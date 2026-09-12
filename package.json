@@ -1,0 +1,26 @@
+{
+  "name": "anima",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "build": "tsc --noEmit"
+  },
+  "keywords": [],
+  "description": "",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/garysoed/anima.git"
+  },
+  "author": "garysoed@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/garysoed/anima/issues"
+  },
+  "homepage": "https://github.com/garysoed/anima#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.20.2",
+    "typescript": "^7.0.2"
+  }
+}
