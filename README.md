@@ -17,5 +17,6 @@ Anima project workspace.
 ## Subdirectories
 
 - [.agents/](.agents/): AI agent configuration and skills.
+- [docs/](docs/): Project architecture and implementation roadmaps.
 - [screenshots/](screenshots/): Visual testing output screenshots.
 - [src/](src/): Application source code.
