@@ -35,7 +35,12 @@ function sampleRadialGamutBoundary(
   h: number | undefined,
   seedChroma: number,
 ): number {
-  const initialColor: OklchColor = oklch({c: seedChroma, h, l, space: 'oklch'});
+  const initialColor: OklchColor = oklch({
+    c: seedChroma,
+    h,
+    l,
+    space: 'oklch',
+  });
 
   if (isInRgbGamut(initialColor)) {
     return seedChroma;

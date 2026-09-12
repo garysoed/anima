@@ -8,4 +8,5 @@ Source code root for the Anima project.
 
 ## Subdirectories
 
+- [demo/](demo/): Interactive demo application and visualizer.
 - [palette/](palette/): Palette generation module.

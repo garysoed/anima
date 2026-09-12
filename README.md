@@ -12,6 +12,7 @@ Anima project workspace.
 - [package.json](package.json): NPM package manifest and project scripts.
 - [playwright.config.ts](playwright.config.ts): Playwright test runner configuration.
 - [README.md](README.md): Repository root documentation.
+- [rollup.config.mjs](rollup.config.mjs): Rollup bundler configuration with SASS and TypeScript plugins.
 - [tsconfig.json](tsconfig.json): TypeScript compiler configuration.
 
 ## Subdirectories
