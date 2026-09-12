@@ -6,8 +6,7 @@ Anima project workspace.
 
 - [.eslintrc.yml](.eslintrc.yml): ESLint configuration extending shared devbase rules.
 - [.gitignore](.gitignore): Git ignore rules for node_modules, build outputs, and OS-specific files.
-- [.prettierignore](.prettierignore): Symlink to Prettier ignore rules in devbase.
-- [.prettierrc.yml](.prettierrc.yml): Symlink to Prettier formatting configuration in devbase.
+- [.prettierignore](.prettierignore): Prettier ignore rules.
 - [package-lock.json](package-lock.json): NPM dependency tree lockfile.
 - [package.json](package.json): NPM package manifest and project scripts.
 - [playwright.config.ts](playwright.config.ts): Playwright test runner configuration.

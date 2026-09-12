@@ -11,6 +11,7 @@
     "test": "playwright test"
   },
   "keywords": [],
+  "prettier": "devbase/prettier",
   "description": "",
   "repository": {
     "type": "git",
