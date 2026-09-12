@@ -6,6 +6,6 @@ export default defineConfig({
   timeout: 30000,
   use: {
     headless: true,
-    viewport: {width: 800, height: 600},
+    viewport: {height: 600, width: 800},
   },
 });

@@ -11,8 +11,5 @@
       "*": ["./*"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "playwright.config.ts"
-  ]
+  "include": ["src/**/*.ts", "playwright.config.ts"]
 }

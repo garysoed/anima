@@ -1,9 +1,4 @@
-import {
-  Color,
-  OklchColor,
-  convert,
-  oklch,
-} from 'gs-tools/export/color';
+import {Color, OklchColor, convert, oklch} from 'gs-tools/export/color';
 
 import {Palette} from './palette';
 
@@ -40,7 +35,7 @@ function sampleRadialGamutBoundary(
   h: number | undefined,
   seedChroma: number,
 ): number {
-  const initialColor: OklchColor = oklch({l, c: seedChroma, h, space: 'oklch'});
+  const initialColor: OklchColor = oklch({c: seedChroma, h, l, space: 'oklch'});
 
   if (isInRgbGamut(initialColor)) {
     return seedChroma;
@@ -50,7 +45,7 @@ function sampleRadialGamutBoundary(
   let high = seedChroma;
   while (high - low > PRECISION) {
     const mid = (low + high) / 2;
-    if (isInRgbGamut(oklch({l, c: mid, h, space: 'oklch'}))) {
+    if (isInRgbGamut(oklch({c: mid, h, l, space: 'oklch'}))) {
       low = mid;
     } else {
       high = mid;
@@ -64,15 +59,11 @@ function createShade(
   lightness: number,
   targetSpace: ColorSpace,
 ): Color {
-  const chroma = sampleRadialGamutBoundary(
-    lightness,
-    seedOklch.h,
-    seedOklch.c,
-  );
+  const chroma = sampleRadialGamutBoundary(lightness, seedOklch.h, seedOklch.c);
   const shadeOklch: OklchColor = oklch({
-    l: lightness,
     c: chroma,
     h: seedOklch.h,
+    l: lightness,
     space: 'oklch',
   });
   return convert(shadeOklch, targetSpace);
@@ -83,14 +74,14 @@ export function createPalette(seed: Color): Palette {
   const targetSpace = seed.space;
 
   return {
-    c100: createShade(seedOklch, 0.960, targetSpace),
+    c100: createShade(seedOklch, 0.96, targetSpace),
     c200: createShade(seedOklch, 0.865, targetSpace),
-    c300: createShade(seedOklch, 0.770, targetSpace),
+    c300: createShade(seedOklch, 0.77, targetSpace),
     c400: createShade(seedOklch, 0.675, targetSpace),
-    c500: createShade(seedOklch, 0.580, targetSpace),
+    c500: createShade(seedOklch, 0.58, targetSpace),
     c600: createShade(seedOklch, 0.485, targetSpace),
-    c700: createShade(seedOklch, 0.390, targetSpace),
+    c700: createShade(seedOklch, 0.39, targetSpace),
     c800: createShade(seedOklch, 0.295, targetSpace),
-    c900: createShade(seedOklch, 0.200, targetSpace),
+    c900: createShade(seedOklch, 0.2, targetSpace),
   };
 }

@@ -9,22 +9,22 @@ interface ShadeMeta {
   readonly key: keyof Palette;
 }
 
-const SHADES: ReadonlyArray<ShadeMeta> = [
-  {key: 'c100', expectedLightness: 0.960},
-  {key: 'c200', expectedLightness: 0.865},
-  {key: 'c300', expectedLightness: 0.770},
-  {key: 'c400', expectedLightness: 0.675},
-  {key: 'c500', expectedLightness: 0.580},
-  {key: 'c600', expectedLightness: 0.485},
-  {key: 'c700', expectedLightness: 0.390},
-  {key: 'c800', expectedLightness: 0.295},
-  {key: 'c900', expectedLightness: 0.200},
+const SHADES: readonly ShadeMeta[] = [
+  {expectedLightness: 0.96, key: 'c100'},
+  {expectedLightness: 0.865, key: 'c200'},
+  {expectedLightness: 0.77, key: 'c300'},
+  {expectedLightness: 0.675, key: 'c400'},
+  {expectedLightness: 0.58, key: 'c500'},
+  {expectedLightness: 0.485, key: 'c600'},
+  {expectedLightness: 0.39, key: 'c700'},
+  {expectedLightness: 0.295, key: 'c800'},
+  {expectedLightness: 0.2, key: 'c900'},
 ];
 
 test.describe('createPalette', () => {
   test('renders 9 boxes with colors and takes a screenshot', async ({page}) => {
     // In sRGB space, hue ~211 (cyan/teal) has the narrowest peak chroma boundary (~0.1438)
-    const seed: Color = oklch({l: 0.81, c: 0.1438, h: 211, space: 'oklch'});
+    const seed: Color = oklch({c: 0.1438, h: 211, l: 0.81, space: 'oklch'});
     const palette = createPalette(seed);
 
     for (const item of SHADES) {
