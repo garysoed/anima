@@ -4,7 +4,7 @@ Anima project workspace.
 
 ## Files
 
-- [.eslintrc.yml](.eslintrc.yml): ESLint configuration extending shared devbase rules.
+- [.eslintrc.js](.eslintrc.js): ESLint configuration extending shared devbase rules.
 - [.gitignore](.gitignore): Git ignore rules for node_modules, build outputs, and OS-specific files.
 - [.prettierignore](.prettierignore): Prettier ignore rules.
 - [package-lock.json](package-lock.json): NPM dependency tree lockfile.
