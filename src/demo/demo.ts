@@ -1,5 +1,5 @@
 import {Signal, SignalWatcher} from '@lit-labs/signals';
-import {Color, rgb} from 'gs-tools/export/color';
+import {Color, format, rgb} from 'gs-tools/export/color';
 import {LitElement, TemplateResult, html} from 'lit';
 import {customElement} from 'lit/decorators.js';
 
@@ -26,7 +26,16 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
       return createPalette(this.seedColor.get());
     },
   );
+  protected watcher: null | Signal.subtle.Watcher = null;
 
+  override connectedCallback(): void {
+    super.connectedCallback();
+    this.initWatcher();
+  }
+  override disconnectedCallback(): void {
+    super.disconnectedCallback();
+    this.cleanupWatcher();
+  }
   override render(): TemplateResult {
     return html`
       <div class="demo-container">
@@ -375,10 +384,51 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
     `;
   }
 
+  protected applyThemeTokens(): void {
+    const pal = this.palette.get();
+    const rootStyle = document.documentElement.style;
+    rootStyle.setProperty('--an-color-100', format(pal.c100, 'hex'));
+    rootStyle.setProperty('--an-color-200', format(pal.c200, 'hex'));
+    rootStyle.setProperty('--an-color-300', format(pal.c300, 'hex'));
+    rootStyle.setProperty('--an-color-400', format(pal.c400, 'hex'));
+    rootStyle.setProperty('--an-color-500', format(pal.c500, 'hex'));
+    rootStyle.setProperty('--an-color-600', format(pal.c600, 'hex'));
+    rootStyle.setProperty('--an-color-700', format(pal.c700, 'hex'));
+    rootStyle.setProperty('--an-color-800', format(pal.c800, 'hex'));
+    rootStyle.setProperty('--an-color-900', format(pal.c900, 'hex'));
+  }
+  protected cleanupWatcher(): void {
+    if (this.watcher) {
+      this.watcher.unwatch(this.palette);
+      this.watcher = null;
+    }
+  }
   protected handleColorPickerEvent(event: Event): void {
     const target = event.target;
     if (target instanceof ColorPicker) {
       this.seedColor.set(target.value);
     }
+  }
+  protected initWatcher(): void {
+    this.cleanupWatcher();
+    let scheduled = false;
+    this.watcher = new Signal.subtle.Watcher(() => {
+      if (!scheduled) {
+        scheduled = true;
+        queueMicrotask(() => {
+          scheduled = false;
+          if (!this.isConnected || !this.watcher) {
+            return;
+          }
+          for (const sub of this.watcher.getPending()) {
+            sub.get();
+          }
+          this.watcher.watch();
+          this.applyThemeTokens();
+        });
+      }
+    });
+    this.watcher.watch(this.palette);
+    this.applyThemeTokens();
   }
 }

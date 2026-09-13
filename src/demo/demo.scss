@@ -1,5 +1,8 @@
 :host {
+  background-color: var(--an-color-100);
+  color: var(--an-color-900);
   display: block;
+  min-height: 100vh;
 }
 
 .demo-container {
@@ -18,19 +21,31 @@
 
   h1,
   h2,
-  h3,
+  h3 {
+    color: var(--an-color-800);
+    margin: 0;
+  }
+
   p {
+    color: var(--an-color-900);
     margin: 0;
   }
 
   ul,
   ol {
+    color: var(--an-color-900);
     margin: 0;
     padding-left: 24px;
   }
 
   li {
     margin: 4px 0;
+  }
+
+  code {
+    background-color: var(--an-color-200);
+    color: var(--an-color-800);
+    padding: 2px 4px;
   }
 }
 
@@ -40,15 +55,53 @@
   max-width: 300px;
   text-align: left;
 
-  th,
+  th {
+    color: var(--an-color-800);
+    padding: 6px 16px 6px 0;
+  }
+
   td {
+    color: var(--an-color-900);
     padding: 6px 16px 6px 0;
   }
 }
 
 .generator-layout {
+  background-color: var(--an-color-200);
   display: flex;
   flex-direction: column;
   gap: 24px;
   margin: 16px 0;
+  padding: 24px;
 }
+
+button {
+  background-color: var(--an-color-600);
+  border: none;
+  color: var(--an-color-100);
+
+  &:hover {
+    background-color: var(--an-color-700);
+  }
+
+  &:active {
+    background-color: var(--an-color-800);
+  }
+
+  &:disabled {
+    background-color: var(--an-color-400);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--an-color-400);
+  }
+}
+
+a {
+  color: var(--an-color-600);
+
+  &:hover {
+    color: var(--an-color-700);
+  }
+}
+
