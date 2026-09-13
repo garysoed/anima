@@ -72,6 +72,8 @@ test.describe('createPalette', () => {
       </html>
     `);
 
-    await page.screenshot({path: 'screenshots/palette-narrowest-chroma.png'});
+    await page.screenshot({
+      path: 'src/palette/goldens/palette-narrowest-chroma.png',
+    });
   });
 });

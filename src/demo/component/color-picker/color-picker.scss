@@ -1,0 +1,54 @@
+:host {
+  display: block;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.channel-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.channel-label {
+  width: 20px;
+  font-weight: bold;
+}
+
+.channel-slider {
+  flex: 1;
+}
+
+.channel-input {
+  width: 60px;
+}
+
+.hex-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hex-label {
+  width: 40px;
+  font-weight: bold;
+}
+
+.hex-input {
+  width: 100px;
+}
+
+.swatch-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.preview-swatch {
+  width: 40px;
+  height: 40px;
+}

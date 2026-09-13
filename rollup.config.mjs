@@ -1,3 +1,4 @@
+import {createRequire} from 'module';
 import path from 'path';
 import {fileURLToPath} from 'url';
 
@@ -7,17 +8,15 @@ import typescript from '@rollup/plugin-typescript';
 import * as sass from 'sass';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
+const gsToolsPkgDir = path.dirname(require.resolve('gs-tools/package.json'));
 
 const localPkgsResolver = {
   name: 'resolve-local-pkgs',
   resolveId(source) {
     if (source.startsWith('gs-tools/export/')) {
       const subpath = source.replace('gs-tools/export/', '');
-      return path.resolve(
-        __dirname,
-        'node_modules/gs-tools/export',
-        `${subpath}.ts`,
-      );
+      return path.resolve(gsToolsPkgDir, 'export', `${subpath}.ts`);
     }
     return null;
   },
@@ -73,7 +72,7 @@ export default [
       commonjs(),
       typescript({
         exclude: ['**/*.test.ts'],
-        include: ['src/**/*.ts', 'src/**/*.d.ts'],
+        include: ['src/**/*.ts', 'src/**/*.d.ts', `${gsToolsPkgDir}/**/*.ts`],
         tsconfig: './tsconfig.json',
       }),
     ],

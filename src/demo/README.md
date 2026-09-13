@@ -6,3 +6,8 @@ Interactive demo application and visualizer for Anima.
 
 - [index.html](index.html): HTML shell hosting the bundled demo application for GitHub Pages.
 - [main.ts](main.ts): Demo application entry point script.
+- [README.md](README.md): Demo directory documentation.
+
+## Subdirectories
+
+- [component/](component/)
