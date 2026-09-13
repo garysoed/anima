@@ -9,3 +9,4 @@ Custom Web Components utilized by the Anima demo page.
 ## Subdirectories
 
 - [color-picker/](color-picker/)
+- [palette-preview/](palette-preview/)

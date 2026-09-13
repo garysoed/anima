@@ -1,0 +1,25 @@
+:host {
+  display: block;
+}
+
+.container {
+  display: flex;
+  gap: 8px;
+}
+
+.swatch-item {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.swatch {
+  height: 100px;
+  width: 100%;
+}
+
+.hex-label {
+  text-align: center;
+}
