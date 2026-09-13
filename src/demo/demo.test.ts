@@ -72,4 +72,34 @@ test.describe('<an-demo>', () => {
       path: 'src/demo/goldens/demo-updated.png',
     });
   });
+
+  test('renders dark mode when toggled', async ({page}) => {
+    await page.setContent(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              background-color: #ffffff;
+            }
+          </style>
+        </head>
+        <body>
+          <an-demo id="demo"></an-demo>
+        </body>
+      </html>
+    `);
+
+    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+
+    const demo = page.locator('an-demo');
+    const darkButton = demo.locator('.mode-button').filter({hasText: 'Dark'});
+    await darkButton.click();
+
+    await demo.screenshot({
+      path: 'src/demo/goldens/demo-dark.png',
+    });
+  });
 });

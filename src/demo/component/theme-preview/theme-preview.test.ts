@@ -56,6 +56,7 @@ test.describe('<an-theme-preview>', () => {
     const lightTheme0: Theme = themeSet.light[0];
 
     await preview.evaluate((el: HTMLElement, theme: Theme) => {
+      Reflect.set(el, 'label', 'Light Theme 0');
       Reflect.set(el, 'theme', theme);
     }, lightTheme0);
 

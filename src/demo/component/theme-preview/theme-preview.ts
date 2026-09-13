@@ -18,6 +18,8 @@ import styles from './theme-preview.scss';
 export class ThemePreview extends LitElement {
   static override styles = styles;
 
+  @property({type: String})
+  label: string = '';
   @property({attribute: false})
   theme: null | Theme = null;
 
@@ -30,7 +32,7 @@ export class ThemePreview extends LitElement {
       <div class="card">
         <div class="header">
           <div class="brand-icon">${unsafeSVG(animaIconSvg)}</div>
-          <h3 class="primary-text">Primary text</h3>
+          <h3 class="primary-text">${this.label || 'Primary text'}</h3>
         </div>
         <p class="secondary-text">Secondary text</p>
         <div class="status-group">

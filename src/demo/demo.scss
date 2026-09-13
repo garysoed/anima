@@ -51,6 +51,37 @@
   }
 }
 
+.mode-toggle-bar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.mode-toggle {
+  background-color: light-dark(var(--an-main-light_0-background), var(--an-main-dark_0-background));
+  border-radius: 4px;
+  display: inline-flex;
+  padding: 4px;
+}
+
+.mode-button {
+  background-color: transparent;
+  border-radius: 4px;
+  color: light-dark(var(--an-main-light_0-secondary), var(--an-main-dark_0-secondary));
+  cursor: pointer;
+  padding: 6px 12px;
+
+  &:hover {
+    background-color: light-dark(var(--an-main-light_2-background), var(--an-main-dark_2-background));
+    color: light-dark(var(--an-main-light_2-primary), var(--an-main-dark_2-primary));
+  }
+
+  &.selected {
+    background-color: light-dark(var(--an-main-light_2-background), var(--an-main-dark_2-background));
+    color: light-dark(var(--an-main-light_2-primary), var(--an-main-dark_2-primary));
+    font-weight: bold;
+  }
+}
+
 .shades-table {
   border-collapse: collapse;
   margin: 8px 0;
@@ -68,6 +99,33 @@
   }
 }
 
+.themes-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  h3 {
+    color: light-dark(var(--an-main-light_0-primary), var(--an-main-dark_0-primary));
+    margin: 0;
+  }
+}
+
+.themes-columns {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.themes-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.theme-card-wrapper {
+  display: flex;
+}
+
 .generator-layout {
   background-color: light-dark(var(--an-main-light_0-background), var(--an-main-dark_0-background));
   color: light-dark(var(--an-main-light_0-primary), var(--an-main-dark_0-primary));
@@ -80,6 +138,22 @@
   h3 {
     color: light-dark(var(--an-main-light_0-primary), var(--an-main-dark_0-primary));
     margin: 0;
+  }
+
+  .palette-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    h4 {
+      color: light-dark(var(--an-main-light_0-primary), var(--an-main-dark_0-primary));
+      margin: 0;
+    }
+
+    p {
+      color: light-dark(var(--an-main-light_0-secondary), var(--an-main-dark_0-secondary));
+      margin: 0;
+    }
   }
 }
 
