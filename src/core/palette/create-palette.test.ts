@@ -73,7 +73,7 @@ test.describe('createPalette', () => {
     `);
 
     await page.screenshot({
-      path: 'src/palette/goldens/palette-narrowest-chroma.png',
+      path: 'src/core/palette/goldens/palette-narrowest-chroma.png',
     });
   });
 });

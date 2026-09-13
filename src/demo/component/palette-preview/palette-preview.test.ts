@@ -1,8 +1,8 @@
 import {expect, test} from '@playwright/test';
 import {Color, oklch} from 'gs-tools/export/color';
 
-import {createPalette} from '../../../palette/create-palette';
-import {Palette} from '../../../palette/palette';
+import {createPalette} from '../../../core/palette/create-palette';
+import {Palette} from '../../../core/palette/palette';
 
 test.describe('<an-palette-preview>', () => {
   test('renders no DOM nodes when palette is null', async ({page}) => {

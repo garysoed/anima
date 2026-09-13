@@ -2,7 +2,7 @@ import {Color, format} from 'gs-tools/export/color';
 import {LitElement, TemplateResult, html, nothing} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 
-import {Palette} from '../../../palette/palette';
+import {Palette} from '../../../core/palette/palette';
 
 import styles from './palette-preview.scss';
 

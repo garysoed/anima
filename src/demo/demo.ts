@@ -3,8 +3,8 @@ import {Color, format, rgb} from 'gs-tools/export/color';
 import {LitElement, TemplateResult, html} from 'lit';
 import {customElement} from 'lit/decorators.js';
 
-import {createPalette} from '../palette/create-palette';
-import {Palette} from '../palette/palette';
+import {createPalette} from '../core/palette/create-palette';
+import {Palette} from '../core/palette/palette';
 
 import {ColorPicker} from './component/color-picker/color-picker';
 import './component/palette-preview/palette-preview';
