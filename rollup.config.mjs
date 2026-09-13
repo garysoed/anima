@@ -67,6 +67,22 @@ const litCssPlugin = {
   },
 };
 
+const copyStaticAssetsPlugin = {
+  name: 'copy-static-assets',
+  writeBundle() {
+    const distDemo = path.resolve(__dirname, 'dist/demo');
+    fs.mkdirSync(distDemo, {recursive: true});
+    fs.copyFileSync(
+      path.resolve(__dirname, 'src/demo/index.html'),
+      path.resolve(distDemo, 'index.html'),
+    );
+    fs.copyFileSync(
+      path.resolve(__dirname, 'src/demo/favicon.svg'),
+      path.resolve(distDemo, 'favicon.svg'),
+    );
+  },
+};
+
 export default [
   {
     input: 'src/demo/main.ts',
@@ -81,6 +97,7 @@ export default [
       localPkgsResolver,
       svgStringPlugin,
       litCssPlugin,
+      copyStaticAssetsPlugin,
       nodeResolve({
         extensions: ['.js', '.ts', '.mjs', '.css', '.scss'],
       }),
