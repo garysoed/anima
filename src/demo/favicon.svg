@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <path id="blade" d="M 0,-120 A 120 120 0 0 1 95,-73.4 A 95 95 0 0 0 -22,-3.5 A 120 120 0 0 1 0,-120 Z" />
+  </defs>
+
+  <g transform="translate(32, 32) scale(0.266667)">
+    <use href="#blade" transform="rotate(0)" fill="#3b82f6" />
+    <use href="#blade" transform="rotate(72)" fill="#8b5cf6" />
+    <use href="#blade" transform="rotate(144)" fill="#ec4899" />
+    <use href="#blade" transform="rotate(216)" fill="#f59e0b" />
+    <use href="#blade" transform="rotate(288)" fill="#10b981" />
+  </g>
+</svg>

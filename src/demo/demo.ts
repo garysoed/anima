@@ -8,6 +8,7 @@ import {Palette} from '../core/palette/palette';
 
 import {ColorPicker} from './component/color-picker/color-picker';
 import './component/palette-preview/palette-preview';
+import './component/theme-preview/theme-preview';
 import styles from './demo.scss';
 
 /**

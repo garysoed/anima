@@ -1,3 +1,4 @@
+import fs from 'fs';
 import {createRequire} from 'module';
 import path from 'path';
 import {fileURLToPath} from 'url';
@@ -17,6 +18,19 @@ const localPkgsResolver = {
     if (source.startsWith('gs-tools/export/')) {
       const subpath = source.replace('gs-tools/export/', '');
       return path.resolve(gsToolsPkgDir, 'export', `${subpath}.ts`);
+    }
+    return null;
+  },
+};
+
+const svgStringPlugin = {
+  name: 'svg-string',
+  transform(code, id) {
+    if (id.endsWith('.svg')) {
+      return {
+        code: `export default ${JSON.stringify(code)};`,
+        map: {mappings: ''},
+      };
     }
     return null;
   },
@@ -65,6 +79,7 @@ export default [
     ],
     plugins: [
       localPkgsResolver,
+      svgStringPlugin,
       litCssPlugin,
       nodeResolve({
         extensions: ['.js', '.ts', '.mjs', '.css', '.scss'],

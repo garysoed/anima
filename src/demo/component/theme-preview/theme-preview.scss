@@ -1,0 +1,78 @@
+:host {
+  display: block;
+}
+
+.card {
+  background-color: var(--an-preview-background);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  width: 100%;
+}
+
+.header {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
+.brand-icon {
+  flex-shrink: 0;
+  height: 28px;
+  width: 28px;
+
+  svg {
+    display: block;
+    fill: var(--an-preview-display);
+    height: 100%;
+    width: 100%;
+  }
+}
+
+.primary-text {
+  color: var(--an-preview-primary);
+  font-family: inherit;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.secondary-text {
+  color: var(--an-preview-secondary);
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.status-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.status-line {
+  align-items: center;
+  display: flex;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  gap: 6px;
+  line-height: 1.4;
+
+  &.error-text {
+    color: var(--an-preview-error);
+  }
+
+  &.success-text {
+    color: var(--an-preview-success);
+  }
+
+  &.warning-text {
+    color: var(--an-preview-warning);
+  }
+}
