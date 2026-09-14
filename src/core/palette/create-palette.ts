@@ -19,56 +19,103 @@ function isInRgbGamut(color: OklchColor): boolean {
   );
 }
 
-/**
- * Samples the gamut boundary along the radial chroma axis in OKLCH starting from seedChroma.
- *
- * In OKLCH space (cylindrical coordinates), lightness L is the height axis,
- * hue H is the angular coordinate, and chroma C is the radial coordinate.
- *
- * Starting from seedChroma:
- * - If (l, seedChroma, h) is inside the sRGB gamut, returns seedChroma.
- * - If (l, seedChroma, h) is outside the sRGB gamut, samples radially inwards
- *   (decreasing C towards 0) via binary search to find the boundary chroma.
- */
-function sampleRadialGamutBoundary(
-  l: number,
+function toLinear(c: number): number {
+  const v = c / 255;
+  return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+}
+
+function getRelativeLuminance(color: OklchColor): number {
+  const rgbColor = convert(color, 'rgb');
+  return (
+    0.2126 * toLinear(rgbColor.r) +
+    0.7152 * toLinear(rgbColor.g) +
+    0.0722 * toLinear(rgbColor.b)
+  );
+}
+
+function findLightnessForTargetY(
+  targetY: number,
   h: number | undefined,
-  seedChroma: number,
+  c: number,
 ): number {
-  const initialColor: OklchColor = oklch({
-    c: seedChroma,
-    h,
-    l,
-    space: 'oklch',
-  });
-
-  if (isInRgbGamut(initialColor)) {
-    return seedChroma;
-  }
-
   let low = 0;
-  let high = seedChroma;
+  let high = 1;
   while (high - low > PRECISION) {
     const mid = (low + high) / 2;
-    if (isInRgbGamut(oklch({c: mid, h, l, space: 'oklch'}))) {
+    const y = getRelativeLuminance(oklch({c, h, l: mid, space: 'oklch'}));
+    if (y < targetY) {
       low = mid;
     } else {
       high = mid;
     }
   }
-  return low;
+  return (low + high) / 2;
+}
+
+/**
+ * Samples the gamut boundary along the radial chroma axis in OKLCH starting from seedChroma,
+ * ensuring the resulting color matches targetY (relative luminance).
+ *
+ * Starting from seedChroma:
+ * - Solves for lightness L such that luminance(oklch(L, seedChroma, H)) === targetY.
+ * - If (L, seedChroma, H) is inside the sRGB gamut, returns that chroma and lightness.
+ * - If outside the sRGB gamut, samples radially inwards (decreasing C towards 0)
+ *   via binary search, finding the boundary chroma and corresponding L at targetY.
+ */
+function sampleRadialGamutBoundary(
+  targetY: number,
+  h: number | undefined,
+  seedChroma: number,
+): {c: number; l: number} {
+  const lInitial = findLightnessForTargetY(targetY, h, seedChroma);
+  const initialColor: OklchColor = oklch({
+    c: seedChroma,
+    h,
+    l: lInitial,
+    space: 'oklch',
+  });
+
+  if (isInRgbGamut(initialColor)) {
+    return {c: seedChroma, l: lInitial};
+  }
+
+  let low = 0;
+  let high = seedChroma;
+  let bestC = 0;
+  let bestL = findLightnessForTargetY(targetY, h, 0);
+
+  while (high - low > PRECISION) {
+    const midC = (low + high) / 2;
+    const midL = findLightnessForTargetY(targetY, h, midC);
+    const midColor: OklchColor = oklch({
+      c: midC,
+      h,
+      l: midL,
+      space: 'oklch',
+    });
+
+    if (isInRgbGamut(midColor)) {
+      bestC = midC;
+      bestL = midL;
+      low = midC;
+    } else {
+      high = midC;
+    }
+  }
+  return {c: bestC, l: bestL};
 }
 
 function createShade(
   seedOklch: OklchColor,
-  lightness: number,
+  targetLightness: number,
   targetSpace: ColorSpace,
 ): Color {
-  const chroma = sampleRadialGamutBoundary(lightness, seedOklch.h, seedOklch.c);
+  const targetY = Math.pow(targetLightness, 3);
+  const {c, l} = sampleRadialGamutBoundary(targetY, seedOklch.h, seedOklch.c);
   const shadeOklch: OklchColor = oklch({
-    c: chroma,
+    c,
     h: seedOklch.h,
-    l: lightness,
+    l,
     space: 'oklch',
   });
   return convert(shadeOklch, targetSpace);
