@@ -7,7 +7,7 @@
     "build:demo": "rollup -c",
     "format": "prettier --write \"**/*.{ts,js,mjs,json,md,html}\"",
     "lint": "eslint . --ext .ts --resolve-plugins-relative-to .",
-    "start": "npx serve dist/demo",
+    "start": "rollup -c -w",
     "test": "playwright test"
   },
   "keywords": [],

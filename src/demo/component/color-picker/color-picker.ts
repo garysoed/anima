@@ -33,9 +33,9 @@ function normalizeHex(hex: string): string {
 export class ColorPicker extends SignalWatcher(LitElement) {
   static override styles = styles;
 
-  protected readonly b: Signal.State<number> = new Signal.State(0);
-  protected readonly g: Signal.State<number> = new Signal.State(0);
-  protected readonly r: Signal.State<number> = new Signal.State(0);
+  protected readonly b: Signal.State<number> = new Signal.State(11);
+  protected readonly g: Signal.State<number> = new Signal.State(158);
+  protected readonly r: Signal.State<number> = new Signal.State(245);
   protected readonly rgbColor: Signal.Computed<RgbColor> = new Signal.Computed(
     () => {
       return rgb({
@@ -48,7 +48,7 @@ export class ColorPicker extends SignalWatcher(LitElement) {
   protected readonly hex: Signal.Computed<string> = new Signal.Computed(() => {
     return format(this.rgbColor.get(), 'hex');
   });
-  protected readonly rawHex: Signal.State<string> = new Signal.State('#000000');
+  protected readonly rawHex: Signal.State<string> = new Signal.State('#f59e0b');
   protected readonly isHexValid: Signal.Computed<boolean> = new Signal.Computed(
     () => {
       return isValidHex(this.rawHex.get());

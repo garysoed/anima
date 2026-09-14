@@ -20,6 +20,7 @@ interface PalettePreviewConfig {
   readonly title: string;
 }
 
+const DEFAULT_SEED_COLOR: Color = rgb({b: 11, g: 158, r: 245});
 const MODES: readonly ThemeMode[] = ['light', 'dark'];
 const PALETTE_CONFIGS: ReadonlyArray<[string, keyof PaletteSet]> = [
   ['main_highlight', 'highlight'],
@@ -107,7 +108,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
   protected readonly mode: Signal.State<ThemeMode> =
     new Signal.State<ThemeMode>('light');
   protected readonly seedColor: Signal.State<Color> = new Signal.State(
-    rgb({b: 0, g: 0, r: 0}),
+    DEFAULT_SEED_COLOR,
   );
   protected readonly themeSet: Signal.Computed<ThemeSet> = new Signal.Computed(
     () => {

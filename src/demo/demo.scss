@@ -1,11 +1,20 @@
+body {
+  margin: 0;
+}
+
 :host {
-  background-color: light-dark(var(--an-main-light_1-background), var(--an-main-dark_1-background));
-  color: light-dark(var(--an-main-light_1-primary), var(--an-main-dark_1-primary));
+  background-color: light-dark(
+    var(--an-main-light_1-background),
+    var(--an-main-dark_1-background)
+  );
+  color: light-dark(
+    var(--an-main-light_1-primary),
+    var(--an-main-dark_1-primary)
+  );
   color-scheme: light dark;
   display: block;
   min-height: 100vh;
 }
-
 
 .demo-container {
   display: flex;
@@ -24,18 +33,27 @@
   h1,
   h2,
   h3 {
-    color: light-dark(var(--an-main-light_1-primary), var(--an-main-dark_1-primary));
+    color: light-dark(
+      var(--an-main-light_1-primary),
+      var(--an-main-dark_1-primary)
+    );
     margin: 0;
   }
 
   p {
-    color: light-dark(var(--an-main-light_1-primary), var(--an-main-dark_1-primary));
+    color: light-dark(
+      var(--an-main-light_1-primary),
+      var(--an-main-dark_1-primary)
+    );
     margin: 0;
   }
 
   ul,
   ol {
-    color: light-dark(var(--an-main-light_1-primary), var(--an-main-dark_1-primary));
+    color: light-dark(
+      var(--an-main-light_1-primary),
+      var(--an-main-dark_1-primary)
+    );
     margin: 0;
     padding-left: 24px;
   }
@@ -45,8 +63,14 @@
   }
 
   code {
-    background-color: light-dark(var(--an-main-light_0-background), var(--an-main-dark_0-background));
-    color: light-dark(var(--an-main-light_0-primary), var(--an-main-dark_0-primary));
+    background-color: light-dark(
+      var(--an-main-light_0-background),
+      var(--an-main-dark_0-background)
+    );
+    color: light-dark(
+      var(--an-main-light_0-primary),
+      var(--an-main-dark_0-primary)
+    );
     padding: 2px 4px;
   }
 }
@@ -57,7 +81,10 @@
 }
 
 .mode-toggle {
-  background-color: light-dark(var(--an-main-light_0-background), var(--an-main-dark_0-background));
+  background-color: light-dark(
+    var(--an-main-light_0-background),
+    var(--an-main-dark_0-background)
+  );
   border-radius: 4px;
   display: inline-flex;
   padding: 4px;
@@ -66,18 +93,33 @@
 .mode-button {
   background-color: transparent;
   border-radius: 4px;
-  color: light-dark(var(--an-main-light_0-secondary), var(--an-main-dark_0-secondary));
+  color: light-dark(
+    var(--an-main-light_0-secondary),
+    var(--an-main-dark_0-secondary)
+  );
   cursor: pointer;
   padding: 6px 12px;
 
   &:hover {
-    background-color: light-dark(var(--an-main-light_2-background), var(--an-main-dark_2-background));
-    color: light-dark(var(--an-main-light_2-primary), var(--an-main-dark_2-primary));
+    background-color: light-dark(
+      var(--an-main-light_2-background),
+      var(--an-main-dark_2-background)
+    );
+    color: light-dark(
+      var(--an-main-light_2-primary),
+      var(--an-main-dark_2-primary)
+    );
   }
 
   &.selected {
-    background-color: light-dark(var(--an-main-light_2-background), var(--an-main-dark_2-background));
-    color: light-dark(var(--an-main-light_2-primary), var(--an-main-dark_2-primary));
+    background-color: light-dark(
+      var(--an-main-light_2-background),
+      var(--an-main-dark_2-background)
+    );
+    color: light-dark(
+      var(--an-main-light_2-primary),
+      var(--an-main-dark_2-primary)
+    );
     font-weight: bold;
   }
 }
@@ -89,12 +131,18 @@
   text-align: left;
 
   th {
-    color: light-dark(var(--an-main-light_1-secondary), var(--an-main-dark_1-secondary));
+    color: light-dark(
+      var(--an-main-light_1-secondary),
+      var(--an-main-dark_1-secondary)
+    );
     padding: 6px 16px 6px 0;
   }
 
   td {
-    color: light-dark(var(--an-main-light_1-primary), var(--an-main-dark_1-primary));
+    color: light-dark(
+      var(--an-main-light_1-primary),
+      var(--an-main-dark_1-primary)
+    );
     padding: 6px 16px 6px 0;
   }
 }
@@ -105,7 +153,10 @@
   gap: 24px;
 
   h3 {
-    color: light-dark(var(--an-main-light_0-primary), var(--an-main-dark_0-primary));
+    color: light-dark(
+      var(--an-main-light_0-primary),
+      var(--an-main-dark_0-primary)
+    );
     margin: 0;
   }
 }
@@ -127,8 +178,14 @@
 }
 
 .generator-layout {
-  background-color: light-dark(var(--an-main-light_0-background), var(--an-main-dark_0-background));
-  color: light-dark(var(--an-main-light_0-primary), var(--an-main-dark_0-primary));
+  background-color: light-dark(
+    var(--an-main-light_0-background),
+    var(--an-main-dark_0-background)
+  );
+  color: light-dark(
+    var(--an-main-light_0-primary),
+    var(--an-main-dark_0-primary)
+  );
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -136,7 +193,10 @@
   padding: 24px;
 
   h3 {
-    color: light-dark(var(--an-main-light_0-primary), var(--an-main-dark_0-primary));
+    color: light-dark(
+      var(--an-main-light_0-primary),
+      var(--an-main-dark_0-primary)
+    );
     margin: 0;
   }
 
@@ -146,30 +206,54 @@
     gap: 8px;
 
     h4 {
-      color: light-dark(var(--an-main-light_0-primary), var(--an-main-dark_0-primary));
+      color: light-dark(
+        var(--an-main-light_0-primary),
+        var(--an-main-dark_0-primary)
+      );
       margin: 0;
     }
 
     p {
-      color: light-dark(var(--an-main-light_0-secondary), var(--an-main-dark_0-secondary));
+      color: light-dark(
+        var(--an-main-light_0-secondary),
+        var(--an-main-dark_0-secondary)
+      );
       margin: 0;
     }
   }
 }
 
 button {
-  background-color: light-dark(var(--an-main-light_2-background), var(--an-main-dark_2-background));
+  background-color: light-dark(
+    var(--an-main-light_2-background),
+    var(--an-main-dark_2-background)
+  );
   border: none;
-  color: light-dark(var(--an-main-light_2-primary), var(--an-main-dark_2-primary));
+  color: light-dark(
+    var(--an-main-light_2-primary),
+    var(--an-main-dark_2-primary)
+  );
 
   &:hover {
-    background-color: light-dark(var(--an-main-light_3-background), var(--an-main-dark_3-background));
-    color: light-dark(var(--an-main-light_3-primary), var(--an-main-dark_3-primary));
+    background-color: light-dark(
+      var(--an-main-light_3-background),
+      var(--an-main-dark_3-background)
+    );
+    color: light-dark(
+      var(--an-main-light_3-primary),
+      var(--an-main-dark_3-primary)
+    );
   }
 
   &:active {
-    background-color: light-dark(var(--an-main-light_3-background), var(--an-main-dark_3-background));
-    color: light-dark(var(--an-main-light_3-primary), var(--an-main-dark_3-primary));
+    background-color: light-dark(
+      var(--an-main-light_3-background),
+      var(--an-main-dark_3-background)
+    );
+    color: light-dark(
+      var(--an-main-light_3-primary),
+      var(--an-main-dark_3-primary)
+    );
   }
 
   &:disabled {
@@ -177,15 +261,24 @@ button {
   }
 
   &:focus-visible {
-    outline: 2px solid light-dark(var(--an-main-light_3-background), var(--an-main-dark_3-background));
+    outline: 2px solid
+      light-dark(
+        var(--an-main-light_3-background),
+        var(--an-main-dark_3-background)
+      );
   }
 }
 
 a {
-  color: light-dark(var(--an-main-light_3-background), var(--an-main-dark_3-background));
+  color: light-dark(
+    var(--an-main-light_3-background),
+    var(--an-main-dark_3-background)
+  );
 
   &:hover {
-    color: light-dark(var(--an-main-light_2-background), var(--an-main-dark_2-background));
+    color: light-dark(
+      var(--an-main-light_2-background),
+      var(--an-main-dark_2-background)
+    );
   }
 }
-

@@ -85,7 +85,7 @@ test.describe('<an-color-picker>', () => {
     expect(changeCount).toBeGreaterThan(0);
 
     const hexInput = picker.locator('.hex-input');
-    await expect(hexInput).toHaveValue('#960000');
+    await expect(hexInput).toHaveValue('#969e0b');
   });
 
   test('updates color on hex typing and validates on blur', async ({page}) => {
