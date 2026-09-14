@@ -2,9 +2,9 @@ import {expect, test} from '@playwright/test';
 import {rgb} from 'gs-tools/export/color';
 
 import {createPaletteSet} from '../../../core/palette/create-palette-set';
-import {getThemeTokensCssProperties} from '../../../core/theme/apply-theme-tokens';
 import {Theme} from '../../../core/theme/theme';
 import {THEME_SET} from '../../../core/theme/theme-set';
+import {getThemeTokensCssProperties} from '../../apply-theme-tokens';
 
 test.describe('<an-theme-preview>', () => {
   test('renders no DOM nodes when theme is null', async ({page}) => {

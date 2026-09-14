@@ -1,16 +1,15 @@
 import {format} from 'gs-tools/export/color';
 
-import {Palette} from '../palette/palette';
-import {PaletteSet} from '../palette/palette-set';
-
+import {Palette} from '../core/palette/palette';
+import {PaletteSet} from '../core/palette/palette-set';
 import {
   getPaletteCssVar,
   PaletteKey,
   ThemeMode,
   ThemeSection,
   ThemeType,
-} from './theme';
-import {ThemeSet} from './theme-set';
+} from '../core/theme/theme';
+import {ThemeSet} from '../core/theme/theme-set';
 
 const PALETTE_KEYS: readonly PaletteKey[] = [
   'highlight',
@@ -49,7 +48,10 @@ export function getThemeTokensCssProperties(
   palettes: PaletteSet,
   seedName: string,
 ): Record<string, string> {
-  const properties: Record<string, string> = {};
+  const properties: Record<string, string> = {
+    '--an-black': '#000000',
+    '--an-white': '#ffffff',
+  };
 
   for (const palKey of PALETTE_KEYS) {
     const palette = palettes[palKey];

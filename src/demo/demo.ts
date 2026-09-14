@@ -5,10 +5,10 @@ import {customElement} from 'lit/decorators.js';
 
 import {createPaletteSet} from '../core/palette/create-palette-set';
 import {PaletteSet} from '../core/palette/palette-set';
-import {applyThemeTokens} from '../core/theme/apply-theme-tokens';
 import {ThemeMode, ThemeType} from '../core/theme/theme';
 import {THEME_SET} from '../core/theme/theme-set';
 
+import {applyThemeTokens} from './apply-theme-tokens';
 import {ColorPicker} from './component/color-picker/color-picker';
 import './component/palette-preview/palette-preview';
 import './component/theme-preview/theme-preview';

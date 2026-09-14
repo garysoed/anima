@@ -1,11 +1,14 @@
-import {Color} from 'gs-tools/export/color';
+import {Color, rgb} from 'gs-tools/export/color';
 
 import {Palette} from '../palette/palette';
 import {PaletteSet} from '../palette/palette-set';
 
+const BLACK: Color = rgb({b: 0, g: 0, r: 0});
+const WHITE: Color = rgb({b: 255, g: 255, r: 255});
+
 export type PaletteKey = keyof PaletteSet;
 export type ShadeKey = keyof Palette;
-export type PaletteColorKey = `${PaletteKey}.${ShadeKey}`;
+export type PaletteColorKey = 'black' | 'white' | `${PaletteKey}.${ShadeKey}`;
 
 export type ThemeMode = 'dark' | 'light';
 export type ThemeType = 0 | 1 | 2 | 3;
@@ -58,6 +61,12 @@ export function resolveThemeColor(
   palettes: PaletteSet,
   key: PaletteColorKey,
 ): Color {
+  if (key === 'white') {
+    return WHITE;
+  }
+  if (key === 'black') {
+    return BLACK;
+  }
   const [palKey, shadeKey] = key.split('.');
   if (!isPaletteKey(palKey) || !isShadeKey(shadeKey)) {
     throw new Error(`Invalid palette color key: ${key}`);
@@ -69,6 +78,12 @@ export function getPaletteCssVar(
   key: PaletteColorKey,
   seedName: string,
 ): string {
+  if (key === 'white') {
+    return 'var(--an-white)';
+  }
+  if (key === 'black') {
+    return 'var(--an-black)';
+  }
   const [palKey, shadeKey] = key.split('.');
   if (!isPaletteKey(palKey) || !isShadeKey(shadeKey)) {
     throw new Error(`Invalid palette color key: ${key}`);
