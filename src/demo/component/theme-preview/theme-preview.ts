@@ -31,7 +31,7 @@ export class ThemePreview extends LitElement {
       <div class="card">
         <div class="header">
           <div class="brand-icon">${unsafeSVG(animaIconSvg)}</div>
-          <h3 class="primary-text">${this.label || 'Primary text'}</h3>
+          <h3 class="primary-text" .textContent=${this.label}></h3>
         </div>
         <p class="secondary-text">Secondary text</p>
         <div class="status-group">

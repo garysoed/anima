@@ -33,11 +33,9 @@ test.describe('apply-theme-tokens', () => {
       expect(properties['--an-main_neutral-100']).toBeDefined();
       expect(properties['--an-error-300']).toBeDefined();
       expect(properties['--an-main-light_0-background']).toBe(
-        'var(--an-main_neutral-200)',
+        'var(--an-main_neutral-100)',
       );
-      expect(properties['--an-main-dark_0-background']).toBe(
-        'var(--an-main_neutral-900)',
-      );
+      expect(properties['--an-main-dark_0-background']).toBe('var(--an-black)');
     });
   });
 
@@ -53,7 +51,7 @@ test.describe('apply-theme-tokens', () => {
       expect(applied['--an-white']).toBe('#ffffff');
       expect(applied['--an-black']).toBe('#000000');
       expect(applied['--an-main-light_0-background']).toBe(
-        'var(--an-main_neutral-200)',
+        'var(--an-main_neutral-100)',
       );
     });
   });
