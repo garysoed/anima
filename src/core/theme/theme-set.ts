@@ -1,9 +1,101 @@
-import {PaletteSet} from '../palette/palette-set';
-
 import {Theme, ThemeType} from './theme';
 
 export interface ThemeSet {
   readonly dark: Record<ThemeType, Theme>;
   readonly light: Record<ThemeType, Theme>;
-  readonly palettes: PaletteSet;
 }
+
+export const THEME_SET: ThemeSet = {
+  dark: {
+    0: {
+      background: 'neutral.c900',
+      display: 'neutral.c400',
+      error: 'error.c300',
+      mode: 'dark',
+      primary: 'neutral.c100',
+      secondary: 'neutral.c300',
+      success: 'success.c300',
+      type: 0,
+      warning: 'warning.c300',
+    },
+    1: {
+      background: 'neutral.c800',
+      display: 'neutral.c400',
+      error: 'error.c300',
+      mode: 'dark',
+      primary: 'neutral.c100',
+      secondary: 'neutral.c300',
+      success: 'success.c300',
+      type: 1,
+      warning: 'warning.c300',
+    },
+    2: {
+      background: 'highlight.c900',
+      display: 'highlight.c400',
+      error: 'error.c300',
+      mode: 'dark',
+      primary: 'highlight.c100',
+      secondary: 'highlight.c300',
+      success: 'success.c300',
+      type: 2,
+      warning: 'warning.c300',
+    },
+    3: {
+      background: 'highlight.c500',
+      display: 'highlight.c900',
+      error: 'error.c900',
+      mode: 'dark',
+      primary: 'highlight.c900',
+      secondary: 'highlight.c800',
+      success: 'success.c900',
+      type: 3,
+      warning: 'warning.c900',
+    },
+  },
+  light: {
+    0: {
+      background: 'neutral.c200',
+      display: 'neutral.c600',
+      error: 'error.c800',
+      mode: 'light',
+      primary: 'neutral.c900',
+      secondary: 'neutral.c700',
+      success: 'success.c800',
+      type: 0,
+      warning: 'warning.c800',
+    },
+    1: {
+      background: 'neutral.c100',
+      display: 'neutral.c600',
+      error: 'error.c800',
+      mode: 'light',
+      primary: 'neutral.c900',
+      secondary: 'neutral.c700',
+      success: 'success.c800',
+      type: 1,
+      warning: 'warning.c800',
+    },
+    2: {
+      background: 'highlight.c100',
+      display: 'highlight.c600',
+      error: 'error.c800',
+      mode: 'light',
+      primary: 'highlight.c900',
+      secondary: 'highlight.c700',
+      success: 'success.c800',
+      type: 2,
+      warning: 'warning.c800',
+    },
+    3: {
+      background: 'highlight.c500',
+      display: 'highlight.c100',
+      error: 'error.c100',
+      mode: 'light',
+      primary: 'highlight.c100',
+      secondary: 'highlight.c200',
+      success: 'success.c100',
+      type: 3,
+      warning: 'warning.c100',
+    },
+  },
+};

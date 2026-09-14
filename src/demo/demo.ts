@@ -1,13 +1,13 @@
 import {Signal, SignalWatcher} from '@lit-labs/signals';
-import {Color, format, rgb} from 'gs-tools/export/color';
+import {Color, rgb} from 'gs-tools/export/color';
 import {LitElement, PropertyValues, TemplateResult, html} from 'lit';
 import {customElement} from 'lit/decorators.js';
 
-import {Palette} from '../core/palette/palette';
+import {createPaletteSet} from '../core/palette/create-palette-set';
 import {PaletteSet} from '../core/palette/palette-set';
-import {createThemeSet} from '../core/theme/create-theme-set';
-import {Theme, ThemeMode, ThemeType} from '../core/theme/theme';
-import {ThemeSet} from '../core/theme/theme-set';
+import {applyThemeTokens} from '../core/theme/apply-theme-tokens';
+import {ThemeMode, ThemeType} from '../core/theme/theme';
+import {THEME_SET} from '../core/theme/theme-set';
 
 import {ColorPicker} from './component/color-picker/color-picker';
 import './component/palette-preview/palette-preview';
@@ -21,14 +21,6 @@ interface PalettePreviewConfig {
 }
 
 const DEFAULT_SEED_COLOR: Color = rgb({b: 11, g: 158, r: 245});
-const MODES: readonly ThemeMode[] = ['light', 'dark'];
-const PALETTE_CONFIGS: ReadonlyArray<[string, keyof PaletteSet]> = [
-  ['main_highlight', 'highlight'],
-  ['main_neutral', 'neutral'],
-  ['error', 'error'],
-  ['warning', 'warning'],
-  ['success', 'success'],
-];
 const PALETTE_PREVIEWS: readonly PalettePreviewConfig[] = [
   {
     description:
@@ -61,26 +53,6 @@ const PALETTE_PREVIEWS: readonly PalettePreviewConfig[] = [
     title: 'Success palette',
   },
 ];
-const SECTIONS: ReadonlyArray<keyof Theme> = [
-  'background',
-  'primary',
-  'secondary',
-  'display',
-  'error',
-  'warning',
-  'success',
-];
-const SHADE_MAP: ReadonlyArray<[number, keyof Palette]> = [
-  [100, 'c100'],
-  [200, 'c200'],
-  [300, 'c300'],
-  [400, 'c400'],
-  [500, 'c500'],
-  [600, 'c600'],
-  [700, 'c700'],
-  [800, 'c800'],
-  [900, 'c900'],
-];
 const THEME_NAMES: Record<ThemeMode, Record<ThemeType, string>> = {
   dark: {
     0: 'Dark Theme 0',
@@ -110,11 +82,10 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
   protected readonly seedColor: Signal.State<Color> = new Signal.State(
     DEFAULT_SEED_COLOR,
   );
-  protected readonly themeSet: Signal.Computed<ThemeSet> = new Signal.Computed(
-    () => {
-      return createThemeSet(this.seedColor.get());
-    },
-  );
+  protected readonly paletteSet: Signal.Computed<PaletteSet> =
+    new Signal.Computed(() => {
+      return createPaletteSet(this.seedColor.get());
+    });
   protected watcher: null | Signal.subtle.Watcher = null;
 
   override connectedCallback(): void {
@@ -372,7 +343,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                   <h4>${config.title}</h4>
                   <p>${config.description}</p>
                   <an-palette-preview
-                    .palette="${this.themeSet.get().palettes[config.key]}"
+                    .palette="${this.paletteSet.get()[config.key]}"
                   ></an-palette-preview>
                 </div>
               `,
@@ -386,7 +357,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                       <div class="theme-card-wrapper">
                         <an-theme-preview
                           .label="${THEME_NAMES.light[type]}"
-                          .theme="${this.themeSet.get().light[type]}"
+                          .theme="${THEME_SET.light[type]}"
                         ></an-theme-preview>
                       </div>
                     `,
@@ -398,7 +369,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                       <div class="theme-card-wrapper">
                         <an-theme-preview
                           .label="${THEME_NAMES.dark[type]}"
-                          .theme="${this.themeSet.get().dark[type]}"
+                          .theme="${THEME_SET.dark[type]}"
                         ></an-theme-preview>
                       </div>
                     `,
@@ -538,35 +509,17 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
   }
 
   protected applyThemeTokens(): void {
-    const themeSet = this.themeSet.get();
-    const rootStyle = document.documentElement.style;
-
-    for (const [prefix, paletteKey] of PALETTE_CONFIGS) {
-      const palette = themeSet.palettes[paletteKey];
-      for (const [shadeNum, shadeKey] of SHADE_MAP) {
-        rootStyle.setProperty(
-          `--an-${prefix}-${shadeNum}`,
-          format(palette[shadeKey], 'hex'),
-        );
-      }
-    }
-
-    for (const mode of MODES) {
-      const modeThemes = themeSet[mode];
-      for (const type of TYPES) {
-        const theme = modeThemes[type];
-        for (const section of SECTIONS) {
-          rootStyle.setProperty(
-            `--an-main-${mode}_${type}-${section}`,
-            format(theme[section], 'hex'),
-          );
-        }
-      }
-    }
+    const paletteSet = this.paletteSet.get();
+    applyThemeTokens(
+      THEME_SET,
+      paletteSet,
+      document.documentElement.style,
+      'main',
+    );
   }
   protected cleanupWatcher(): void {
     if (this.watcher) {
-      this.watcher.unwatch(this.themeSet);
+      this.watcher.unwatch(this.paletteSet);
       this.watcher = null;
     }
   }
@@ -598,7 +551,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
         });
       }
     });
-    this.watcher.watch(this.themeSet);
+    this.watcher.watch(this.paletteSet);
     this.applyThemeTokens();
   }
 }

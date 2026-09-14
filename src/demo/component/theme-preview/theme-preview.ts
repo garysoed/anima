@@ -1,4 +1,3 @@
-import {format} from 'gs-tools/export/color';
 import {LitElement, PropertyValues, TemplateResult, html, nothing} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import {unsafeSVG} from 'lit/directives/unsafe-svg.js';
@@ -47,13 +46,32 @@ export class ThemePreview extends LitElement {
     super.updated(changedProperties);
     const theme = this.theme;
     if (theme) {
-      this.style.setProperty('--an-preview-background', format(theme.background, 'hex'));
-      this.style.setProperty('--an-preview-display', format(theme.display, 'hex'));
-      this.style.setProperty('--an-preview-error', format(theme.error, 'hex'));
-      this.style.setProperty('--an-preview-primary', format(theme.primary, 'hex'));
-      this.style.setProperty('--an-preview-secondary', format(theme.secondary, 'hex'));
-      this.style.setProperty('--an-preview-success', format(theme.success, 'hex'));
-      this.style.setProperty('--an-preview-warning', format(theme.warning, 'hex'));
+      const themePrefix = `--an-main-${theme.mode}_${theme.type}`;
+      this.style.setProperty(
+        '--an-preview-background',
+        `var(${themePrefix}-background)`,
+      );
+      this.style.setProperty(
+        '--an-preview-display',
+        `var(${themePrefix}-display)`,
+      );
+      this.style.setProperty('--an-preview-error', `var(${themePrefix}-error)`);
+      this.style.setProperty(
+        '--an-preview-primary',
+        `var(${themePrefix}-primary)`,
+      );
+      this.style.setProperty(
+        '--an-preview-secondary',
+        `var(${themePrefix}-secondary)`,
+      );
+      this.style.setProperty(
+        '--an-preview-success',
+        `var(${themePrefix}-success)`,
+      );
+      this.style.setProperty(
+        '--an-preview-warning',
+        `var(${themePrefix}-warning)`,
+      );
     }
   }
 }

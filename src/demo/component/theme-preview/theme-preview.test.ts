@@ -1,8 +1,10 @@
 import {expect, test} from '@playwright/test';
 import {rgb} from 'gs-tools/export/color';
 
-import {createThemeSet} from '../../../core/theme/create-theme-set';
+import {createPaletteSet} from '../../../core/palette/create-palette-set';
+import {getThemeTokensCssProperties} from '../../../core/theme/apply-theme-tokens';
 import {Theme} from '../../../core/theme/theme';
+import {THEME_SET} from '../../../core/theme/theme-set';
 
 test.describe('<an-theme-preview>', () => {
   test('renders no DOM nodes when theme is null', async ({page}) => {
@@ -52,8 +54,16 @@ test.describe('<an-theme-preview>', () => {
     const preview = page.locator('an-theme-preview');
     await expect(preview).toBeAttached();
 
-    const themeSet = createThemeSet(rgb({b: 220, g: 38, r: 38}));
-    const lightTheme0: Theme = themeSet.light[0];
+    const seed = rgb({b: 220, g: 38, r: 38});
+    const palettes = createPaletteSet(seed);
+    const lightTheme0: Theme = THEME_SET.light[0];
+    const cssVars = getThemeTokensCssProperties(THEME_SET, palettes, 'main');
+
+    await page.evaluate((props: Record<string, string>) => {
+      for (const [key, value] of Object.entries(props)) {
+        document.documentElement.style.setProperty(key, value);
+      }
+    }, cssVars);
 
     await preview.evaluate((el: HTMLElement, theme: Theme) => {
       Reflect.set(el, 'label', 'Light Theme 0');

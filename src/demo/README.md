@@ -16,4 +16,3 @@ Interactive demo application and visualizer for Anima.
 - [assets/](assets/)
 - [component/](component/)
 - [goldens/](goldens/)
-

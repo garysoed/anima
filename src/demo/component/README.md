@@ -11,4 +11,3 @@ Custom Web Components utilized by the Anima demo page.
 - [color-picker/](color-picker/)
 - [palette-preview/](palette-preview/)
 - [theme-preview/](theme-preview/)
-
