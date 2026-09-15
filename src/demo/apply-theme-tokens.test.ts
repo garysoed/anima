@@ -35,7 +35,9 @@ test.describe('apply-theme-tokens', () => {
       expect(properties['--an-main-light_0-background']).toBe(
         'var(--an-main_neutral-100)',
       );
-      expect(properties['--an-main-dark_0-background']).toBe('var(--an-black)');
+      expect(properties['--an-main-dark_0-background']).toBe(
+        'var(--an-main_neutral-900)',
+      );
     });
   });
 

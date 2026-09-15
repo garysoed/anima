@@ -36,15 +36,13 @@ test.describe('createPaletteSet', () => {
     }
   });
 
-  test('generates neutral palette with 75% reduced saturation compared to highlight', () => {
+  test('generates neutral palette with 0.1 saturation in HSL space', () => {
     const seed = hsl({h: 210, l: 0.5, s: 0.8});
     const paletteSet = createPaletteSet(seed);
 
-    const highlightHsl = convert(paletteSet.highlight.c500, 'hsl');
     const neutralHsl = convert(paletteSet.neutral.c500, 'hsl');
 
-    expect(neutralHsl.s).toBeLessThan(highlightHsl.s);
-    expect(neutralHsl.s).toBeCloseTo(highlightHsl.s * 0.25, 1);
+    expect(neutralHsl.s).toBeCloseTo(0.1, 1);
   });
 
   test('generates semantic palettes with expected red, amber, and green hues', () => {
