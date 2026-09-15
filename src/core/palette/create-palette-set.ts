@@ -10,7 +10,7 @@ const SUCCESS_SEED = rgb({b: 74, g: 163, r: 22});
 export function createPaletteSet(seedColor: Color): PaletteSet {
   const targetSpace = seedColor.space;
   const neutralSeed = convert(
-    update(seedColor, 'hsl', () => ({s: 0.1})),
+    update(seedColor, 'hsl', () => ({s: 0.05})),
     targetSpace,
   );
 

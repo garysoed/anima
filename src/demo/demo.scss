@@ -1,16 +1,25 @@
-body {
-  margin: 0;
-}
-
 :host {
-  background-color: light-dark(
-    var(--an-main-light_1-background),
-    var(--an-main-dark_1-background)
-  );
-  color: light-dark(
-    var(--an-main-light_1-primary),
-    var(--an-main-dark_1-primary)
-  );
+  @for $type from 0 through 3 {
+    @each $section
+      in (
+        'background',
+        'display',
+        'error',
+        'primary',
+        'secondary',
+        'success',
+        'warning'
+      )
+    {
+      --an-main_#{$type}-#{$section}: light-dark(
+        var(--an-main-light_#{$type}-#{$section}),
+        var(--an-main-dark_#{$type}-#{$section})
+      );
+    }
+  }
+
+  background-color: var(--an-main_0-background);
+  color: var(--an-main_0-primary);
   color-scheme: light dark;
   display: block;
   min-height: 100vh;
@@ -28,33 +37,9 @@ body {
 .doc-section {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-
-  h1,
-  h2,
-  h3 {
-    color: light-dark(
-      var(--an-main-light_1-primary),
-      var(--an-main-dark_1-primary)
-    );
-    margin: 0;
-  }
-
-  p {
-    color: light-dark(
-      var(--an-main-light_1-primary),
-      var(--an-main-dark_1-primary)
-    );
-    margin: 0;
-  }
 
   ul,
   ol {
-    color: light-dark(
-      var(--an-main-light_1-primary),
-      var(--an-main-dark_1-primary)
-    );
-    margin: 0;
     padding-left: 24px;
   }
 
@@ -63,16 +48,16 @@ body {
   }
 
   code {
-    background-color: light-dark(
-      var(--an-main-light_0-background),
-      var(--an-main-dark_0-background)
-    );
-    color: light-dark(
-      var(--an-main-light_0-primary),
-      var(--an-main-dark_0-primary)
-    );
+    background-color: var(--an-main_0-background);
+    color: var(--an-main_0-primary);
     padding: 2px 4px;
   }
+}
+
+.card {
+  background-color: var(--an-main_1-background);
+  color: var(--an-main_1-primary);
+  padding: 16px;
 }
 
 .mode-toggle-bar {
@@ -81,10 +66,7 @@ body {
 }
 
 .mode-toggle {
-  background-color: light-dark(
-    var(--an-main-light_0-background),
-    var(--an-main-dark_0-background)
-  );
+  background-color: var(--an-main_0-background);
   border-radius: 4px;
   display: inline-flex;
   padding: 4px;
@@ -93,33 +75,18 @@ body {
 .mode-button {
   background-color: transparent;
   border-radius: 4px;
-  color: light-dark(
-    var(--an-main-light_0-secondary),
-    var(--an-main-dark_0-secondary)
-  );
+  color: var(--an-main_0-secondary);
   cursor: pointer;
   padding: 6px 12px;
 
   &:hover {
-    background-color: light-dark(
-      var(--an-main-light_2-background),
-      var(--an-main-dark_2-background)
-    );
-    color: light-dark(
-      var(--an-main-light_2-primary),
-      var(--an-main-dark_2-primary)
-    );
+    background-color: var(--an-main_2-background);
+    color: var(--an-main_2-primary);
   }
 
   &.selected {
-    background-color: light-dark(
-      var(--an-main-light_2-background),
-      var(--an-main-dark_2-background)
-    );
-    color: light-dark(
-      var(--an-main-light_2-primary),
-      var(--an-main-dark_2-primary)
-    );
+    background-color: var(--an-main_2-background);
+    color: var(--an-main_2-primary);
     font-weight: bold;
   }
 }
@@ -131,18 +98,12 @@ body {
   text-align: left;
 
   th {
-    color: light-dark(
-      var(--an-main-light_1-secondary),
-      var(--an-main-dark_1-secondary)
-    );
+    color: var(--an-main_1-secondary);
     padding: 6px 16px 6px 0;
   }
 
   td {
-    color: light-dark(
-      var(--an-main-light_1-primary),
-      var(--an-main-dark_1-primary)
-    );
+    color: var(--an-main_1-primary);
     padding: 6px 16px 6px 0;
   }
 }
@@ -153,10 +114,7 @@ body {
   gap: 24px;
 
   h3 {
-    color: light-dark(
-      var(--an-main-light_0-primary),
-      var(--an-main-dark_0-primary)
-    );
+    color: var(--an-main_0-primary);
     margin: 0;
   }
 }
@@ -178,14 +136,8 @@ body {
 }
 
 .generator-layout {
-  background-color: light-dark(
-    var(--an-main-light_0-background),
-    var(--an-main-dark_0-background)
-  );
-  color: light-dark(
-    var(--an-main-light_0-primary),
-    var(--an-main-dark_0-primary)
-  );
+  background-color: var(--an-main_1-background);
+  color: var(--an-main_0-primary);
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -193,10 +145,7 @@ body {
   padding: 24px;
 
   h3 {
-    color: light-dark(
-      var(--an-main-light_0-primary),
-      var(--an-main-dark_0-primary)
-    );
+    color: var(--an-main_0-primary);
     margin: 0;
   }
 
@@ -206,54 +155,30 @@ body {
     gap: 8px;
 
     h4 {
-      color: light-dark(
-        var(--an-main-light_0-primary),
-        var(--an-main-dark_0-primary)
-      );
+      color: var(--an-main_0-primary);
       margin: 0;
     }
 
     p {
-      color: light-dark(
-        var(--an-main-light_0-secondary),
-        var(--an-main-dark_0-secondary)
-      );
+      color: var(--an-main_0-secondary);
       margin: 0;
     }
   }
 }
 
 button {
-  background-color: light-dark(
-    var(--an-main-light_2-background),
-    var(--an-main-dark_2-background)
-  );
+  background-color: var(--an-main_2-background);
   border: none;
-  color: light-dark(
-    var(--an-main-light_2-primary),
-    var(--an-main-dark_2-primary)
-  );
+  color: var(--an-main_2-primary);
 
   &:hover {
-    background-color: light-dark(
-      var(--an-main-light_3-background),
-      var(--an-main-dark_3-background)
-    );
-    color: light-dark(
-      var(--an-main-light_3-primary),
-      var(--an-main-dark_3-primary)
-    );
+    background-color: var(--an-main_3-background);
+    color: var(--an-main_3-primary);
   }
 
   &:active {
-    background-color: light-dark(
-      var(--an-main-light_3-background),
-      var(--an-main-dark_3-background)
-    );
-    color: light-dark(
-      var(--an-main-light_3-primary),
-      var(--an-main-dark_3-primary)
-    );
+    background-color: var(--an-main_3-background);
+    color: var(--an-main_3-primary);
   }
 
   &:disabled {
@@ -261,24 +186,14 @@ button {
   }
 
   &:focus-visible {
-    outline: 2px solid
-      light-dark(
-        var(--an-main-light_3-background),
-        var(--an-main-dark_3-background)
-      );
+    outline: 2px solid var(--an-main_3-background);
   }
 }
 
 a {
-  color: light-dark(
-    var(--an-main-light_3-background),
-    var(--an-main-dark_3-background)
-  );
+  color: var(--an-main_3-background);
 
   &:hover {
-    color: light-dark(
-      var(--an-main-light_2-background),
-      var(--an-main-dark_2-background)
-    );
+    color: var(--an-main_2-background);
   }
 }
