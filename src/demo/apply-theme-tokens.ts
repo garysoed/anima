@@ -1,47 +1,14 @@
 import {format} from 'gs-tools/export/color';
 
-import {Palette} from '../core/palette/palette';
-import {PaletteSet} from '../core/palette/palette-set';
+import {SHADE_KEYS} from '../core/palette/palette';
+import {PALETTE_KEYS, PaletteSet} from '../core/palette/palette-set';
 import {
   getPaletteCssVar,
-  PaletteKey,
-  ThemeMode,
-  ThemeSection,
-  ThemeType,
+  MODES,
+  SECTIONS,
+  TYPES,
 } from '../core/theme/theme';
 import {ThemeSet} from '../core/theme/theme-set';
-
-const PALETTE_KEYS: readonly PaletteKey[] = [
-  'highlight',
-  'neutral',
-  'error',
-  'warning',
-  'success',
-];
-
-const SHADE_KEYS: ReadonlyArray<keyof Palette> = [
-  'c100',
-  'c200',
-  'c300',
-  'c400',
-  'c500',
-  'c600',
-  'c700',
-  'c800',
-  'c900',
-];
-
-const MODES: readonly ThemeMode[] = ['light', 'dark'];
-const TYPES: readonly ThemeType[] = [0, 1, 2, 3];
-const SECTIONS: readonly ThemeSection[] = [
-  'background',
-  'display',
-  'error',
-  'primary',
-  'secondary',
-  'success',
-  'warning',
-];
 
 export function getThemeTokensCssProperties(
   themeSet: ThemeSet,

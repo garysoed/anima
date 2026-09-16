@@ -164,6 +164,16 @@
       margin: 0;
     }
   }
+
+  .export-button {
+    align-self: flex-start;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 8px 16px;
+  }
 }
 
 button {

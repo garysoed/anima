@@ -2,19 +2,7 @@ import {expect, test} from '@playwright/test';
 import {convert, hsl, rgb} from 'gs-tools/export/color';
 
 import {createPaletteSet} from './create-palette-set';
-import {Palette} from './palette';
-
-const SHADE_KEYS: ReadonlyArray<keyof Palette> = [
-  'c100',
-  'c200',
-  'c300',
-  'c400',
-  'c500',
-  'c600',
-  'c700',
-  'c800',
-  'c900',
-];
+import {SHADE_KEYS} from './palette';
 
 test.describe('createPaletteSet', () => {
   test('returns all 5 palettes with valid shades c100 to c900', () => {

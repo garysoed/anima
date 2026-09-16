@@ -1,4 +1,4 @@
-import {test} from '@playwright/test';
+import {expect, test} from '@playwright/test';
 import {Color, oklch} from 'gs-tools/export/color';
 
 import {ColorPicker} from './component/color-picker/color-picker';
@@ -101,5 +101,37 @@ test.describe('<an-demo>', () => {
     await demo.screenshot({
       path: 'src/demo/goldens/demo-dark.png',
     });
+  });
+
+  test('renders export penpot tokens button and triggers download', async ({
+    page,
+  }) => {
+    await page.setContent(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              background-color: #ffffff;
+            }
+          </style>
+        </head>
+        <body>
+          <an-demo id="demo"></an-demo>
+        </body>
+      </html>
+    `);
+
+    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+
+    const demo = page.locator('an-demo');
+    const exportButton = demo.locator('.export-button');
+
+    const downloadPromise = page.waitForEvent('download');
+    await exportButton.click();
+    const download = await downloadPromise;
+    expect(download.suggestedFilename()).toBe('penpot-tokens.json');
   });
 });

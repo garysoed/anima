@@ -7,3 +7,12 @@ export interface PaletteSet {
   readonly success: Palette;
   readonly warning: Palette;
 }
+
+export const PALETTE_KEYS: ReadonlyArray<keyof PaletteSet> = [
+  'highlight',
+  'neutral',
+  'error',
+  'warning',
+  'success',
+];
+

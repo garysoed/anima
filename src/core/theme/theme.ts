@@ -21,6 +21,18 @@ export type ThemeSection =
   | 'success'
   | 'warning';
 
+export const MODES: readonly ThemeMode[] = ['light', 'dark'];
+export const TYPES: readonly ThemeType[] = [0, 1, 2, 3];
+export const SECTIONS: readonly ThemeSection[] = [
+  'background',
+  'display',
+  'error',
+  'primary',
+  'secondary',
+  'success',
+  'warning',
+];
+
 export interface Theme {
   readonly background: PaletteColorKey;
   readonly display: PaletteColorKey;

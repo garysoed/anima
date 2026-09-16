@@ -5,7 +5,7 @@ import {customElement} from 'lit/decorators.js';
 
 import {createPaletteSet} from '../core/palette/create-palette-set';
 import {PaletteSet} from '../core/palette/palette-set';
-import {ThemeMode, ThemeType} from '../core/theme/theme';
+import {ThemeMode, ThemeType, TYPES} from '../core/theme/theme';
 import {THEME_SET} from '../core/theme/theme-set';
 
 import {applyThemeTokens} from './apply-theme-tokens';
@@ -13,6 +13,7 @@ import {ColorPicker} from './component/color-picker/color-picker';
 import './component/palette-preview/palette-preview';
 import './component/theme-preview/theme-preview';
 import styles from './demo.scss';
+import {downloadPenpotTokens} from './download-penpot-tokens';
 
 interface PalettePreviewConfig {
   readonly description: string;
@@ -67,7 +68,6 @@ const THEME_NAMES: Record<ThemeMode, Record<ThemeType, string>> = {
     3: 'Light Theme 3',
   },
 };
-const TYPES: readonly ThemeType[] = [0, 1, 2, 3];
 
 /**
  * Root demo application coordinating the introduction, picker, preview, and theme tokens.
@@ -389,6 +389,13 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                   </div>
                 </div>
               </div>
+              <button
+                class="export-button"
+                type="button"
+                @click="${this.handleExportPenpotTokens}"
+              >
+                Export Penpot tokens
+              </button>
             </div>
           </div>
           <h2>Typographies</h2>
@@ -543,6 +550,14 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
     if (target instanceof ColorPicker) {
       this.seedColor.set(target.value);
     }
+  }
+  protected handleExportPenpotTokens(): void {
+    downloadPenpotTokens(
+      THEME_SET,
+      this.paletteSet.get(),
+      'main',
+      'penpot-tokens.json',
+    );
   }
   protected handleModeSelect(selectedMode: ThemeMode): void {
     this.mode.set(selectedMode);
