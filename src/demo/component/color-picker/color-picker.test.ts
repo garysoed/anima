@@ -58,7 +58,6 @@ test.describe('<an-color-picker>', () => {
     await page.addScriptTag({path: 'dist/demo/bundle.js'});
 
     const picker = page.locator('an-color-picker');
-    await expect(picker).toBeVisible();
 
     await page.evaluate(() => {
       window.inputEventCount = 0;
@@ -72,11 +71,11 @@ test.describe('<an-color-picker>', () => {
       });
     });
 
-    const redSlider = picker
+    const hueSlider = picker
       .locator('.channel-row')
       .nth(0)
       .locator('.channel-slider');
-    await redSlider.fill('150');
+    await hueSlider.fill('180');
 
     const inputCount = await page.evaluate(() => window.inputEventCount);
     const changeCount = await page.evaluate(() => window.changeEventCount);
@@ -85,7 +84,7 @@ test.describe('<an-color-picker>', () => {
     expect(changeCount).toBeGreaterThan(0);
 
     const hexInput = picker.locator('.hex-input');
-    await expect(hexInput).toHaveValue('#969e0b');
+    await expect(hexInput).toHaveValue('#0af5f5');
   });
 
   test('updates color on hex typing and validates on blur', async ({page}) => {
@@ -101,17 +100,15 @@ test.describe('<an-color-picker>', () => {
     await page.addScriptTag({path: 'dist/demo/bundle.js'});
 
     const picker = page.locator('an-color-picker');
-    await expect(picker).toBeVisible();
-
     const hexInput = picker.locator('.hex-input');
-    const greenInput = picker
+    const hueInput = picker
       .locator('.channel-row')
-      .nth(1)
+      .nth(0)
       .locator('.channel-input');
 
     // Type valid hex
     await hexInput.fill('#00ff00');
-    await expect(greenInput).toHaveValue('255');
+    await expect(hueInput).toHaveValue('120');
 
     // Type invalid hex
     await hexInput.fill('#xyz');

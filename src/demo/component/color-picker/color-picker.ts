@@ -1,11 +1,11 @@
 import {Signal, SignalWatcher} from '@lit-labs/signals';
-import {Color, RgbColor, convert, format, rgb} from 'gs-tools/export/color';
+import {Color, HslColor, convert, format, hsl, rgb} from 'gs-tools/export/color';
 import {LitElement, TemplateResult, html} from 'lit';
 import {customElement} from 'lit/decorators.js';
 
 import styles from './color-picker.scss';
 
-export type RgbChannel = 'b' | 'g' | 'r';
+export type HslChannel = 'h' | 'l' | 's';
 
 const HEX_REGEX = /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
 
@@ -26,27 +26,27 @@ function normalizeHex(hex: string): string {
 }
 
 /**
- * Autonomous RGB color picker component with slider and hex controls.
+ * Autonomous HSL color picker component with slider and hex controls.
  * Custom Element Tag: <an-color-picker>
  */
 @customElement('an-color-picker')
 export class ColorPicker extends SignalWatcher(LitElement) {
   static override styles = styles;
 
-  protected readonly b: Signal.State<number> = new Signal.State(11);
-  protected readonly g: Signal.State<number> = new Signal.State(158);
-  protected readonly r: Signal.State<number> = new Signal.State(245);
-  protected readonly rgbColor: Signal.Computed<RgbColor> = new Signal.Computed(
+  protected readonly hue: Signal.State<number> = new Signal.State(38);
+  protected readonly lightness: Signal.State<number> = new Signal.State(0.5);
+  protected readonly saturation: Signal.State<number> = new Signal.State(0.92);
+  protected readonly hslColor: Signal.Computed<HslColor> = new Signal.Computed(
     () => {
-      return rgb({
-        b: this.b.get(),
-        g: this.g.get(),
-        r: this.r.get(),
+      return hsl({
+        h: this.hue.get(),
+        l: this.lightness.get(),
+        s: this.saturation.get(),
       });
     },
   );
   protected readonly hex: Signal.Computed<string> = new Signal.Computed(() => {
-    return format(this.rgbColor.get(), 'hex');
+    return format(this.hslColor.get(), 'hex');
   });
   protected readonly rawHex: Signal.State<string> = new Signal.State('#f59e0b');
   protected readonly isHexValid: Signal.Computed<boolean> = new Signal.Computed(
@@ -59,67 +59,73 @@ export class ColorPicker extends SignalWatcher(LitElement) {
     return html`
       <div class="container">
         <div class="channel-row">
-          <span class="channel-label r">R</span>
+          <span class="channel-label h">H</span>
           <input
             type="range"
             class="channel-slider"
             min="0"
-            max="255"
-            .value="${String(this.r.get())}"
-            @input="${(e: Event) => this.handleSliderInput('r', e)}"
+            max="360"
+            step="1"
+            .value="${String(this.hue.get())}"
+            @input="${(e: Event) => this.handleSliderInput('h', e)}"
             @change="${this.handleSliderChange}"
           />
           <input
             type="number"
             class="channel-input"
             min="0"
-            max="255"
-            .value="${String(this.r.get())}"
-            @input="${(e: Event) => this.handleNumericInput('r', e)}"
+            max="360"
+            step="1"
+            .value="${String(this.hue.get())}"
+            @input="${(e: Event) => this.handleNumericInput('h', e)}"
             @change="${this.handleNumericChange}"
           />
         </div>
 
         <div class="channel-row">
-          <span class="channel-label g">G</span>
+          <span class="channel-label s">S</span>
           <input
             type="range"
             class="channel-slider"
             min="0"
-            max="255"
-            .value="${String(this.g.get())}"
-            @input="${(e: Event) => this.handleSliderInput('g', e)}"
+            max="1"
+            step="0.01"
+            .value="${String(this.saturation.get())}"
+            @input="${(e: Event) => this.handleSliderInput('s', e)}"
             @change="${this.handleSliderChange}"
           />
           <input
             type="number"
             class="channel-input"
             min="0"
-            max="255"
-            .value="${String(this.g.get())}"
-            @input="${(e: Event) => this.handleNumericInput('g', e)}"
+            max="1"
+            step="0.01"
+            .value="${String(this.saturation.get())}"
+            @input="${(e: Event) => this.handleNumericInput('s', e)}"
             @change="${this.handleNumericChange}"
           />
         </div>
 
         <div class="channel-row">
-          <span class="channel-label b">B</span>
+          <span class="channel-label l">L</span>
           <input
             type="range"
             class="channel-slider"
             min="0"
-            max="255"
-            .value="${String(this.b.get())}"
-            @input="${(e: Event) => this.handleSliderInput('b', e)}"
+            max="1"
+            step="0.01"
+            .value="${String(this.lightness.get())}"
+            @input="${(e: Event) => this.handleSliderInput('l', e)}"
             @change="${this.handleSliderChange}"
           />
           <input
             type="number"
             class="channel-input"
             min="0"
-            max="255"
-            .value="${String(this.b.get())}"
-            @input="${(e: Event) => this.handleNumericInput('b', e)}"
+            max="1"
+            step="0.01"
+            .value="${String(this.lightness.get())}"
+            @input="${(e: Event) => this.handleNumericInput('l', e)}"
             @change="${this.handleNumericChange}"
           />
         </div>
@@ -146,18 +152,27 @@ export class ColorPicker extends SignalWatcher(LitElement) {
   }
 
   get value(): Color {
-    return this.rgbColor.get();
+    return this.hslColor.get();
   }
   set value(color: Color) {
-    const converted = convert(color, 'rgb');
-    const clampedR = Math.max(0, Math.min(255, Math.round(converted.r)));
-    const clampedG = Math.max(0, Math.min(255, Math.round(converted.g)));
-    const clampedB = Math.max(0, Math.min(255, Math.round(converted.b)));
-    this.r.set(clampedR);
-    this.g.set(clampedG);
-    this.b.set(clampedB);
+    const converted = convert(color, 'hsl');
+    const clampedH = Math.max(
+      0,
+      Math.min(360, Math.round(converted.h ?? this.hue.get())),
+    );
+    const clampedS = Math.max(
+      0,
+      Math.min(1, Math.round(converted.s * 100) / 100),
+    );
+    const clampedL = Math.max(
+      0,
+      Math.min(1, Math.round(converted.l * 100) / 100),
+    );
+    this.hue.set(clampedH);
+    this.saturation.set(clampedS);
+    this.lightness.set(clampedL);
     this.rawHex.set(
-      format(rgb({b: clampedB, g: clampedG, r: clampedR}), 'hex'),
+      format(hsl({h: clampedH, l: clampedL, s: clampedS}), 'hex'),
     );
   }
 
@@ -181,10 +196,22 @@ export class ColorPicker extends SignalWatcher(LitElement) {
       const val = target.value;
       this.rawHex.set(val);
       if (isValidHex(val)) {
-        const parsed = rgb(normalizeHex(val));
-        this.r.set(parsed.r);
-        this.g.set(parsed.g);
-        this.b.set(parsed.b);
+        const parsed = convert(rgb(normalizeHex(val)), 'hsl');
+        const clampedH = Math.max(
+          0,
+          Math.min(360, Math.round(parsed.h ?? this.hue.get())),
+        );
+        const clampedS = Math.max(
+          0,
+          Math.min(1, Math.round(parsed.s * 100) / 100),
+        );
+        const clampedL = Math.max(
+          0,
+          Math.min(1, Math.round(parsed.l * 100) / 100),
+        );
+        this.hue.set(clampedH);
+        this.saturation.set(clampedS);
+        this.lightness.set(clampedL);
         this.dispatchInputEvent();
       }
     }
@@ -192,12 +219,16 @@ export class ColorPicker extends SignalWatcher(LitElement) {
   protected handleNumericChange(): void {
     this.dispatchChangeEvent();
   }
-  protected handleNumericInput(channel: RgbChannel, event: Event): void {
+  protected handleNumericInput(channel: HslChannel, event: Event): void {
     const target = event.target;
     if (target instanceof HTMLInputElement) {
       const parsedNumber = Number(target.value);
       if (!Number.isNaN(parsedNumber)) {
-        const val = Math.max(0, Math.min(255, Math.round(parsedNumber)));
+        const max = channel === 'h' ? 360 : 1;
+        const val =
+          channel === 'h'
+            ? Math.max(0, Math.min(max, Math.round(parsedNumber)))
+            : Math.max(0, Math.min(max, Math.round(parsedNumber * 100) / 100));
         this.setChannel(channel, val);
         this.rawHex.set(this.hex.get());
         this.dispatchInputEvent();
@@ -207,26 +238,31 @@ export class ColorPicker extends SignalWatcher(LitElement) {
   protected handleSliderChange(): void {
     this.dispatchChangeEvent();
   }
-  protected handleSliderInput(channel: RgbChannel, event: Event): void {
+  protected handleSliderInput(channel: HslChannel, event: Event): void {
     const target = event.target;
     if (target instanceof HTMLInputElement) {
-      const val = Math.max(0, Math.min(255, Number(target.value)));
+      const num = Number(target.value);
+      const max = channel === 'h' ? 360 : 1;
+      const val =
+        channel === 'h'
+          ? Math.max(0, Math.min(max, Math.round(num)))
+          : Math.max(0, Math.min(max, Math.round(num * 100) / 100));
       this.setChannel(channel, val);
       this.rawHex.set(this.hex.get());
       this.dispatchInputEvent();
     }
   }
 
-  private setChannel(channel: RgbChannel, value: number): void {
+  private setChannel(channel: HslChannel, value: number): void {
     switch (channel) {
-      case 'r':
-        this.r.set(value);
+      case 'h':
+        this.hue.set(value);
         break;
-      case 'g':
-        this.g.set(value);
+      case 's':
+        this.saturation.set(value);
         break;
-      case 'b':
-        this.b.set(value);
+      case 'l':
+        this.lightness.set(value);
         break;
     }
   }
