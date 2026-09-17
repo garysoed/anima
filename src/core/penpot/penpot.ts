@@ -13,6 +13,5 @@ export interface PenpotExportData {
     readonly activeSets?: readonly string[];
     readonly tokenSetOrder: readonly string[];
   };
-  readonly palette: PenpotTokenTree;
-  readonly theme: PenpotTokenTree;
+  readonly base: PenpotTokenTree;
 }

@@ -20,10 +20,10 @@ import {
 
 function getPenpotPaletteAlias(key: PaletteColorKey, seedName: string): string {
   if (key === 'white') {
-    return '{palette.white}';
+    return '{white}';
   }
   if (key === 'black') {
-    return '{palette.black}';
+    return '{black}';
   }
   const [palKey, shadeKey] = key.split('.');
   if (!isPaletteKey(palKey) || !isShadeKey(shadeKey)) {
@@ -34,7 +34,7 @@ function getPenpotPaletteAlias(key: PaletteColorKey, seedName: string): string {
     palKey === 'highlight' || palKey === 'neutral'
       ? `${seedName}_${palKey}`
       : palKey;
-  return `{palette.${paletteType}.${shadeNum}}`;
+  return `{${paletteType}.${shadeNum}}`;
 }
 
 export function getPenpotTokens(
@@ -42,7 +42,7 @@ export function getPenpotTokens(
   palettes: PaletteSet,
   seedName: string,
 ): PenpotExportData {
-  const paletteTokens: Record<string, PenpotColorToken | PenpotTokenTree> = {
+  const baseTokens: Record<string, PenpotColorToken | PenpotTokenTree> = {
     black: {
       $type: 'color',
       $value: '#000000',
@@ -68,10 +68,8 @@ export function getPenpotTokens(
         $value: format(palette[shadeKey], 'hex'),
       };
     }
-    paletteTokens[prefix] = shadeTokens;
+    baseTokens[prefix] = shadeTokens;
   }
-
-  const themeTokens: Record<string, PenpotTokenTree> = {};
 
   for (const mode of MODES) {
     const modeThemes = themeSet[mode];
@@ -84,16 +82,15 @@ export function getPenpotTokens(
           $value: getPenpotPaletteAlias(theme[section], seedName),
         };
       }
-      themeTokens[`${seedName}-${mode}_${type}`] = roleTokens;
+      baseTokens[`${seedName}-${mode}_${type}`] = roleTokens;
     }
   }
 
   return {
     $metadata: {
-      activeSets: ['palette', 'theme'],
-      tokenSetOrder: ['palette', 'theme'],
+      activeSets: ['base'],
+      tokenSetOrder: ['base'],
     },
-    palette: paletteTokens,
-    theme: themeTokens,
+    base: baseTokens,
   };
 }

@@ -49,22 +49,22 @@ const SECTIONS = [
 ];
 
 test.describe('getPenpotTokens', () => {
-  test('outputs valid palette set, theme set, and metadata', () => {
+  test('outputs all colors in valid base set and metadata', () => {
     const seed = rgb({b: 245, g: 158, r: 11});
     const palettes = createPaletteSet(seed);
     const data: PenpotExportData = getPenpotTokens(THEME_SET, palettes, 'main');
 
-    const palette = data.palette;
-    const whiteToken = palette['white'] as PenpotColorToken;
+    const base = data.base;
+    const whiteToken = base['white'] as PenpotColorToken;
     expect(whiteToken.$type).toBe('color');
     expect(whiteToken.$value).toBe('#ffffff');
 
-    const blackToken = palette['black'] as PenpotColorToken;
+    const blackToken = base['black'] as PenpotColorToken;
     expect(blackToken.$type).toBe('color');
     expect(blackToken.$value).toBe('#000000');
 
     for (const groupName of PALETTE_GROUPS) {
-      const group = palette[groupName] as PenpotTokenTree;
+      const group = base[groupName] as PenpotTokenTree;
       expect(group).toBeDefined();
       for (const shade of SHADE_KEYS) {
         const token = group[shade] as PenpotColorToken;
@@ -74,19 +74,18 @@ test.describe('getPenpotTokens', () => {
       }
     }
 
-    const theme = data.theme;
     for (const themeName of THEME_NAMES) {
-      const themeGroup = theme[themeName] as PenpotTokenTree;
+      const themeGroup = base[themeName] as PenpotTokenTree;
       expect(themeGroup).toBeDefined();
       for (const section of SECTIONS) {
         const token = themeGroup[section] as PenpotColorToken;
         expect(token).toBeDefined();
         expect(token.$type).toBe('color');
-        expect(token.$value).toMatch(/^\{palette\.[a-z0-9_.]+\}$/);
+        expect(token.$value).toMatch(/^\{[a-z0-9_.]+\}$/);
       }
     }
 
-    expect(data.$metadata!.tokenSetOrder).toEqual(['palette', 'theme']);
-    expect(data.$metadata!.activeSets).toEqual(['palette', 'theme']);
+    expect(data.$metadata!.tokenSetOrder).toEqual(['base']);
+    expect(data.$metadata!.activeSets).toEqual(['base']);
   });
 });
