@@ -6,3 +6,5 @@ export * from './core/penpot/get-penpot-tokens';
 export * from './core/penpot/penpot';
 export * from './core/theme/theme';
 export * from './core/theme/theme-set';
+export * from './core/typography/to-css-font';
+export * from './core/typography/types';

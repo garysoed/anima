@@ -7,3 +7,4 @@ Reusable core color palette and theme generation modules for Anima.
 - [palette/](palette/)
 - [penpot/](penpot/)
 - [theme/](theme/)
+- [typography/](typography/)
