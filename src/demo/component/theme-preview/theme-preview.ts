@@ -20,7 +20,7 @@ export class ThemePreview extends LitElement {
   @property({type: String})
   label: string = '';
   @property({attribute: false})
-  theme: null | Theme = null;
+  theme: Theme | null = null;
 
   override render(): TemplateResult | typeof nothing {
     if (!this.theme) {

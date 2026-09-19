@@ -3,21 +3,10 @@ import {rgb} from 'gs-tools/export/color';
 
 import {createPaletteSet} from '../palette/create-palette-set';
 import {THEME_SET} from '../theme/theme-set';
+import {TypographySet} from '../typography/types';
 
 import {getPenpotTokens} from './get-penpot-tokens';
-import {PenpotColorToken, PenpotExportData, PenpotTokenTree} from './penpot';
-
-const SHADE_KEYS = [
-  '100',
-  '200',
-  '300',
-  '400',
-  '500',
-  '600',
-  '700',
-  '800',
-  '900',
-];
+import {PenpotExportData} from './penpot';
 
 const PALETTE_GROUPS = [
   'main_highlight',
@@ -38,54 +27,131 @@ const THEME_NAMES = [
   'main-dark_3',
 ];
 
-const SECTIONS = [
-  'background',
-  'primary',
-  'secondary',
-  'display',
-  'error',
-  'warning',
-  'success',
-];
+const TYPOGRAPHY_SET: TypographySet = {
+  bodyMedium: {
+    fontFamily: 'Roboto',
+    fontSize: '14px',
+    fontWeight: 400,
+    lineHeight: 1.5,
+  },
+  bodyMediumCode: {
+    fontFamily: 'JetBrains Mono',
+    fontSize: '14px',
+    fontWeight: 400,
+    lineHeight: 1.5,
+  },
+  displayMedium: {
+    fontFamily: 'Montserrat',
+    fontSize: '45px',
+    fontWeight: 400,
+    lineHeight: 1.2,
+  },
+};
 
 test.describe('getPenpotTokens', () => {
-  test('outputs all colors in valid base set and metadata', () => {
+  test('outputs valid palette set, theme set with typography tokens, and metadata', () => {
     const seed = rgb({b: 245, g: 158, r: 11});
     const palettes = createPaletteSet(seed);
-    const data: PenpotExportData = getPenpotTokens(THEME_SET, palettes, 'main');
+    const data: PenpotExportData = getPenpotTokens(
+      THEME_SET,
+      palettes,
+      TYPOGRAPHY_SET,
+      'main',
+    );
 
-    const base = data.base;
-    const whiteToken = base['white'] as PenpotColorToken;
-    expect(whiteToken.$type).toBe('color');
-    expect(whiteToken.$value).toBe('#ffffff');
+    expect(data.palette['white']).toEqual({
+      $type: 'color',
+      $value: '#ffffff',
+    });
 
-    const blackToken = base['black'] as PenpotColorToken;
-    expect(blackToken.$type).toBe('color');
-    expect(blackToken.$value).toBe('#000000');
+    expect(data.palette['black']).toEqual({
+      $type: 'color',
+      $value: '#000000',
+    });
 
     for (const groupName of PALETTE_GROUPS) {
-      const group = base[groupName] as PenpotTokenTree;
-      expect(group).toBeDefined();
-      for (const shade of SHADE_KEYS) {
-        const token = group[shade] as PenpotColorToken;
-        expect(token).toBeDefined();
-        expect(token.$type).toBe('color');
-        expect(token.$value).toMatch(/^#[0-9a-f]{6}$/i);
-      }
+      expect(data.palette[groupName]).toEqual({
+        100: {$type: 'color', $value: expect.stringMatching(/^#[0-9a-f]{6}$/i)},
+        200: {$type: 'color', $value: expect.stringMatching(/^#[0-9a-f]{6}$/i)},
+        300: {$type: 'color', $value: expect.stringMatching(/^#[0-9a-f]{6}$/i)},
+        400: {$type: 'color', $value: expect.stringMatching(/^#[0-9a-f]{6}$/i)},
+        500: {$type: 'color', $value: expect.stringMatching(/^#[0-9a-f]{6}$/i)},
+        600: {$type: 'color', $value: expect.stringMatching(/^#[0-9a-f]{6}$/i)},
+        700: {$type: 'color', $value: expect.stringMatching(/^#[0-9a-f]{6}$/i)},
+        800: {$type: 'color', $value: expect.stringMatching(/^#[0-9a-f]{6}$/i)},
+        900: {$type: 'color', $value: expect.stringMatching(/^#[0-9a-f]{6}$/i)},
+      });
     }
 
     for (const themeName of THEME_NAMES) {
-      const themeGroup = base[themeName] as PenpotTokenTree;
-      expect(themeGroup).toBeDefined();
-      for (const section of SECTIONS) {
-        const token = themeGroup[section] as PenpotColorToken;
-        expect(token).toBeDefined();
-        expect(token.$type).toBe('color');
-        expect(token.$value).toMatch(/^\{[a-z0-9_.]+\}$/);
-      }
+      expect(data.theme[themeName]).toEqual({
+        background: {
+          $type: 'color',
+          $value: expect.stringMatching(/^\{[a-z0-9_.]+\}$/),
+        },
+        display: {
+          $type: 'color',
+          $value: expect.stringMatching(/^\{[a-z0-9_.]+\}$/),
+        },
+        error: {
+          $type: 'color',
+          $value: expect.stringMatching(/^\{[a-z0-9_.]+\}$/),
+        },
+        primary: {
+          $type: 'color',
+          $value: expect.stringMatching(/^\{[a-z0-9_.]+\}$/),
+        },
+        secondary: {
+          $type: 'color',
+          $value: expect.stringMatching(/^\{[a-z0-9_.]+\}$/),
+        },
+        success: {
+          $type: 'color',
+          $value: expect.stringMatching(/^\{[a-z0-9_.]+\}$/),
+        },
+        warning: {
+          $type: 'color',
+          $value: expect.stringMatching(/^\{[a-z0-9_.]+\}$/),
+        },
+      });
     }
 
-    expect(data.$metadata!.tokenSetOrder).toEqual(['base']);
-    expect(data.$metadata!.activeSets).toEqual(['base']);
+    expect(data.theme['display']).toEqual({
+      medium: {
+        $type: 'typography',
+        $value: {
+          fontFamily: 'Montserrat',
+          fontSize: '45px',
+          fontWeight: 400,
+          lineHeight: 1.2,
+        },
+      },
+    });
+
+    expect(data.theme['body']).toEqual({
+      medium: {
+        $type: 'typography',
+        $value: {
+          fontFamily: 'Roboto',
+          fontSize: '14px',
+          fontWeight: 400,
+          lineHeight: 1.5,
+        },
+        code: {
+          $type: 'typography',
+          $value: {
+            fontFamily: 'JetBrains Mono',
+            fontSize: '14px',
+            fontWeight: 400,
+            lineHeight: 1.5,
+          },
+        },
+      },
+    });
+
+    expect(data.$metadata).toEqual({
+      activeSets: ['palette', 'theme'],
+      tokenSetOrder: ['palette', 'theme'],
+    });
   });
 });

@@ -17,7 +17,7 @@ export class PalettePreview extends LitElement {
   static override styles = styles;
 
   @property({attribute: false})
-  palette: null | Palette = null;
+  palette: Palette | null = null;
 
   override render(): TemplateResult | typeof nothing {
     const pal = this.palette;

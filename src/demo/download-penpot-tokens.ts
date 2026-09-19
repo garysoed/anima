@@ -9,7 +9,7 @@ export function downloadPenpotTokens(
   filename: string,
 ): void {
   const json = JSON.stringify(
-    getPenpotTokens(themeSet, palettes, seedName),
+    getPenpotTokens(themeSet, palettes, {}, seedName),
     null,
     2,
   );

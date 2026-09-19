@@ -86,7 +86,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
     new Signal.Computed(() => {
       return createPaletteSet(this.seedColor.get());
     });
-  protected watcher: null | Signal.subtle.Watcher = null;
+  protected watcher: Signal.subtle.Watcher | null = null;
 
   override connectedCallback(): void {
     super.connectedCallback();
