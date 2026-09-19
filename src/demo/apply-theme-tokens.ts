@@ -2,12 +2,7 @@ import {format} from 'gs-tools/export/color';
 
 import {SHADE_KEYS} from '../core/palette/palette';
 import {PALETTE_KEYS, PaletteSet} from '../core/palette/palette-set';
-import {
-  getPaletteCssVar,
-  MODES,
-  SECTIONS,
-  TYPES,
-} from '../core/theme/theme';
+import {getPaletteCssVar, MODES, SECTIONS, TYPES} from '../core/theme/theme';
 import {ThemeSet} from '../core/theme/theme-set';
 
 export function getThemeTokensCssProperties(

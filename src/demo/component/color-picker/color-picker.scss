@@ -15,8 +15,8 @@
 }
 
 .channel-label {
+  font: var(--an-label-medium-font);
   width: 20px;
-  font-weight: bold;
 }
 
 .channel-slider {
@@ -24,6 +24,7 @@
 }
 
 .channel-input {
+  font: var(--an-label-medium-font);
   width: 60px;
 }
 
@@ -34,11 +35,12 @@
 }
 
 .hex-label {
+  font: var(--an-label-small-font);
   width: 40px;
-  font-weight: bold;
 }
 
 .hex-input {
+  font: var(--an-label-medium-font);
   width: 100px;
 }
 

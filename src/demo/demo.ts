@@ -9,11 +9,13 @@ import {ThemeMode, ThemeType, TYPES} from '../core/theme/theme';
 import {THEME_SET} from '../core/theme/theme-set';
 
 import {applyThemeTokens} from './apply-theme-tokens';
+import {applyTypographyTokens} from './apply-typography-tokens';
 import {ColorPicker} from './component/color-picker/color-picker';
 import './component/palette-preview/palette-preview';
 import './component/theme-preview/theme-preview';
 import styles from './demo.scss';
 import {downloadPenpotTokens} from './download-penpot-tokens';
+import {ALL_FONTS} from './google-fonts';
 
 interface PalettePreviewConfig {
   readonly description: string;
@@ -21,7 +23,27 @@ interface PalettePreviewConfig {
   readonly title: string;
 }
 
-const DEFAULT_SEED_COLOR: Color = hsl({h: 38, l: 0.5, s: 0.92});
+interface TypographyControlConfig {
+  readonly id: string;
+  readonly label: string;
+  readonly property:
+    | 'bodyMediumCodeFont'
+    | 'bodyMediumFont'
+    | 'headlineLargeFont'
+    | 'headlineMediumFont'
+    | 'headlineSmallFont'
+    | 'labelMediumFont'
+    | 'labelSmallFont'
+    | 'titleLargeFont'
+    | 'titleMediumFont';
+}
+
+interface TypographySectionConfig {
+  readonly controls: readonly TypographyControlConfig[];
+  readonly title: string;
+}
+
+const DEFAULT_SEED_COLOR = hsl({h: 38, l: 0.5, s: 0.92});
 const PALETTE_PREVIEWS: readonly PalettePreviewConfig[] = [
   {
     description:
@@ -68,6 +90,73 @@ const THEME_NAMES: Record<ThemeMode, Record<ThemeType, string>> = {
     3: 'Light Theme 3',
   },
 };
+const TYPOGRAPHY_SECTIONS: readonly TypographySectionConfig[] = [
+  {
+    controls: [
+      {
+        id: 'headline-large-font-select',
+        label: 'Large',
+        property: 'headlineLargeFont',
+      },
+      {
+        id: 'headline-medium-font-select',
+        label: 'Medium',
+        property: 'headlineMediumFont',
+      },
+      {
+        id: 'headline-small-font-select',
+        label: 'Small',
+        property: 'headlineSmallFont',
+      },
+    ],
+    title: 'Headline',
+  },
+  {
+    controls: [
+      {
+        id: 'title-large-font-select',
+        label: 'Large',
+        property: 'titleLargeFont',
+      },
+      {
+        id: 'title-medium-font-select',
+        label: 'Medium',
+        property: 'titleMediumFont',
+      },
+    ],
+    title: 'Title',
+  },
+  {
+    controls: [
+      {
+        id: 'body-medium-font-select',
+        label: 'Medium',
+        property: 'bodyMediumFont',
+      },
+      {
+        id: 'body-medium-code-font-select',
+        label: 'Medium code',
+        property: 'bodyMediumCodeFont',
+      },
+    ],
+    title: 'Body',
+  },
+  {
+    controls: [
+      {
+        id: 'label-medium-font-select',
+        label: 'Medium',
+        property: 'labelMediumFont',
+      },
+      {
+        id: 'label-small-font-select',
+        label: 'Small',
+        property: 'labelSmallFont',
+      },
+    ],
+    title: 'Label',
+  },
+];
 
 /**
  * Root demo application coordinating the introduction, picker, preview, and theme tokens.
@@ -77,15 +166,82 @@ const THEME_NAMES: Record<ThemeMode, Record<ThemeType, string>> = {
 export class AnimaDemo extends SignalWatcher(LitElement) {
   static override styles = styles;
 
-  protected readonly mode: Signal.State<ThemeMode> =
-    new Signal.State<ThemeMode>('light');
-  protected readonly seedColor: Signal.State<Color> = new Signal.State(
-    DEFAULT_SEED_COLOR,
+  protected readonly bodyMediumCodeFont = new Signal.State('Inconsolata');
+  protected readonly bodyMediumFont = new Signal.State('Atkinson Hyperlegible');
+  protected readonly headlineLargeFont = new Signal.State('Montserrat');
+  protected readonly headlineMediumFont = new Signal.State('Montserrat');
+  protected readonly headlineSmallFont = new Signal.State('Montserrat');
+  protected readonly labelMediumFont = new Signal.State(
+    'Atkinson Hyperlegible',
   );
-  protected readonly paletteSet: Signal.Computed<PaletteSet> =
-    new Signal.Computed(() => {
-      return createPaletteSet(this.seedColor.get());
-    });
+  protected readonly labelSmallFont = new Signal.State('Atkinson Hyperlegible');
+  protected readonly mode = new Signal.State<ThemeMode>('light');
+  protected readonly seedColor = new Signal.State<Color>(DEFAULT_SEED_COLOR);
+  protected readonly paletteSet = new Signal.Computed(() => {
+    return createPaletteSet(this.seedColor.get());
+  });
+  protected readonly titleLargeFont = new Signal.State('Atkinson Hyperlegible');
+  protected readonly titleMediumFont = new Signal.State(
+    'Atkinson Hyperlegible',
+  );
+  protected readonly typographySet = new Signal.Computed(() => {
+    return {
+      bodyMedium: {
+        fontFamily: this.bodyMediumFont.get(),
+        fontSize: '14px',
+        fontWeight: 400,
+        lineHeight: 1.5,
+      },
+      bodyMediumCode: {
+        fontFamily: this.bodyMediumCodeFont.get(),
+        fontSize: '14px',
+        fontWeight: 400,
+        lineHeight: 1.5,
+      },
+      headlineLarge: {
+        fontFamily: this.headlineLargeFont.get(),
+        fontSize: '36px',
+        fontWeight: 400,
+        lineHeight: 1.2,
+      },
+      headlineMedium: {
+        fontFamily: this.headlineMediumFont.get(),
+        fontSize: '24px',
+        fontWeight: 400,
+        lineHeight: 1.3,
+      },
+      headlineSmall: {
+        fontFamily: this.headlineSmallFont.get(),
+        fontSize: '16px',
+        fontWeight: 400,
+        lineHeight: 1.4,
+      },
+      labelMedium: {
+        fontFamily: this.labelMediumFont.get(),
+        fontSize: '14px',
+        fontWeight: 300,
+        lineHeight: 1.4,
+      },
+      labelSmall: {
+        fontFamily: this.labelSmallFont.get(),
+        fontSize: '12px',
+        fontWeight: 300,
+        lineHeight: 1.4,
+      },
+      titleLarge: {
+        fontFamily: this.titleLargeFont.get(),
+        fontSize: '24px',
+        fontWeight: 500,
+        lineHeight: 1.3,
+      },
+      titleMedium: {
+        fontFamily: this.titleMediumFont.get(),
+        fontSize: '16px',
+        fontWeight: 500,
+        lineHeight: 1.4,
+      },
+    };
+  });
   protected watcher: Signal.subtle.Watcher | null = null;
 
   override connectedCallback(): void {
@@ -343,7 +499,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
             </p>
 
             <div class="generator-layout" id="generator">
-              <h3>Colour generator</h3>
+              <h4>Colour generator</h4>
               <an-color-picker
                 .value="${this.seedColor.get()}"
                 @input="${this.handleColorPickerEvent}"
@@ -352,7 +508,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
               ${PALETTE_PREVIEWS.map(
                 (config) => html`
                   <div class="palette-item">
-                    <h4>${config.title}</h4>
+                    <h5>${config.title}</h5>
                     <p>${config.description}</p>
                     <an-palette-preview
                       .palette="${this.paletteSet.get()[config.key]}"
@@ -361,7 +517,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                 `,
               )}
               <div class="themes-showcase">
-                <h3>Themes</h3>
+                <h4>Themes</h4>
                 <div class="themes-columns">
                   <div class="themes-column">
                     ${TYPES.map(
@@ -423,6 +579,46 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
             </p>
 
             <p>Not all types have to be specified for a particular app.</p>
+
+            <div class="typography-controls">
+              <h4>Typography generator</h4>
+              ${TYPOGRAPHY_SECTIONS.map(
+                (section) => html`
+                  <div class="typography-section-group">
+                    <h5>${section.title}</h5>
+                    <div class="typography-controls-grid">
+                      ${section.controls.map((control) => {
+                        const signal = this[control.property];
+                        const currentFont = signal.get();
+                        return html`
+                          <div class="control-group">
+                            <label for="${control.id}">${control.label}</label>
+                            <select
+                              id="${control.id}"
+                              style="font-family: '${currentFont}';"
+                              .value="${currentFont}"
+                              @change="${(e: Event) =>
+                                this.handleFontSelect(e, signal)}"
+                            >
+                              ${ALL_FONTS.map(
+                                (font) => html`
+                                  <option
+                                    value="${font}"
+                                    ?selected="${font === currentFont}"
+                                  >
+                                    ${font}
+                                  </option>
+                                `,
+                              )}
+                            </select>
+                          </div>
+                        `;
+                      })}
+                    </div>
+                  </div>
+                `,
+              )}
+            </div>
           </div>
           <h2>Design tokens</h2>
 
@@ -528,6 +724,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
   override updated(changedProperties: PropertyValues<this>): void {
     super.updated(changedProperties);
     this.style.setProperty('color-scheme', this.mode.get());
+    this.applyTypographyTokens();
   }
 
   protected applyThemeTokens(): void {
@@ -539,9 +736,14 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
       'main',
     );
   }
+  protected applyTypographyTokens(): void {
+    const typographySet = this.typographySet.get();
+    applyTypographyTokens(this, typographySet);
+  }
   protected cleanupWatcher(): void {
     if (this.watcher) {
       this.watcher.unwatch(this.paletteSet);
+      this.watcher.unwatch(this.typographySet);
       this.watcher = null;
     }
   }
@@ -555,9 +757,19 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
     downloadPenpotTokens(
       THEME_SET,
       this.paletteSet.get(),
+      this.typographySet.get(),
       'main',
       'penpot-tokens.json',
     );
+  }
+  protected handleFontSelect(
+    event: Event,
+    fontSignal: Signal.State<string>,
+  ): void {
+    const target = event.target;
+    if (target instanceof HTMLSelectElement) {
+      fontSignal.set(target.value);
+    }
   }
   protected handleModeSelect(selectedMode: ThemeMode): void {
     this.mode.set(selectedMode);
@@ -578,10 +790,13 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
           }
           this.watcher.watch();
           this.applyThemeTokens();
+          this.applyTypographyTokens();
         });
       }
     });
     this.watcher.watch(this.paletteSet);
+    this.watcher.watch(this.typographySet);
     this.applyThemeTokens();
+    this.applyTypographyTokens();
   }
 }

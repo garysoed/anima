@@ -1,5 +1,12 @@
 import {Signal, SignalWatcher} from '@lit-labs/signals';
-import {Color, HslColor, convert, format, hsl, rgb} from 'gs-tools/export/color';
+import {
+  Color,
+  HslColor,
+  convert,
+  format,
+  hsl,
+  rgb,
+} from 'gs-tools/export/color';
 import {LitElement, TemplateResult, html} from 'lit';
 import {customElement} from 'lit/decorators.js';
 

@@ -1,20 +1,23 @@
-export const TITLE_FONTS: readonly string[] = [
-  'Inter',
-  'Merriweather',
+export const ALL_FONTS: readonly string[] = [
+  'Atkinson Hyperlegible',
+  'Fira Code',
+  'Inconsolata',
+  'JetBrains Mono',
+  'Lato',
   'Montserrat',
-  'Oswald',
+  'Nunito',
+  'Open Sans',
   'Playfair Display',
-  'Poppins',
   'Raleway',
+  'Roboto Mono',
+  'Source Code Pro',
 ];
 
 export const BODY_FONTS: readonly string[] = [
+  'Atkinson Hyperlegible',
   'Lato',
-  'Noto Sans',
   'Nunito',
   'Open Sans',
-  'Roboto',
-  'Source Sans 3',
 ];
 
 export const CODE_FONTS: readonly string[] = [
@@ -23,4 +26,11 @@ export const CODE_FONTS: readonly string[] = [
   'JetBrains Mono',
   'Roboto Mono',
   'Source Code Pro',
+];
+
+export const TITLE_FONTS: readonly string[] = [
+  'Atkinson Hyperlegible',
+  'Montserrat',
+  'Playfair Display',
+  'Raleway',
 ];
