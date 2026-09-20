@@ -36,7 +36,7 @@ test.describe('apply-theme-tokens', () => {
         'var(--an-main_neutral-100)',
       );
       expect(properties['--an-main-dark_0-background']).toBe(
-        'var(--an-main_neutral-900)',
+        'var(--an-main_neutral-800)',
       );
     });
   });
