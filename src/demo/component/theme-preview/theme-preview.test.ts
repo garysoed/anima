@@ -2,6 +2,7 @@ import {expect, test} from '@playwright/test';
 import {rgb} from 'gs-tools/export/color';
 
 import {createPaletteSet} from '../../../core/palette/create-palette-set';
+import {PaletteSet} from '../../../core/palette/palette-set';
 import {Theme} from '../../../core/theme/theme';
 import {THEME_SET} from '../../../core/theme/theme-set';
 import {getThemeTokensCssProperties} from '../../apply-theme-tokens';
@@ -65,10 +66,14 @@ test.describe('<an-theme-preview>', () => {
       }
     }, cssVars);
 
-    await preview.evaluate((el: HTMLElement, theme: Theme) => {
-      Reflect.set(el, 'label', 'Light Theme 0');
-      Reflect.set(el, 'theme', theme);
-    }, lightTheme0);
+    await preview.evaluate(
+      (el: HTMLElement, params: {palettes: PaletteSet; theme: Theme}) => {
+        Reflect.set(el, 'label', 'Light Theme 0');
+        Reflect.set(el, 'palettes', params.palettes);
+        Reflect.set(el, 'theme', params.theme);
+      },
+      {palettes, theme: lightTheme0},
+    );
 
     await expect(preview.locator('.card')).toBeVisible();
 

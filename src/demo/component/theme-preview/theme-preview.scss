@@ -18,8 +18,15 @@
   gap: 12px;
 }
 
-.brand-icon {
+.brand-icon-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
   flex-shrink: 0;
+  gap: 2px;
+}
+
+.brand-icon {
   height: 28px;
   width: 28px;
 
@@ -29,6 +36,11 @@
     height: 100%;
     width: 100%;
   }
+}
+
+.icon-contrast {
+  color: var(--an-preview-display);
+  font: var(--an-label-small-font);
 }
 
 .primary-text {

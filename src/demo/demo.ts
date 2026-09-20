@@ -525,6 +525,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                         <div class="theme-card-wrapper">
                           <an-theme-preview
                             .label="${THEME_NAMES.light[type]}"
+                            .palettes="${this.paletteSet.get()}"
                             .theme="${THEME_SET.light[type]}"
                           ></an-theme-preview>
                         </div>
@@ -537,6 +538,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                         <div class="theme-card-wrapper">
                           <an-theme-preview
                             .label="${THEME_NAMES.dark[type]}"
+                            .palettes="${this.paletteSet.get()}"
                             .theme="${THEME_SET.dark[type]}"
                           ></an-theme-preview>
                         </div>
