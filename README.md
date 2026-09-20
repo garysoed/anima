@@ -18,5 +18,6 @@ Anima project workspace.
 ## Subdirectories
 
 - [.agents/](.agents/)
+- [.github/](.github/)
 - [docs/](docs/)
 - [src/](src/)

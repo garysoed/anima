@@ -74,8 +74,15 @@ jobs:
         with:
           path: 'anima/dist/demo'
 
+  test-prestige-gen:
+    uses: garysoed/prestige_gen/.github/workflows/test.yml@main
+    with:
+      anima-ref: ${{ github.ref }}
+    secrets:
+      DEPENDENCIES_TOKEN: ${{ secrets.DEPENDENCIES_TOKEN }}
+
   deploy:
-    needs: build
+    needs: [build, test-prestige-gen]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     environment:
       name: github-pages
