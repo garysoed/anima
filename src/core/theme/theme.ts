@@ -45,7 +45,7 @@ export interface Theme {
   readonly warning: PaletteColorKey;
 }
 
-export function isPaletteKey(key: string): key is PaletteKey {
+export function isPaletteKey(key: string | undefined): key is PaletteKey {
   return (
     key === 'error' ||
     key === 'highlight' ||
@@ -55,7 +55,7 @@ export function isPaletteKey(key: string): key is PaletteKey {
   );
 }
 
-export function isShadeKey(key: string): key is ShadeKey {
+export function isShadeKey(key: string | undefined): key is ShadeKey {
   return (
     key === 'c100' ||
     key === 'c200' ||

@@ -1,4 +1,5 @@
 {
+  "extends": "devbase/ts/tsconfig.json",
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",

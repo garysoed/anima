@@ -30,13 +30,15 @@ function parseTypographyKey(key: string): ParsedTypographyKey | null {
   const match = key.match(
     /^(body|display|headline|label|title)(Large|Medium|Small)(Code)?$/,
   );
-  if (!match) {
+  const type = match?.[1];
+  const size = match?.[2];
+  if (!match || !type || !size) {
     return null;
   }
   return {
     isCode: match[3] === 'Code',
-    size: match[2].toLowerCase(),
-    type: match[1],
+    size: size.toLowerCase(),
+    type,
   };
 }
 
