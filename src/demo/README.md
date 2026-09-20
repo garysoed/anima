@@ -11,7 +11,7 @@ Interactive demo application and visualizer for Anima.
 - [download-penpot-tokens.ts](download-penpot-tokens.ts): Utility function triggering browser download of Penpot palette, theme, and typography design tokens.
 - [favicon.svg](favicon.svg): Vector SVG favicon featuring the Anima harmonic color bloom.
 - [google-fonts.ts](google-fonts.ts): Curated Google Fonts lists (`ALL_FONTS`, `TITLE_FONTS`, `BODY_FONTS`, `CODE_FONTS`).
-- [index.html](index.html): HTML shell hosting the bundled demo application for GitHub Pages.
+- [index.html](index.html): HTML shell hosting the bundled demo application with preloaded Google Fonts stylesheet links.
 - [main.ts](main.ts): Demo application entry point script.
 - [README.md](README.md): Demo directory documentation.
 
