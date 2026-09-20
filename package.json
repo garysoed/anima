@@ -7,6 +7,7 @@
     "build:demo": "rollup -c",
     "format": "prettier --write \"**/*.{ts,js,mjs,json,md,html}\"",
     "lint": "eslint . --ext .ts --resolve-plugins-relative-to .",
+    "pretest": "npm run build:demo",
     "start": "rollup -c -w",
     "test": "playwright test"
   },
