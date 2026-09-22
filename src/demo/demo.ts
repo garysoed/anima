@@ -757,6 +757,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
   }
   protected handleExportPenpotTokens(): void {
     downloadPenpotTokens(
+      'theme',
       THEME_SET,
       this.paletteSet.get(),
       this.typographySet.get(),

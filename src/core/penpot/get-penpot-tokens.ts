@@ -15,7 +15,7 @@ import {TypographySet, TypographyValue} from '../typography/types';
 
 import {
   PenpotColorToken,
-  PenpotExportData,
+  PenpotTokenSet,
   PenpotTokenTree,
   PenpotTypographyToken,
 } from './penpot';
@@ -81,38 +81,43 @@ function createPenpotTypographyToken(
 }
 
 export function getPenpotTokens(
+  tokenSet: PenpotTokenSet,
   themeSet: ThemeSet,
   palettes: PaletteSet,
   typographySet: TypographySet,
   seedName: string,
-): PenpotExportData {
-  const paletteTokens: Record<string, PenpotColorToken | PenpotTokenTree> = {
-    black: {
-      $type: 'color',
-      $value: '#000000',
-    },
-    white: {
-      $type: 'color',
-      $value: '#ffffff',
-    },
-  };
-
-  for (const palKey of PALETTE_KEYS) {
-    const palette = palettes[palKey];
-    const prefix =
-      palKey === 'highlight' || palKey === 'neutral'
-        ? `${seedName}_${palKey}`
-        : palKey;
-
-    const shadeTokens: Record<string, PenpotColorToken> = {};
-    for (const shadeKey of SHADE_KEYS) {
-      const shadeNum = shadeKey.slice(1);
-      shadeTokens[shadeNum] = {
+): PenpotTokenTree {
+  if (tokenSet === 'palette') {
+    const paletteTokens: Record<string, PenpotColorToken | PenpotTokenTree> = {
+      black: {
         $type: 'color',
-        $value: format(palette[shadeKey], 'hex'),
-      };
+        $value: '#000000',
+      },
+      white: {
+        $type: 'color',
+        $value: '#ffffff',
+      },
+    };
+
+    for (const palKey of PALETTE_KEYS) {
+      const palette = palettes[palKey];
+      const prefix =
+        palKey === 'highlight' || palKey === 'neutral'
+          ? `${seedName}_${palKey}`
+          : palKey;
+
+      const shadeTokens: Record<string, PenpotColorToken> = {};
+      for (const shadeKey of SHADE_KEYS) {
+        const shadeNum = shadeKey.slice(1);
+        shadeTokens[shadeNum] = {
+          $type: 'color',
+          $value: format(palette[shadeKey], 'hex'),
+        };
+      }
+      paletteTokens[prefix] = shadeTokens;
     }
-    paletteTokens[prefix] = shadeTokens;
+
+    return paletteTokens;
   }
 
   const themeTokens: Record<string, PenpotTokenTree | PenpotTypographyToken> =
@@ -175,12 +180,5 @@ export function getPenpotTokens(
     themeTokens[type] = typeTokens;
   }
 
-  return {
-    $metadata: {
-      activeSets: ['palette', 'theme'],
-      tokenSetOrder: ['palette', 'theme'],
-    },
-    palette: paletteTokens,
-    theme: themeTokens,
-  };
+  return themeTokens;
 }

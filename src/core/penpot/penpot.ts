@@ -24,6 +24,8 @@ export type PenpotTokenTree = {
     PenpotColorToken | PenpotTokenTree | PenpotTypographyToken;
 };
 
+export type PenpotTokenSet = 'palette' | 'theme';
+
 export interface PenpotExportData {
   readonly $metadata?: {
     readonly activeSets?: readonly string[];

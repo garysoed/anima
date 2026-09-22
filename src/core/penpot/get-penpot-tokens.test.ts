@@ -6,7 +6,7 @@ import {THEME_SET} from '../theme/theme-set';
 import {TypographySet} from '../typography/types';
 
 import {getPenpotTokens} from './get-penpot-tokens';
-import {PenpotExportData} from './penpot';
+import {PenpotTokenTree} from './penpot';
 
 const PALETTE_GROUPS = [
   'main_highlight',
@@ -49,28 +49,29 @@ const TYPOGRAPHY_SET: TypographySet = {
 };
 
 test.describe('getPenpotTokens', () => {
-  test('outputs valid palette set, theme set with typography tokens, and metadata', () => {
+  test('outputs valid palette set and theme set with typography tokens', () => {
     const seed = rgb({b: 245, g: 158, r: 11});
     const palettes = createPaletteSet(seed);
-    const data: PenpotExportData = getPenpotTokens(
+    const paletteTokens: PenpotTokenTree = getPenpotTokens(
+      'palette',
       THEME_SET,
       palettes,
       TYPOGRAPHY_SET,
       'main',
     );
 
-    expect(data.palette['white']).toEqual({
+    expect(paletteTokens['white']).toEqual({
       $type: 'color',
       $value: '#ffffff',
     });
 
-    expect(data.palette['black']).toEqual({
+    expect(paletteTokens['black']).toEqual({
       $type: 'color',
       $value: '#000000',
     });
 
     for (const groupName of PALETTE_GROUPS) {
-      expect(data.palette[groupName]).toEqual({
+      expect(paletteTokens[groupName]).toEqual({
         100: {$type: 'color', $value: expect.stringMatching(/^#[0-9a-f]{6}$/i)},
         200: {$type: 'color', $value: expect.stringMatching(/^#[0-9a-f]{6}$/i)},
         300: {$type: 'color', $value: expect.stringMatching(/^#[0-9a-f]{6}$/i)},
@@ -83,8 +84,16 @@ test.describe('getPenpotTokens', () => {
       });
     }
 
+    const themeTokens: PenpotTokenTree = getPenpotTokens(
+      'theme',
+      THEME_SET,
+      palettes,
+      TYPOGRAPHY_SET,
+      'main',
+    );
+
     for (const themeName of THEME_NAMES) {
-      expect(data.theme[themeName]).toEqual({
+      expect(themeTokens[themeName]).toEqual({
         background: {
           $type: 'color',
           $value: expect.stringMatching(/^\{[a-z0-9_.]+\}$/),
@@ -116,7 +125,7 @@ test.describe('getPenpotTokens', () => {
       });
     }
 
-    expect(data.theme['display']).toEqual({
+    expect(themeTokens['display']).toEqual({
       medium: {
         $type: 'typography',
         $value: {
@@ -128,7 +137,7 @@ test.describe('getPenpotTokens', () => {
       },
     });
 
-    expect(data.theme['body']).toEqual({
+    expect(themeTokens['body']).toEqual({
       medium: {
         $type: 'typography',
         $value: {
@@ -147,11 +156,6 @@ test.describe('getPenpotTokens', () => {
           },
         },
       },
-    });
-
-    expect(data.$metadata).toEqual({
-      activeSets: ['palette', 'theme'],
-      tokenSetOrder: ['palette', 'theme'],
     });
   });
 });

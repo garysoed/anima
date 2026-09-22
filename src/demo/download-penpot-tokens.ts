@@ -1,9 +1,11 @@
 import {PaletteSet} from '../core/palette/palette-set';
 import {getPenpotTokens} from '../core/penpot/get-penpot-tokens';
+import {PenpotTokenSet} from '../core/penpot/penpot';
 import {ThemeSet} from '../core/theme/theme-set';
 import {TypographySet} from '../core/typography/types';
 
 export function downloadPenpotTokens(
+  tokenSet: PenpotTokenSet,
   themeSet: ThemeSet,
   palettes: PaletteSet,
   typographySet: TypographySet,
@@ -11,7 +13,7 @@ export function downloadPenpotTokens(
   filename: string,
 ): void {
   const json = JSON.stringify(
-    getPenpotTokens(themeSet, palettes, typographySet, seedName),
+    getPenpotTokens(tokenSet, themeSet, palettes, typographySet, seedName),
     null,
     2,
   );

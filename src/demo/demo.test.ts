@@ -1,8 +1,6 @@
 import {expect, test} from '@playwright/test';
 import {Color, oklch} from 'gs-tools/export/color';
 
-import {ColorPicker} from './component/color-picker/color-picker';
-
 test.describe('<an-demo>', () => {
   test('renders introduction, interactive generator, and UI showcase', async ({
     page,
@@ -61,9 +59,8 @@ test.describe('<an-demo>', () => {
     const seed: Color = oklch({c: 0.1438, h: 211, l: 0.81});
 
     await picker.evaluate((el: HTMLElement, newColor: Color) => {
-      const colorPicker = el as unknown as ColorPicker;
-      colorPicker.value = newColor;
-      colorPicker.dispatchEvent(
+      Reflect.set(el, 'value', newColor);
+      el.dispatchEvent(
         new Event('input', {bubbles: true, composed: true}),
       );
     }, seed);
@@ -137,14 +134,14 @@ test.describe('<an-demo>', () => {
     const stream = await download.createReadStream();
     const chunks: Buffer[] = [];
     for await (const chunk of stream) {
-      chunks.push(chunk as Buffer);
+      chunks.push(Buffer.from(chunk));
     }
     const content = Buffer.concat(chunks).toString('utf-8');
     const json = JSON.parse(content);
-    expect(json.theme.body.medium.$value.fontFamily).toBe(
+    expect(json.body.medium.$value.fontFamily).toBe(
       'Atkinson Hyperlegible',
     );
-    expect(json.theme.headline.large.$value.fontFamily).toBe('Montserrat');
+    expect(json.headline.large.$value.fontFamily).toBe('Montserrat');
   });
 
   test('updates typography tokens when font selector changes', async ({
