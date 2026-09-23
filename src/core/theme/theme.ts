@@ -1,12 +1,11 @@
-import {Color, rgb} from 'gs-tools/export/color';
+import {Color} from 'gs-tools/export/color';
 
 import {Palette} from '../palette/palette';
 import {PaletteSet} from '../palette/palette-set';
 
-const BLACK: Color = rgb({b: 0, g: 0, r: 0});
-const WHITE: Color = rgb({b: 255, g: 255, r: 255});
-
-export type PaletteKey = keyof PaletteSet;
+export type GlobalPaletteKey = 'error' | 'success' | 'warning';
+export type SeededPaletteKey = 'highlight' | 'neutral';
+export type PaletteKey = GlobalPaletteKey | SeededPaletteKey;
 export type ShadeKey = keyof Palette;
 export type PaletteColorKey = 'black' | 'white' | `${PaletteKey}.${ShadeKey}`;
 
@@ -72,16 +71,24 @@ export function isShadeKey(key: string | undefined): key is ShadeKey {
 export function resolveThemeColor(
   palettes: PaletteSet,
   key: PaletteColorKey,
+  seedName: string,
 ): Color {
   if (key === 'white') {
-    return WHITE;
+    return palettes.white;
   }
   if (key === 'black') {
-    return BLACK;
+    return palettes.black;
   }
   const [palKey, shadeKey] = key.split('.');
   if (!isPaletteKey(palKey) || !isShadeKey(shadeKey)) {
     throw new Error(`Invalid palette color key: ${key}`);
+  }
+  if (palKey === 'highlight' || palKey === 'neutral') {
+    const seeded = palettes.seededPaletteSets.get(seedName);
+    if (!seeded) {
+      throw new Error(`Seed not found: ${seedName}`);
+    }
+    return seeded[palKey][shadeKey];
   }
   return palettes[palKey][shadeKey];
 }

@@ -2,27 +2,40 @@ import {expect, test} from '@playwright/test';
 import {format, rgb} from 'gs-tools/export/color';
 
 import {createPaletteSet} from '../palette/create-palette-set';
+import {createSeededPaletteSet} from '../palette/create-seeded-palette-set';
 
 import {getPaletteCssVar, resolveThemeColor} from './theme';
 
 test.describe('Theme utilities', () => {
   const seed = rgb({b: 220, g: 38, r: 38});
-  const palettes = createPaletteSet(seed);
+  const seededPaletteSet = createSeededPaletteSet(seed, 'main');
+  const palettes = createPaletteSet(new Map([['main', seededPaletteSet]]));
 
   test.describe('resolveThemeColor', () => {
     test('resolves white to #ffffff', () => {
-      const color = resolveThemeColor(palettes, 'white');
+      const color = resolveThemeColor(palettes, 'white', 'main');
       expect(format(color, 'hex')).toBe('#ffffff');
     });
 
     test('resolves black to #000000', () => {
-      const color = resolveThemeColor(palettes, 'black');
+      const color = resolveThemeColor(palettes, 'black', 'main');
       expect(format(color, 'hex')).toBe('#000000');
     });
 
-    test('resolves palette shade key to palette color', () => {
-      const color = resolveThemeColor(palettes, 'neutral.c100');
-      expect(color).toBe(palettes.neutral.c100);
+    test('resolves seeded palette shade key to seeded palette color', () => {
+      const color = resolveThemeColor(palettes, 'neutral.c100', 'main');
+      expect(color).toBe(seededPaletteSet.neutral.c100);
+    });
+
+    test('resolves global palette shade key to global palette color', () => {
+      const color = resolveThemeColor(palettes, 'error.c300', 'main');
+      expect(color).toBe(palettes.error.c300);
+    });
+
+    test('throws error if seed is not found in seededPaletteSets', () => {
+      expect(() =>
+        resolveThemeColor(palettes, 'neutral.c100', 'nonexistent'),
+      ).toThrow('Seed not found: nonexistent');
     });
   });
 

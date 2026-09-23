@@ -4,6 +4,5 @@ Theme types and factory functions generating accessible Light and Dark themes fo
 
 ## Files
 
-- [README.md](README.md): Core theme module documentation.
-- [theme-set.ts](theme-set.ts): Interface and constant defining the complete theme set containing light and dark theme collections.
-- [theme.ts](theme.ts): Type definitions for theme modes, types, palette color keys, and the 7-role semantic theme interface.
+- [theme-set.ts](theme-set.ts): Interface `ThemeSet` and factory function `createThemeSet` generating the complete theme set containing light and dark theme collections.
+- [theme.ts](theme.ts): Type definitions for theme modes, types, palette color keys, the 7-role semantic theme interface, and theme color resolution utilities.
