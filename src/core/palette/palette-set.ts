@@ -1,18 +1,13 @@
+import {Color} from 'gs-tools/export/color';
+
 import {Palette} from './palette';
+import {SeededPaletteSet} from './seeded-palette-set';
 
 export interface PaletteSet {
+  readonly black: Color;
   readonly error: Palette;
-  readonly highlight: Palette;
-  readonly neutral: Palette;
+  readonly seededPaletteSets: ReadonlyMap<string, SeededPaletteSet>;
   readonly success: Palette;
   readonly warning: Palette;
+  readonly white: Color;
 }
-
-export const PALETTE_KEYS: ReadonlyArray<keyof PaletteSet> = [
-  'highlight',
-  'neutral',
-  'error',
-  'warning',
-  'success',
-];
-

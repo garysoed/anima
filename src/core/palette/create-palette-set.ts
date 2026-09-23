@@ -1,24 +1,24 @@
-import {Color, convert, rgb, update} from 'gs-tools/export/color';
+import {Color, rgb} from 'gs-tools/export/color';
 
 import {createPalette} from './create-palette';
 import {PaletteSet} from './palette-set';
+import {SeededPaletteSet} from './seeded-palette-set';
 
-const ERROR_SEED = rgb({b: 38, g: 38, r: 220});
-const WARNING_SEED = rgb({b: 6, g: 119, r: 217});
-const SUCCESS_SEED = rgb({b: 74, g: 163, r: 22});
+const BLACK: Color = rgb({b: 0, g: 0, r: 0});
+const WHITE: Color = rgb({b: 255, g: 255, r: 255});
+const ERROR_SEED: Color = rgb({b: 38, g: 38, r: 220});
+const WARNING_SEED: Color = rgb({b: 6, g: 119, r: 217});
+const SUCCESS_SEED: Color = rgb({b: 74, g: 163, r: 22});
 
-export function createPaletteSet(seedColor: Color): PaletteSet {
-  const targetSpace = seedColor.space;
-  const neutralSeed = convert(
-    update(seedColor, 'hsl', () => ({s: 0.05})),
-    targetSpace,
-  );
-
+export function createPaletteSet(
+  seededPaletteSets: ReadonlyMap<string, SeededPaletteSet>,
+): PaletteSet {
   return {
-    error: createPalette(convert(ERROR_SEED, targetSpace)),
-    highlight: createPalette(seedColor),
-    neutral: createPalette(neutralSeed),
-    success: createPalette(convert(SUCCESS_SEED, targetSpace)),
-    warning: createPalette(convert(WARNING_SEED, targetSpace)),
+    black: BLACK,
+    error: createPalette(ERROR_SEED),
+    seededPaletteSets,
+    success: createPalette(SUCCESS_SEED),
+    warning: createPalette(WARNING_SEED),
+    white: WHITE,
   };
 }
