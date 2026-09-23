@@ -60,9 +60,7 @@ test.describe('<an-demo>', () => {
 
     await picker.evaluate((el: HTMLElement, newColor: Color) => {
       Reflect.set(el, 'value', newColor);
-      el.dispatchEvent(
-        new Event('input', {bubbles: true, composed: true}),
-      );
+      el.dispatchEvent(new Event('input', {bubbles: true, composed: true}));
     }, seed);
 
     await demo.screenshot({
@@ -129,7 +127,7 @@ test.describe('<an-demo>', () => {
     const downloadPromise = page.waitForEvent('download');
     await exportButton.click();
     const download = await downloadPromise;
-    expect(download.suggestedFilename()).toBe('penpot-tokens.json');
+    expect(download.suggestedFilename()).toBe('base.json');
 
     const stream = await download.createReadStream();
     const chunks: Buffer[] = [];
@@ -138,10 +136,14 @@ test.describe('<an-demo>', () => {
     }
     const content = Buffer.concat(chunks).toString('utf-8');
     const json = JSON.parse(content);
-    expect(json.body.medium.$value.fontFamily).toBe(
+    expect(json['body']['medium']['$value']['fontFamily']).toBe(
       'Atkinson Hyperlegible',
     );
-    expect(json.headline.large.$value.fontFamily).toBe('Montserrat');
+    expect(json['headline']['large']['$value']['fontFamily']).toBe(
+      'Montserrat',
+    );
+    expect(json['black']['$value']).toBe('#000000');
+    expect(json['dark_0']['background']['$value']).toBe('{main_neutral.800}');
   });
 
   test('updates typography tokens when font selector changes', async ({

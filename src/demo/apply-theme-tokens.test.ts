@@ -2,7 +2,8 @@ import {expect, test} from '@playwright/test';
 import {rgb} from 'gs-tools/export/color';
 
 import {createPaletteSet} from '../core/palette/create-palette-set';
-import {THEME_SET} from '../core/theme/theme-set';
+import {createSeededPaletteSet} from '../core/palette/create-seeded-palette-set';
+import {createThemeSet} from '../core/theme/theme-set';
 
 import {
   applyThemeTokens,
@@ -11,12 +12,14 @@ import {
 
 test.describe('apply-theme-tokens', () => {
   const seed = rgb({b: 220, g: 38, r: 38});
-  const palettes = createPaletteSet(seed);
+  const seeded = createSeededPaletteSet(seed, 'main');
+  const palettes = createPaletteSet(new Map([['main', seeded]]));
+  const themeSet = createThemeSet('main');
 
   test.describe('getThemeTokensCssProperties', () => {
     test('includes --an-white and --an-black css variables', () => {
       const properties = getThemeTokensCssProperties(
-        THEME_SET,
+        themeSet,
         palettes,
         'main',
       );
@@ -26,7 +29,7 @@ test.describe('apply-theme-tokens', () => {
 
     test('generates palette tokens and theme role tokens', () => {
       const properties = getThemeTokensCssProperties(
-        THEME_SET,
+        themeSet,
         palettes,
         'main',
       );
@@ -44,12 +47,12 @@ test.describe('apply-theme-tokens', () => {
   test.describe('applyThemeTokens', () => {
     test('sets properties on targetStyle', () => {
       const applied: Record<string, string> = {};
-      const mockStyle = {
+      const targetStyle = {
         setProperty: (name: string, value: string) => {
           applied[name] = value;
         },
       };
-      applyThemeTokens(THEME_SET, palettes, mockStyle, 'main');
+      applyThemeTokens(themeSet, palettes, targetStyle, 'main');
       expect(applied['--an-white']).toBe('#ffffff');
       expect(applied['--an-black']).toBe('#000000');
       expect(applied['--an-main-light_0-background']).toBe(

@@ -1,7 +1,7 @@
 import {format} from 'gs-tools/export/color';
 
-import {SHADE_KEYS} from '../core/palette/palette';
-import {PALETTE_KEYS, PaletteSet} from '../core/palette/palette-set';
+import {Palette, SHADE_KEYS} from '../core/palette/palette';
+import {PaletteSet} from '../core/palette/palette-set';
 import {getPaletteCssVar, MODES, SECTIONS, TYPES} from '../core/theme/theme';
 import {ThemeSet} from '../core/theme/theme-set';
 
@@ -15,17 +15,29 @@ export function getThemeTokensCssProperties(
     '--an-white': '#ffffff',
   };
 
-  for (const palKey of PALETTE_KEYS) {
-    const palette = palettes[palKey];
-    const prefix =
-      palKey === 'highlight' || palKey === 'neutral'
-        ? `${seedName}_${palKey}`
-        : palKey;
+  const globalPalettes: ReadonlyMap<string, Palette> = new Map([
+    ['error', palettes.error],
+    ['success', palettes.success],
+    ['warning', palettes.warning],
+  ]);
 
+  for (const [name, palette] of globalPalettes) {
     for (const shadeKey of SHADE_KEYS) {
       const shadeNum = shadeKey.slice(1);
-      properties[`--an-${prefix}-${shadeNum}`] = format(
-        palette[shadeKey],
+      properties[`--an-${name}-${shadeNum}`] = format(palette[shadeKey], 'hex');
+    }
+  }
+
+  const seeded = palettes.seededPaletteSets.get(seedName);
+  if (seeded) {
+    for (const shadeKey of SHADE_KEYS) {
+      const shadeNum = shadeKey.slice(1);
+      properties[`--an-${seedName}_highlight-${shadeNum}`] = format(
+        seeded.highlight[shadeKey],
+        'hex',
+      );
+      properties[`--an-${seedName}_neutral-${shadeNum}`] = format(
+        seeded.neutral[shadeKey],
         'hex',
       );
     }
@@ -37,7 +49,7 @@ export function getThemeTokensCssProperties(
       const theme = modeThemes[type];
       for (const section of SECTIONS) {
         properties[`--an-${seedName}-${mode}_${type}-${section}`] =
-          getPaletteCssVar(theme[section], seedName);
+          getPaletteCssVar(theme[section]);
       }
     }
   }

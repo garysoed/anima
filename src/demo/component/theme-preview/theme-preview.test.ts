@@ -2,9 +2,11 @@ import {expect, test} from '@playwright/test';
 import {rgb} from 'gs-tools/export/color';
 
 import {createPaletteSet} from '../../../core/palette/create-palette-set';
+import {createSeededPaletteSet} from '../../../core/palette/create-seeded-palette-set';
 import {PaletteSet} from '../../../core/palette/palette-set';
+import {SeededPaletteSet} from '../../../core/palette/seeded-palette-set';
 import {Theme} from '../../../core/theme/theme';
-import {THEME_SET} from '../../../core/theme/theme-set';
+import {createThemeSet} from '../../../core/theme/theme-set';
 import {getThemeTokensCssProperties} from '../../apply-theme-tokens';
 
 test.describe('<an-theme-preview>', () => {
@@ -56,9 +58,14 @@ test.describe('<an-theme-preview>', () => {
     await expect(preview).toBeAttached();
 
     const seed = rgb({b: 220, g: 38, r: 38});
-    const palettes = createPaletteSet(seed);
-    const lightTheme0: Theme = THEME_SET.light[0];
-    const cssVars = getThemeTokensCssProperties(THEME_SET, palettes, 'main');
+    const seeded = createSeededPaletteSet(seed, 'main');
+    const seededPaletteSets: ReadonlyMap<string, SeededPaletteSet> = new Map([
+      ['main', seeded],
+    ]);
+    const palettes = createPaletteSet(seededPaletteSets);
+    const themeSet = createThemeSet('main');
+    const lightTheme0: Theme = themeSet.light[0];
+    const cssVars = getThemeTokensCssProperties(themeSet, palettes, 'main');
 
     await page.evaluate((props: Record<string, string>) => {
       for (const [key, value] of Object.entries(props)) {
@@ -67,12 +74,27 @@ test.describe('<an-theme-preview>', () => {
     }, cssVars);
 
     await preview.evaluate(
-      (el: HTMLElement, params: {palettes: PaletteSet; theme: Theme}) => {
+      (
+        el: HTMLElement,
+        params: {
+          palettes: PaletteSet;
+          seededEntries: ReadonlyArray<[string, SeededPaletteSet]>;
+          theme: Theme;
+        },
+      ) => {
+        const themePalettes: PaletteSet = {
+          ...params.palettes,
+          seededPaletteSets: new Map(params.seededEntries),
+        };
         Reflect.set(el, 'label', 'Light Theme 0');
-        Reflect.set(el, 'palettes', params.palettes);
+        Reflect.set(el, 'palettes', themePalettes);
         Reflect.set(el, 'theme', params.theme);
       },
-      {palettes, theme: lightTheme0},
+      {
+        palettes,
+        seededEntries: [...seededPaletteSets],
+        theme: lightTheme0,
+      },
     );
 
     await expect(preview.locator('.card')).toBeVisible();

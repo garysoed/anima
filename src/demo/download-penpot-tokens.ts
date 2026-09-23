@@ -1,22 +1,10 @@
-import {PaletteSet} from '../core/palette/palette-set';
-import {getPenpotTokens} from '../core/penpot/get-penpot-tokens';
-import {PenpotTokenSet} from '../core/penpot/penpot';
-import {ThemeSet} from '../core/theme/theme-set';
-import {TypographySet} from '../core/typography/types';
+import {PenpotTokenTree} from '../core/penpot/penpot';
 
 export function downloadPenpotTokens(
-  tokenSet: PenpotTokenSet,
-  themeSet: ThemeSet,
-  palettes: PaletteSet,
-  typographySet: TypographySet,
-  seedName: string,
+  tokenTree: PenpotTokenTree,
   filename: string,
 ): void {
-  const json = JSON.stringify(
-    getPenpotTokens(tokenSet, themeSet, palettes, typographySet, seedName),
-    null,
-    2,
-  );
+  const json = JSON.stringify(tokenTree, null, 2);
   const blob = new Blob([json], {type: 'application/json'});
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');

@@ -4,9 +4,15 @@ import {LitElement, PropertyValues, TemplateResult, html} from 'lit';
 import {customElement} from 'lit/decorators.js';
 
 import {createPaletteSet} from '../core/palette/create-palette-set';
+import {createSeededPaletteSet} from '../core/palette/create-seeded-palette-set';
+import {Palette} from '../core/palette/palette';
 import {PaletteSet} from '../core/palette/palette-set';
+import {mergePenpotTokenTrees} from '../core/penpot/merge-penpot-token-trees';
+import {paletteSetToPenpotTokenTree} from '../core/penpot/palette-set-to-penpot-token-tree';
+import {themeSetToPenpotTokenTree} from '../core/penpot/theme-set-to-penpot-token-tree';
+import {typographySetToPenpotTokenTree} from '../core/penpot/typography-set-to-penpot-token-tree';
 import {ThemeMode, ThemeType, TYPES} from '../core/theme/theme';
-import {THEME_SET} from '../core/theme/theme-set';
+import {createThemeSet, ThemeSet} from '../core/theme/theme-set';
 
 import {applyThemeTokens} from './apply-theme-tokens';
 import {applyTypographyTokens} from './apply-typography-tokens';
@@ -17,10 +23,23 @@ import styles from './demo.scss';
 import {downloadPenpotTokens} from './download-penpot-tokens';
 import {ALL_FONTS} from './google-fonts';
 
+type PalettePreviewKey =
+  'error' | 'highlight' | 'neutral' | 'success' | 'warning';
+
 interface PalettePreviewConfig {
   readonly description: string;
-  readonly key: keyof PaletteSet;
+  readonly key: PalettePreviewKey;
   readonly title: string;
+}
+
+function getPreviewPalette(
+  palettes: PaletteSet,
+  key: PalettePreviewKey,
+): Palette | undefined {
+  if (key === 'highlight' || key === 'neutral') {
+    return palettes.seededPaletteSets.get('main')?.[key];
+  }
+  return palettes[key];
 }
 
 interface TypographyControlConfig {
@@ -76,6 +95,7 @@ const PALETTE_PREVIEWS: readonly PalettePreviewConfig[] = [
     title: 'Success palette',
   },
 ];
+const THEME_SET: ThemeSet = createThemeSet('main');
 const THEME_NAMES: Record<ThemeMode, Record<ThemeType, string>> = {
   dark: {
     0: 'Dark Theme 0',
@@ -178,7 +198,8 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
   protected readonly mode = new Signal.State<ThemeMode>('light');
   protected readonly seedColor = new Signal.State<Color>(DEFAULT_SEED_COLOR);
   protected readonly paletteSet = new Signal.Computed(() => {
-    return createPaletteSet(this.seedColor.get());
+    const seeded = createSeededPaletteSet(this.seedColor.get(), 'main');
+    return createPaletteSet(new Map([['main', seeded]]));
   });
   protected readonly titleLargeFont = new Signal.State('Atkinson Hyperlegible');
   protected readonly titleMediumFont = new Signal.State(
@@ -511,7 +532,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                     <h5>${config.title}</h5>
                     <p>${config.description}</p>
                     <an-palette-preview
-                      .palette="${this.paletteSet.get()[config.key]}"
+                      .palette="${getPreviewPalette(this.paletteSet.get(), config.key)}"
                     ></an-palette-preview>
                   </div>
                 `,
@@ -756,14 +777,14 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
     }
   }
   protected handleExportPenpotTokens(): void {
-    downloadPenpotTokens(
-      'theme',
-      THEME_SET,
-      this.paletteSet.get(),
-      this.typographySet.get(),
-      'main',
-      'penpot-tokens.json',
+    const palettes = this.paletteSet.get();
+    const typographySet = this.typographySet.get();
+    const mergedTree = mergePenpotTokenTrees(
+      paletteSetToPenpotTokenTree(palettes),
+      themeSetToPenpotTokenTree(THEME_SET),
+      typographySetToPenpotTokenTree(typographySet),
     );
+    downloadPenpotTokens(mergedTree, 'base.json');
   }
   protected handleFontSelect(
     event: Event,

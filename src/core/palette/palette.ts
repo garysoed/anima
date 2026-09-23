@@ -23,4 +23,3 @@ export const SHADE_KEYS: ReadonlyArray<keyof Palette> = [
   'c800',
   'c900',
 ];
-
