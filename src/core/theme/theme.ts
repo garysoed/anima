@@ -5,7 +5,7 @@ import {PaletteSet} from '../palette/palette-set';
 
 export type GlobalPaletteKey = 'error' | 'success' | 'warning';
 export type SeededPaletteKey = 'highlight' | 'neutral';
-export type PaletteKey = GlobalPaletteKey | SeededPaletteKey;
+export type PaletteKey = `${string}_${SeededPaletteKey}` | GlobalPaletteKey;
 export type ShadeKey = keyof Palette;
 export type PaletteColorKey = 'black' | 'white' | `${PaletteKey}.${ShadeKey}`;
 
@@ -44,14 +44,20 @@ export interface Theme {
   readonly warning: PaletteColorKey;
 }
 
+export function isGlobalPaletteKey(
+  key: string | undefined,
+): key is GlobalPaletteKey {
+  return key === 'error' || key === 'success' || key === 'warning';
+}
+
 export function isPaletteKey(key: string | undefined): key is PaletteKey {
-  return (
-    key === 'error' ||
-    key === 'highlight' ||
-    key === 'neutral' ||
-    key === 'success' ||
-    key === 'warning'
-  );
+  if (isGlobalPaletteKey(key)) {
+    return true;
+  }
+  if (typeof key === 'string') {
+    return key.endsWith('_highlight') || key.endsWith('_neutral');
+  }
+  return false;
 }
 
 export function isShadeKey(key: string | undefined): key is ShadeKey {
@@ -71,7 +77,6 @@ export function isShadeKey(key: string | undefined): key is ShadeKey {
 export function resolveThemeColor(
   palettes: PaletteSet,
   key: PaletteColorKey,
-  seedName: string,
 ): Color {
   if (key === 'white') {
     return palettes.white;
@@ -79,38 +84,37 @@ export function resolveThemeColor(
   if (key === 'black') {
     return palettes.black;
   }
-  const [palKey, shadeKey] = key.split('.');
-  if (!isPaletteKey(palKey) || !isShadeKey(shadeKey)) {
+  const [paletteKey, shadeKey] = key.split('.');
+  if (!isPaletteKey(paletteKey) || !isShadeKey(shadeKey)) {
     throw new Error(`Invalid palette color key: ${key}`);
   }
-  if (palKey === 'highlight' || palKey === 'neutral') {
-    const seeded = palettes.seededPaletteSets.get(seedName);
-    if (!seeded) {
-      throw new Error(`Seed not found: ${seedName}`);
-    }
-    return seeded[palKey][shadeKey];
+  if (isGlobalPaletteKey(paletteKey)) {
+    return palettes[paletteKey][shadeKey];
   }
-  return palettes[palKey][shadeKey];
+  const lastUnderscore = paletteKey.lastIndexOf('_');
+  const seedName = paletteKey.slice(0, lastUnderscore);
+  const basePaletteKey = paletteKey.slice(lastUnderscore + 1);
+  const seeded = palettes.seededPaletteSets.get(seedName);
+  if (!seeded) {
+    throw new Error(`Seed not found: ${seedName}`);
+  }
+  if (basePaletteKey === 'highlight' || basePaletteKey === 'neutral') {
+    return seeded[basePaletteKey][shadeKey];
+  }
+  throw new Error(`Invalid seeded palette key: ${paletteKey}`);
 }
 
-export function getPaletteCssVar(
-  key: PaletteColorKey,
-  seedName: string,
-): string {
+export function getPaletteCssVar(key: PaletteColorKey): string {
   if (key === 'white') {
     return 'var(--an-white)';
   }
   if (key === 'black') {
     return 'var(--an-black)';
   }
-  const [palKey, shadeKey] = key.split('.');
-  if (!isPaletteKey(palKey) || !isShadeKey(shadeKey)) {
+  const [paletteKey, shadeKey] = key.split('.');
+  if (!isPaletteKey(paletteKey) || !isShadeKey(shadeKey)) {
     throw new Error(`Invalid palette color key: ${key}`);
   }
   const shadeNum = shadeKey.slice(1);
-  const paletteType =
-    palKey === 'highlight' || palKey === 'neutral'
-      ? `${seedName}_${palKey}`
-      : palKey;
-  return `var(--an-${paletteType}-${shadeNum})`;
+  return `var(--an-${paletteKey}-${shadeNum})`;
 }

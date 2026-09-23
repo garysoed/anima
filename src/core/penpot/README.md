@@ -1,9 +1,11 @@
 # Penpot
 
-Core Penpot design token data structures and generator functions.
+Core Penpot design token data structures, per-set converters, and recursive token tree merger.
 
 ## Files
 
-- [get-penpot-tokens.ts](get-penpot-tokens.ts): Generates a single Penpot design token set (palette or theme with typography) structured in standard Penpot-compatible W3C DTCG / Tokens Studio JSON format.
-- [penpot.ts](penpot.ts): Types and interfaces defining the Penpot token tree, color tokens, typography tokens, token sets, and multi-set export data envelope.
-- [README.md](README.md): Directory documentation.
+- [merge-penpot-token-trees.ts](merge-penpot-token-trees.ts): Pure recursive utility merging multiple Penpot token trees into a unified token tree.
+- [palette-set-to-penpot-token-tree.ts](palette-set-to-penpot-token-tree.ts): Converter transforming a `PaletteSet` (including seeded palettes and global palettes) into a `PenpotTokenTree`.
+- [penpot.ts](penpot.ts): Types and interfaces defining the Penpot token tree, color tokens, and composite typography tokens.
+- [theme-set-to-penpot-token-tree.ts](theme-set-to-penpot-token-tree.ts): Converter transforming a `ThemeSet` into a `PenpotTokenTree` referencing palette color aliases.
+- [typography-set-to-penpot-token-tree.ts](typography-set-to-penpot-token-tree.ts): Converter transforming a `TypographySet` into a `PenpotTokenTree` with composite typography tokens and code variants.
