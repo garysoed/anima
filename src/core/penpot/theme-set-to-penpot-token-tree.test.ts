@@ -11,6 +11,7 @@ test.describe('themeSetToPenpotTokenTree', () => {
   test('formats theme group keys as mode_type and references palette aliases with seedName', () => {
     expect(tree['dark_0']).toEqual({
       background: {$type: 'color', $value: '{custom_neutral.800}'},
+      border: {$type: 'color', $value: '{custom_highlight.200}'},
       display: {$type: 'color', $value: '{custom_highlight.500}'},
       error: {$type: 'color', $value: '{error.300}'},
       primary: {$type: 'color', $value: '{custom_neutral.100}'},

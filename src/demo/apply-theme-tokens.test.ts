@@ -38,8 +38,14 @@ test.describe('apply-theme-tokens', () => {
       expect(properties['--an-main-light_0-background']).toBe(
         'var(--an-main_neutral-100)',
       );
+      expect(properties['--an-main-light_0-border']).toBe(
+        'var(--an-main_highlight-800)',
+      );
       expect(properties['--an-main-dark_0-background']).toBe(
         'var(--an-main_neutral-800)',
+      );
+      expect(properties['--an-main-dark_0-border']).toBe(
+        'var(--an-main_highlight-200)',
       );
     });
   });

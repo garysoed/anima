@@ -3,6 +3,7 @@
     @each $section
       in (
         'background',
+        'border',
         'display',
         'error',
         'primary',

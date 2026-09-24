@@ -13,6 +13,7 @@ export type ThemeMode = 'dark' | 'light';
 export type ThemeType = 0 | 1 | 2 | 3;
 export type ThemeSection =
   | 'background'
+  | 'border'
   | 'display'
   | 'error'
   | 'primary'
@@ -24,6 +25,7 @@ export const MODES: readonly ThemeMode[] = ['light', 'dark'];
 export const TYPES: readonly ThemeType[] = [0, 1, 2, 3];
 export const SECTIONS: readonly ThemeSection[] = [
   'background',
+  'border',
   'display',
   'error',
   'primary',
@@ -34,6 +36,7 @@ export const SECTIONS: readonly ThemeSection[] = [
 
 export interface Theme {
   readonly background: PaletteColorKey;
+  readonly border: PaletteColorKey;
   readonly display: PaletteColorKey;
   readonly error: PaletteColorKey;
   readonly mode: ThemeMode;

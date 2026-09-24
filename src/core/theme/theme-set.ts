@@ -10,6 +10,7 @@ export function createThemeSet(seedName: string): ThemeSet {
     dark: {
       0: {
         background: `${seedName}_neutral.c800`,
+        border: `${seedName}_highlight.c200`,
         display: `${seedName}_highlight.c500`,
         error: 'error.c300',
         mode: 'dark',
@@ -21,6 +22,7 @@ export function createThemeSet(seedName: string): ThemeSet {
       },
       1: {
         background: 'black',
+        border: `${seedName}_highlight.c200`,
         display: `${seedName}_highlight.c500`,
         error: 'error.c400',
         mode: 'dark',
@@ -32,6 +34,7 @@ export function createThemeSet(seedName: string): ThemeSet {
       },
       2: {
         background: `${seedName}_highlight.c900`,
+        border: `${seedName}_highlight.c200`,
         display: `${seedName}_highlight.c500`,
         error: 'error.c400',
         mode: 'dark',
@@ -43,6 +46,7 @@ export function createThemeSet(seedName: string): ThemeSet {
       },
       3: {
         background: `${seedName}_highlight.c700`,
+        border: `${seedName}_highlight.c200`,
         display: `${seedName}_highlight.c400`,
         error: 'error.c200',
         mode: 'dark',
@@ -56,6 +60,7 @@ export function createThemeSet(seedName: string): ThemeSet {
     light: {
       0: {
         background: `${seedName}_neutral.c100`,
+        border: `${seedName}_highlight.c800`,
         display: `${seedName}_highlight.c500`,
         error: 'error.c600',
         mode: 'light',
@@ -67,6 +72,7 @@ export function createThemeSet(seedName: string): ThemeSet {
       },
       1: {
         background: 'white',
+        border: `${seedName}_highlight.c800`,
         display: `${seedName}_highlight.c500`,
         error: 'error.c600',
         mode: 'light',
@@ -78,6 +84,7 @@ export function createThemeSet(seedName: string): ThemeSet {
       },
       2: {
         background: `${seedName}_highlight.c200`,
+        border: `${seedName}_highlight.c800`,
         display: `${seedName}_highlight.c600`,
         error: 'error.c700',
         mode: 'light',
@@ -89,6 +96,7 @@ export function createThemeSet(seedName: string): ThemeSet {
       },
       3: {
         background: `${seedName}_highlight.c300`,
+        border: `${seedName}_highlight.c800`,
         display: `${seedName}_highlight.c600`,
         error: 'error.c800',
         mode: 'light',
