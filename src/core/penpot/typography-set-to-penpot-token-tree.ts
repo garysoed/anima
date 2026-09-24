@@ -35,7 +35,7 @@ function createPenpotTypographyToken(
       fontSize: value.fontSize,
       fontWeight: value.fontWeight,
       letterSpacing: value.letterSpacing,
-      lineHeight: value.lineHeight,
+      lineHeight: `${value.lineHeight}`,
       textCase: value.textCase,
       textDecoration: value.textDecoration,
     },

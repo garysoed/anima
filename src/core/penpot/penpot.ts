@@ -12,7 +12,7 @@ export interface PenpotTypographyToken {
     readonly fontSize: string;
     readonly fontWeight: number | string;
     readonly letterSpacing?: number | string;
-    readonly lineHeight: number | string;
+    readonly lineHeight: string;
     readonly textCase?: string;
     readonly textDecoration?: string;
   };
