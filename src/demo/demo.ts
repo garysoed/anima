@@ -5,7 +5,6 @@ import {customElement} from 'lit/decorators.js';
 
 import {createNeutralPalette} from '../core/palette/create-neutral-palette';
 import {createPalette} from '../core/palette/create-palette';
-import {Palette} from '../core/palette/palette';
 import {PaletteSet} from '../core/palette/palette-set';
 import {mergePenpotTokenTrees} from '../core/penpot/merge-penpot-token-trees';
 import {paletteSetToPenpotTokenTree} from '../core/penpot/palette-set-to-penpot-token-tree';
@@ -25,23 +24,12 @@ import styles from './demo.scss';
 import {downloadPenpotTokens} from './download-penpot-tokens';
 import {ALL_FONTS} from './google-fonts';
 
-type PalettePreviewKey =
-  'error' | 'highlight' | 'neutral' | 'success' | 'warning';
+type PalettePreviewKey = 'error' | 'main' | 'neutral' | 'success' | 'warning';
 
 interface PalettePreviewConfig {
   readonly description: string;
   readonly key: PalettePreviewKey;
   readonly title: string;
-}
-
-function getPreviewPalette(
-  palettes: PaletteSet,
-  key: PalettePreviewKey,
-): Palette | undefined {
-  if (key === 'highlight') {
-    return palettes.main;
-  }
-  return palettes[key];
 }
 
 interface TypographyControlConfig {
@@ -69,8 +57,8 @@ const PALETTE_PREVIEWS: readonly PalettePreviewConfig[] = [
   {
     description:
       'Generated from the seed colour with maximum chroma gamut boundary sampling.',
-    key: 'highlight',
-    title: 'Highlight palette',
+    key: 'main',
+    title: 'Main palette',
   },
   {
     description:
@@ -399,25 +387,35 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
 
           <div class="card">
             <p>
-              A theme is generated from a single seed colour, which is used to
-              generate palettes. Every theme is created using these palettes:
+              A theme set is generated from seed colours used to produce
+              palettes. Palettes are categorized into:
             </p>
 
             <ul>
               <li>
-                Highlight palette: Generated from the seed colour. This has the
-                highest saturation.
+                Main palette: Generated from the primary seed colour using
+                radial gamut boundary sampling. This has the highest chroma and
+                saturation.
               </li>
               <li>
-                Neutral palette: Generated from the seed colour after decreasing
-                its saturation.
+                Neutral palette: Generated from the primary seed colour after
+                decreasing its saturation to 0.05 in HSL colour space.
               </li>
-              <li>Error palette: Generated from red. Used for errors.</li>
-              <li>Warning palette: Generated from amber. Used for warnings.</li>
-              <li>Success palette: Generated from green. Used for success.</li>
+              <li>
+                Status palettes: Fixed semantic palettes generated from
+                standard seed colours (error from red, warning from amber,
+                success from green).
+              </li>
+              <li>
+                Other palettes: Domain-specific palettes generated from
+                arbitrary domain seeds.
+              </li>
             </ul>
 
-            <p>A collection of the above palette is called a palette set</p>
+            <p>
+              A collection of the above palettes (together with base white and
+              black) is called a palette set.
+            </p>
 
             <p>To generate a palette:</p>
 
@@ -438,6 +436,10 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                 </tr>
               </thead>
               <tbody>
+                <tr>
+                  <td>50</td>
+                  <td>0.980</td>
+                </tr>
                 <tr>
                   <td>100</td>
                   <td>0.960</td>
@@ -474,6 +476,10 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                   <td>900</td>
                   <td>0.200</td>
                 </tr>
+                <tr>
+                  <td>950</td>
+                  <td>0.150</td>
+                </tr>
               </tbody>
             </table>
 
@@ -489,19 +495,32 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
             <p>Themes use the palette set to define the following colours:</p>
 
             <ul>
-              <li>Background</li>
+              <li>Background: The surface background colour.</li>
               <li>
                 Primary: The primary foreground colour. This is usually used for
-                texts.
+                body texts and headings. The contrast ratio against background
+                should be at least 4.5:1.
               </li>
               <li>
                 Secondary: The secondary foreground colour. This is usually used
                 for secondary texts and is dimmer (i.e. lower contrast) than
-                primary. The contrast ratio should at least be 4.5.
+                primary. The contrast ratio against background should be at
+                least 4.5:1.
               </li>
               <li>
-                Display: Foreground colour for icons and any non textual
-                symbols. The contrast ratio should be at least 3.0
+                Status (Error, Warning, Success): Contextual state and feedback
+                colours. The contrast ratio against background should be at
+                least 4.5:1.
+              </li>
+              <li>
+                Display: Foreground colour for brand icons, large headlines, and
+                non-textual symbols. The contrast ratio against background
+                should be at least 3.0:1.
+              </li>
+              <li>
+                Outline: Structural dividers, borders, focus rings, and
+                outlines. The contrast ratio against background should be at
+                least 1.5:1.
               </li>
             </ul>
           </div>
@@ -509,23 +528,35 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
           <h3>Theme set</h3>
 
           <div class="card">
-            <p>A theme set consists of the following themes:</p>
+            <p>
+              A theme set consists of four theme types in light and dark modes,
+              following strict background hierarchy ordering:
+            </p>
 
             <ul>
-              <li>Theme 0: Darker theme. Has a neutral shade for background</li>
-              <li>Theme 1: Normal theme. Usually have a white background</li>
               <li>
-                Theme 2: Highlight theme. Has a highlight shade for background
+                Theme 0: Subtle shift / inset theme. Uses a neutral shade for
+                background (darker than Theme 1 in light mode, lighter than Theme
+                1 in dark mode).
               </li>
               <li>
-                Theme 3: Super highlight theme. This should be used sparingly
-                and only to grab the attention of the user. This has a middle
-                highlight shade for the background
+                Theme 1: Base canvas theme. Uses a neutral shade for background
+                (the base surface canvas).
+              </li>
+              <li>
+                Theme 2: Highlight theme. Uses a main palette shade for
+                background (darker than Theme 1 in light mode, lighter than Theme
+                1 in dark mode).
+              </li>
+              <li>
+                Theme 3: Super highlight theme. Uses a main palette shade for
+                background (darker than Theme 2 in light mode, lighter than Theme
+                2 in dark mode) to command user attention.
               </li>
             </ul>
 
             <p>
-              Each of the above themes have a light and dark versions. This can
+              Each of the above themes has light and dark versions. This can
               be used for light / dark mode of the app, though apps can mix and
               match this. For example, a light mode app can have a dark mode
               button.
@@ -544,7 +575,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                     <h5>${config.title}</h5>
                     <p>${config.description}</p>
                     <an-palette-preview
-                      .palette="${getPreviewPalette(this.paletteSet.get(), config.key)}"
+                      .palette="${this.paletteSet.get()[config.key]}"
                     ></an-palette-preview>
                   </div>
                 `,
@@ -676,21 +707,29 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
 
             <ul>
               <li>
-                Palette tokens: Highlight and neutral palettes are based on the
-                name of the seed. The error, warning, and success do not. There
-                are two parts:
+                Palette tokens: Formatted as
+                <code>--an-[palette_type]-[shade]</code> (or base
+                <code>--an-white</code> and <code>--an-black</code>). There are
+                two parts:
                 <ul>
                   <li>
                     The palette type, which are as follows:
                     <ul>
-                      <li><code>seed_highlight</code></li>
-                      <li><code>seed_neutral</code></li>
+                      <li><code>main</code></li>
+                      <li><code>neutral</code></li>
                       <li><code>error</code></li>
                       <li><code>warning</code></li>
                       <li><code>success</code></li>
+                      <li><code>[domain]</code> (for domain palettes)</li>
                     </ul>
                   </li>
-                  <li>The shade. These are numbers from 100 to 900</li>
+                  <li>
+                    The shade. These are 11 numbers: <code>50</code>,
+                    <code>100</code>, <code>200</code>, <code>300</code>,
+                    <code>400</code>, <code>500</code>, <code>600</code>,
+                    <code>700</code>, <code>800</code>, <code>900</code>,
+                    <code>950</code>
+                  </li>
                 </ul>
               </li>
               <li>
@@ -723,9 +762,11 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                 </ul>
               </li>
               <li>
-                Color theme tokens: There are three parts:
+                Color theme tokens: Formatted as
+                <code>--an-main-[mode]_[type]-[section]</code>. There are three
+                parts:
                 <ul>
-                  <li>The seed name</li>
+                  <li>The seed name (e.g. <code>main</code>)</li>
                   <li>
                     Whether the theme is light or dark, followed by the theme
                     type. For example, <code>light_2</code>
@@ -734,9 +775,13 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                     The section of the theme:
                     <ul>
                       <li><code>background</code></li>
+                      <li><code>outline</code></li>
                       <li><code>primary</code></li>
                       <li><code>secondary</code></li>
                       <li><code>display</code></li>
+                      <li><code>error</code></li>
+                      <li><code>warning</code></li>
+                      <li><code>success</code></li>
                     </ul>
                   </li>
                 </ul>
