@@ -5,6 +5,7 @@ import {createNeutralPalette} from '../core/palette/create-neutral-palette';
 import {createPalette} from '../core/palette/create-palette';
 import {PaletteSet} from '../core/palette/palette-set';
 import {ThemeSet} from '../core/theme/theme-set';
+
 import {
   applyThemeTokens,
   getThemeTokensCssProperties,
@@ -17,7 +18,7 @@ test.describe('apply-theme-tokens', () => {
     error: createPalette(rgb('#dc2626')),
     main: createPalette(seed),
     neutral: createNeutralPalette(seed),
-    other: new Map(),
+    other: new Map([['food', createPalette(rgb('#10b981'))]]),
     success: createPalette(rgb('#16a34a')),
     warning: createPalette(rgb('#d97706')),
     white: rgb('#ffffff'),
@@ -142,6 +143,11 @@ test.describe('apply-theme-tokens', () => {
         palettes,
         'main',
       );
+      expect(properties['--an-food-500']).toBeDefined();
+      expect(properties['--an-main-50']).toBeDefined();
+      expect(properties['--an-main-950']).toBeDefined();
+      expect(properties['--an-neutral-50']).toBeDefined();
+      expect(properties['--an-neutral-950']).toBeDefined();
       expect(properties['--an-neutral-100']).toBeDefined();
       expect(properties['--an-error-300']).toBeDefined();
       expect(properties['--an-main-light_0-background']).toBe(

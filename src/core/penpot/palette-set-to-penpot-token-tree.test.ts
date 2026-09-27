@@ -22,7 +22,9 @@ test.describe('paletteSetToPenpotTokenTree', () => {
   };
   const tree = paletteSetToPenpotTokenTree(palettes);
 
-  test('converts global palettes, main/neutral palettes, and other palettes to penpot color tokens', () => {
+  test(
+    'converts global palettes, main/neutral palettes, and other palettes to penpot color tokens',
+    () => {
     expect(tree['black']).toEqual({$type: 'color', $value: '#000000'});
     expect(tree['white']).toEqual({$type: 'color', $value: '#ffffff'});
 

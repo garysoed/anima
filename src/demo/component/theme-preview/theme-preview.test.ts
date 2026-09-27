@@ -5,8 +5,8 @@ import {createNeutralPalette} from '../../../core/palette/create-neutral-palette
 import {createPalette} from '../../../core/palette/create-palette';
 import {PaletteSet} from '../../../core/palette/palette-set';
 import {Theme} from '../../../core/theme/theme';
-import {getThemeTokensCssProperties} from '../../apply-theme-tokens';
 import {ThemeSet} from '../../../core/theme/theme-set';
+import {getThemeTokensCssProperties} from '../../apply-theme-tokens';
 
 test.describe('<an-theme-preview>', () => {
   test('renders no DOM nodes when theme is null', async ({page}) => {
@@ -182,21 +182,16 @@ test.describe('<an-theme-preview>', () => {
       (
         el: HTMLElement,
         params: {
-          palettes: PaletteSet;
           theme: Theme;
         },
       ) => {
         Reflect.set(el, 'label', 'Light Theme 0');
-        Reflect.set(el, 'palettes', params.palettes);
         Reflect.set(el, 'theme', params.theme);
       },
       {
-        palettes,
         theme: lightTheme0,
       },
     );
-
-    await expect(preview.locator('.card')).toBeVisible();
 
     await preview.screenshot({
       path: 'src/demo/component/theme-preview/goldens/theme-preview.png',

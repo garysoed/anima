@@ -1,0 +1,44 @@
+:host {
+  display: block;
+}
+
+.configs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.config-row {
+  align-items: center;
+  color: var(--an-main_1-secondary);
+  display: flex;
+  font: var(--an-label-small-font);
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.config-label {
+  flex-shrink: 0;
+}
+
+.color-select {
+  background-color: var(--an-main_0-background);
+  border: 1px solid var(--an-main_1-outline);
+  border-radius: 4px;
+  color: var(--an-main_0-primary);
+  cursor: pointer;
+  font: var(--an-label-small-font);
+  max-width: 110px;
+  padding: 2px 4px;
+
+  option {
+    background-color: var(--an-main_0-background);
+    color: var(--an-main_0-primary);
+  }
+
+  &:focus-visible {
+    border-color: var(--an-main_3-outline);
+    outline: 1px solid var(--an-main_3-outline);
+  }
+}

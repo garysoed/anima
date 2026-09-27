@@ -4,6 +4,8 @@
 
 .card {
   background-color: var(--an-preview-background);
+  border: 1px solid var(--an-preview-outline);
+  border-radius: 4px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -18,29 +20,17 @@
   gap: 12px;
 }
 
-.brand-icon-container {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  gap: 2px;
-}
-
 .brand-icon {
+  flex-shrink: 0;
   height: 28px;
   width: 28px;
 
   svg {
-    display: block;
     color: var(--an-preview-display);
+    display: block;
     height: 100%;
     width: 100%;
   }
-}
-
-.icon-contrast {
-  color: var(--an-preview-display);
-  font: var(--an-label-small-font);
 }
 
 .primary-text {

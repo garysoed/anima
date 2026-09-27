@@ -11,14 +11,16 @@ import {mergePenpotTokenTrees} from '../core/penpot/merge-penpot-token-trees';
 import {paletteSetToPenpotTokenTree} from '../core/penpot/palette-set-to-penpot-token-tree';
 import {themeSetToPenpotTokenTree} from '../core/penpot/theme-set-to-penpot-token-tree';
 import {typographySetToPenpotTokenTree} from '../core/penpot/typography-set-to-penpot-token-tree';
+import {Theme, ThemeMode, ThemeType, TYPES} from '../core/theme/theme';
 import {ThemeSet} from '../core/theme/theme-set';
-import {ThemeMode, ThemeType, TYPES} from '../core/theme/theme';
 
 import {applyThemeTokens} from './apply-theme-tokens';
 import {applyTypographyTokens} from './apply-typography-tokens';
 import {ColorPicker} from './component/color-picker/color-picker';
 import './component/palette-preview/palette-preview';
+import './component/theme-configs/theme-configs';
 import './component/theme-preview/theme-preview';
+import {INITIAL_THEME_SET} from './default-themes';
 import styles from './demo.scss';
 import {downloadPenpotTokens} from './download-penpot-tokens';
 import {ALL_FONTS} from './google-fonts';
@@ -108,108 +110,6 @@ const THEME_NAMES: Record<ThemeMode, Record<ThemeType, string>> = {
     1: 'Light Theme 1',
     2: 'Light Theme 2',
     3: 'Light Theme 3',
-  },
-};
-const INITIAL_THEME_SET: ThemeSet = {
-  dark: {
-    0: {
-      background: 'neutral.c800',
-      display: 'main.c500',
-      error: 'error.c300',
-      mode: 'dark',
-      outline: 'main.c200',
-      primary: 'neutral.c100',
-      secondary: 'neutral.c300',
-      success: 'success.c300',
-      type: 0,
-      warning: 'warning.c300',
-    },
-    1: {
-      background: 'black',
-      display: 'main.c500',
-      error: 'error.c400',
-      mode: 'dark',
-      outline: 'main.c200',
-      primary: 'neutral.c100',
-      secondary: 'neutral.c400',
-      success: 'success.c400',
-      type: 1,
-      warning: 'warning.c400',
-    },
-    2: {
-      background: 'main.c900',
-      display: 'main.c500',
-      error: 'error.c400',
-      mode: 'dark',
-      outline: 'main.c200',
-      primary: 'neutral.c100',
-      secondary: 'neutral.c400',
-      success: 'success.c400',
-      type: 2,
-      warning: 'warning.c400',
-    },
-    3: {
-      background: 'main.c700',
-      display: 'main.c400',
-      error: 'error.c200',
-      mode: 'dark',
-      outline: 'main.c200',
-      primary: 'white',
-      secondary: 'neutral.c200',
-      success: 'success.c200',
-      type: 3,
-      warning: 'warning.c200',
-    },
-  },
-  light: {
-    0: {
-      background: 'neutral.c100',
-      display: 'main.c500',
-      error: 'error.c600',
-      mode: 'light',
-      outline: 'main.c800',
-      primary: 'neutral.c900',
-      secondary: 'neutral.c700',
-      success: 'success.c600',
-      type: 0,
-      warning: 'warning.c600',
-    },
-    1: {
-      background: 'white',
-      display: 'main.c500',
-      error: 'error.c600',
-      mode: 'light',
-      outline: 'main.c800',
-      primary: 'neutral.c900',
-      secondary: 'neutral.c700',
-      success: 'success.c600',
-      type: 1,
-      warning: 'warning.c600',
-    },
-    2: {
-      background: 'main.c200',
-      display: 'main.c600',
-      error: 'error.c700',
-      mode: 'light',
-      outline: 'main.c800',
-      primary: 'neutral.c900',
-      secondary: 'neutral.c700',
-      success: 'success.c700',
-      type: 2,
-      warning: 'warning.c700',
-    },
-    3: {
-      background: 'main.c300',
-      display: 'main.c600',
-      error: 'error.c800',
-      mode: 'light',
-      outline: 'main.c800',
-      primary: 'black',
-      secondary: 'neutral.c800',
-      success: 'success.c800',
-      type: 3,
-      warning: 'warning.c800',
-    },
   },
 };
 const TYPOGRAPHY_SECTIONS: readonly TypographySectionConfig[] = [
@@ -312,6 +212,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
       white: rgb('#ffffff'),
     };
   });
+  protected readonly themeSet = new Signal.State<ThemeSet>(INITIAL_THEME_SET);
   protected readonly titleLargeFont = new Signal.State('Atkinson Hyperlegible');
   protected readonly titleMediumFont = new Signal.State(
     'Atkinson Hyperlegible',
@@ -657,9 +558,14 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                         <div class="theme-card-wrapper">
                           <an-theme-preview
                             .label="${THEME_NAMES.light[type]}"
-                            .palettes="${this.paletteSet.get()}"
-                            .theme="${INITIAL_THEME_SET.light[type]}"
+                            .theme="${this.themeSet.get().light[type]}"
                           ></an-theme-preview>
+                          <an-theme-configs
+                            .mode="${'light'}"
+                            .type="${type}"
+                            .palettes="${this.paletteSet.get()}"
+                            @theme-change="${this.handleThemeChange}"
+                          ></an-theme-configs>
                         </div>
                       `,
                     )}
@@ -670,9 +576,14 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                         <div class="theme-card-wrapper">
                           <an-theme-preview
                             .label="${THEME_NAMES.dark[type]}"
-                            .palettes="${this.paletteSet.get()}"
-                            .theme="${INITIAL_THEME_SET.dark[type]}"
+                            .theme="${this.themeSet.get().dark[type]}"
                           ></an-theme-preview>
+                          <an-theme-configs
+                            .mode="${'dark'}"
+                            .type="${type}"
+                            .palettes="${this.paletteSet.get()}"
+                            @theme-change="${this.handleThemeChange}"
+                          ></an-theme-configs>
                         </div>
                       `,
                     )}
@@ -863,8 +774,9 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
 
   protected applyThemeTokens(): void {
     const paletteSet = this.paletteSet.get();
+    const themeSet = this.themeSet.get();
     applyThemeTokens(
-      INITIAL_THEME_SET,
+      themeSet,
       paletteSet,
       document.documentElement.style,
       'main',
@@ -877,6 +789,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
   protected cleanupWatcher(): void {
     if (this.watcher) {
       this.watcher.unwatch(this.paletteSet);
+      this.watcher.unwatch(this.themeSet);
       this.watcher.unwatch(this.typographySet);
       this.watcher = null;
     }
@@ -889,10 +802,11 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
   }
   protected handleExportPenpotTokens(): void {
     const palettes = this.paletteSet.get();
+    const themeSet = this.themeSet.get();
     const typographySet = this.typographySet.get();
     const mergedTree = mergePenpotTokenTrees(
       paletteSetToPenpotTokenTree(palettes),
-      themeSetToPenpotTokenTree(INITIAL_THEME_SET),
+      themeSetToPenpotTokenTree(themeSet),
       typographySetToPenpotTokenTree(typographySet),
     );
     downloadPenpotTokens(mergedTree, 'base.json');
@@ -908,6 +822,19 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
   }
   protected handleModeSelect(selectedMode: ThemeMode): void {
     this.mode.set(selectedMode);
+  }
+  protected handleThemeChange(event: CustomEvent<{theme: Theme}>): void {
+    const updatedTheme = event.detail.theme;
+    const currentThemeSet = this.themeSet.get();
+    const mode = updatedTheme.mode;
+    const type = updatedTheme.type;
+    this.themeSet.set({
+      ...currentThemeSet,
+      [mode]: {
+        ...currentThemeSet[mode],
+        [type]: updatedTheme,
+      },
+    });
   }
   protected initWatcher(): void {
     this.cleanupWatcher();
@@ -930,6 +857,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
       }
     });
     this.watcher.watch(this.paletteSet);
+    this.watcher.watch(this.themeSet);
     this.watcher.watch(this.typographySet);
     this.applyThemeTokens();
     this.applyTypographyTokens();

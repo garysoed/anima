@@ -123,7 +123,7 @@
 }
 
 .shades-table {
-  border: 1px solid var(--an-main_1-display);
+  border: 1px solid var(--an-main_1-outline);
   border-collapse: collapse;
   margin: 8px 0;
   max-width: 300px;
@@ -131,7 +131,7 @@
 
   th,
   td {
-    border: 1px solid var(--an-main_1-display);
+    border: 1px solid var(--an-main_1-outline);
     padding: 6px 16px;
   }
 
@@ -168,7 +168,19 @@
 }
 
 .theme-card-wrapper {
+  align-items: flex-start;
   display: flex;
+  gap: 16px;
+
+  an-theme-preview {
+    flex: 1;
+    min-width: 0;
+  }
+
+  an-theme-configs {
+    flex-shrink: 0;
+    width: 170px;
+  }
 }
 
 .generator-layout {
@@ -249,7 +261,7 @@
 
     select {
       background-color: var(--an-main_0-background);
-      border: 1px solid var(--an-main_1-secondary);
+      border: 1px solid var(--an-main_1-outline);
       border-radius: 4px;
       color: var(--an-main_0-primary);
       cursor: pointer;
@@ -257,8 +269,8 @@
       padding: 8px 12px;
 
       &:focus-visible {
-        border-color: var(--an-main_3-background);
-        outline: 1px solid var(--an-main_3-background);
+        border-color: var(--an-main_3-outline);
+        outline: 1px solid var(--an-main_3-outline);
       }
     }
   }
@@ -289,7 +301,7 @@ button {
   }
 
   &:focus-visible {
-    outline: 2px solid var(--an-main_3-background);
+    outline: 2px solid var(--an-main_3-outline);
   }
 }
 

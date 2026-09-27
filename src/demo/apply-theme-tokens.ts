@@ -40,6 +40,13 @@ export function getThemeTokensCssProperties(
     );
   }
 
+  for (const [name, palette] of palettes.other) {
+    for (const shadeKey of SHADE_KEYS) {
+      const shadeNum = shadeKey.slice(1);
+      properties[`--an-${name}-${shadeNum}`] = format(palette[shadeKey], 'hex');
+    }
+  }
+
   for (const mode of MODES) {
     const modeThemes = themeSet[mode];
     for (const type of TYPES) {
