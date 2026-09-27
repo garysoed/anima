@@ -85,8 +85,8 @@ export class ThemePreview extends LitElement {
         `var(${themePrefix}-background)`,
       );
       this.style.setProperty(
-        '--an-preview-border',
-        `var(${themePrefix}-border)`,
+        '--an-preview-outline',
+        `var(${themePrefix}-outline)`,
       );
       this.style.setProperty(
         '--an-preview-display',

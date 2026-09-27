@@ -15,5 +15,5 @@
 
 ## 3. Theme Models & Constants
 
-- **PaletteColorKey**: Role colors are defined by `PaletteColorKey` (`'black' | 'white' | `${PaletteKey}.${ShadeKey}``).
-- **Static Theme Configurations**: Themes are statically defined in `THEME_SET: ThemeSet` in `src/core/theme/theme-set.ts`. Inline and reference `THEME_SET` directly rather than wrapping it in reactive signals or factory calls.
+- **PaletteColorKey**: Role colors are defined by `PaletteColorKey` (`'black' | 'white' | `${string}.${ShadeKey}``).
+- **Manual Theme Selection**: Themes do not have predefined or fixed shades; there is no global `THEME_SET`. Consumers manually configure shades for each theme based on background and contrast requirements.

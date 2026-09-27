@@ -3,9 +3,9 @@
     @each $section
       in (
         'background',
-        'border',
         'display',
         'error',
+        'outline',
         'primary',
         'secondary',
         'success',

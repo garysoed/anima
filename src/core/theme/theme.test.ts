@@ -52,6 +52,11 @@ test.describe('Theme utilities', () => {
       expect(color).toBe(palettes.error.c300);
     });
 
+    test('resolves boundary shades c50 and c950', () => {
+      expect(resolveThemeColor(palettes, 'main.c50')).toBe(palettes.main.c50);
+      expect(resolveThemeColor(palettes, 'neutral.c950')).toBe(palettes.neutral.c950);
+    });
+
     test('throws error if palette is not found in PaletteSet', () => {
       expect(() =>
         resolveThemeColor(palettes, 'nonexistent.c100'),
@@ -75,6 +80,11 @@ test.describe('Theme utilities', () => {
       expect(getPaletteCssVar('main.c900')).toBe(
         'var(--an-main-900)',
       );
+    });
+
+    test('returns var for boundary shades c50 and c950', () => {
+      expect(getPaletteCssVar('main.c50')).toBe('var(--an-main-50)');
+      expect(getPaletteCssVar('neutral.c950')).toBe('var(--an-neutral-950)');
     });
 
     test('returns unprefixed var for semantic palettes', () => {
