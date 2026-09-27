@@ -34,9 +34,10 @@ export function paletteSetToPenpotTokenTree(
     },
   };
 
-  for (const [seedName, seededPalette] of palettes.seededPaletteSets) {
-    tree[`${seedName}_highlight`] = createShadeTokens(seededPalette.highlight);
-    tree[`${seedName}_neutral`] = createShadeTokens(seededPalette.neutral);
+  tree['main'] = createShadeTokens(palettes.main);
+  tree['neutral'] = createShadeTokens(palettes.neutral);
+  for (const [name, palette] of palettes.other) {
+    tree[name] = createShadeTokens(palette);
   }
 
   return tree;

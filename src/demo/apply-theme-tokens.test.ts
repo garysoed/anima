@@ -1,8 +1,9 @@
 import {expect, test} from '@playwright/test';
 import {rgb} from 'gs-tools/export/color';
 
-import {createPaletteSet} from '../core/palette/create-palette-set';
-import {createSeededPaletteSet} from '../core/palette/create-seeded-palette-set';
+import {createNeutralPalette} from '../core/palette/create-neutral-palette';
+import {createPalette} from '../core/palette/create-palette';
+import {PaletteSet} from '../core/palette/palette-set';
 import {createThemeSet} from '../core/theme/theme-set';
 
 import {
@@ -12,8 +13,16 @@ import {
 
 test.describe('apply-theme-tokens', () => {
   const seed = rgb({b: 220, g: 38, r: 38});
-  const seeded = createSeededPaletteSet(seed, 'main');
-  const palettes = createPaletteSet(new Map([['main', seeded]]));
+  const palettes: PaletteSet = {
+    black: rgb('#000000'),
+    error: createPalette(rgb('#dc2626')),
+    main: createPalette(seed),
+    neutral: createNeutralPalette(seed),
+    other: new Map(),
+    success: createPalette(rgb('#16a34a')),
+    warning: createPalette(rgb('#d97706')),
+    white: rgb('#ffffff'),
+  };
   const themeSet = createThemeSet('main');
 
   test.describe('getThemeTokensCssProperties', () => {
@@ -33,19 +42,19 @@ test.describe('apply-theme-tokens', () => {
         palettes,
         'main',
       );
-      expect(properties['--an-main_neutral-100']).toBeDefined();
+      expect(properties['--an-neutral-100']).toBeDefined();
       expect(properties['--an-error-300']).toBeDefined();
       expect(properties['--an-main-light_0-background']).toBe(
-        'var(--an-main_neutral-100)',
+        'var(--an-neutral-100)',
       );
       expect(properties['--an-main-light_0-border']).toBe(
-        'var(--an-main_highlight-800)',
+        'var(--an-main-800)',
       );
       expect(properties['--an-main-dark_0-background']).toBe(
-        'var(--an-main_neutral-800)',
+        'var(--an-neutral-800)',
       );
       expect(properties['--an-main-dark_0-border']).toBe(
-        'var(--an-main_highlight-200)',
+        'var(--an-main-200)',
       );
     });
   });
@@ -62,7 +71,7 @@ test.describe('apply-theme-tokens', () => {
       expect(applied['--an-white']).toBe('#ffffff');
       expect(applied['--an-black']).toBe('#000000');
       expect(applied['--an-main-light_0-background']).toBe(
-        'var(--an-main_neutral-100)',
+        'var(--an-neutral-100)',
       );
     });
   });

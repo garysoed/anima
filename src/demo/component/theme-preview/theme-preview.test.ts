@@ -1,10 +1,9 @@
 import {expect, test} from '@playwright/test';
 import {rgb} from 'gs-tools/export/color';
 
-import {createPaletteSet} from '../../../core/palette/create-palette-set';
-import {createSeededPaletteSet} from '../../../core/palette/create-seeded-palette-set';
+import {createNeutralPalette} from '../../../core/palette/create-neutral-palette';
+import {createPalette} from '../../../core/palette/create-palette';
 import {PaletteSet} from '../../../core/palette/palette-set';
-import {SeededPaletteSet} from '../../../core/palette/seeded-palette-set';
 import {Theme} from '../../../core/theme/theme';
 import {createThemeSet} from '../../../core/theme/theme-set';
 import {getThemeTokensCssProperties} from '../../apply-theme-tokens';
@@ -58,11 +57,16 @@ test.describe('<an-theme-preview>', () => {
     await expect(preview).toBeAttached();
 
     const seed = rgb({b: 220, g: 38, r: 38});
-    const seeded = createSeededPaletteSet(seed, 'main');
-    const seededPaletteSets: ReadonlyMap<string, SeededPaletteSet> = new Map([
-      ['main', seeded],
-    ]);
-    const palettes = createPaletteSet(seededPaletteSets);
+    const palettes: PaletteSet = {
+      black: rgb('#000000'),
+      error: createPalette(rgb('#dc2626')),
+      main: createPalette(seed),
+      neutral: createNeutralPalette(seed),
+      other: new Map(),
+      success: createPalette(rgb('#16a34a')),
+      warning: createPalette(rgb('#d97706')),
+      white: rgb('#ffffff'),
+    };
     const themeSet = createThemeSet('main');
     const lightTheme0: Theme = themeSet.light[0];
     const cssVars = getThemeTokensCssProperties(themeSet, palettes, 'main');
@@ -78,21 +82,15 @@ test.describe('<an-theme-preview>', () => {
         el: HTMLElement,
         params: {
           palettes: PaletteSet;
-          seededEntries: ReadonlyArray<[string, SeededPaletteSet]>;
           theme: Theme;
         },
       ) => {
-        const themePalettes: PaletteSet = {
-          ...params.palettes,
-          seededPaletteSets: new Map(params.seededEntries),
-        };
         Reflect.set(el, 'label', 'Light Theme 0');
-        Reflect.set(el, 'palettes', themePalettes);
+        Reflect.set(el, 'palettes', params.palettes);
         Reflect.set(el, 'theme', params.theme);
       },
       {
         palettes,
-        seededEntries: [...seededPaletteSets],
         theme: lightTheme0,
       },
     );

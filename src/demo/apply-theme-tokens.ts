@@ -28,19 +28,16 @@ export function getThemeTokensCssProperties(
     }
   }
 
-  const seeded = palettes.seededPaletteSets.get(seedName);
-  if (seeded) {
-    for (const shadeKey of SHADE_KEYS) {
-      const shadeNum = shadeKey.slice(1);
-      properties[`--an-${seedName}_highlight-${shadeNum}`] = format(
-        seeded.highlight[shadeKey],
-        'hex',
-      );
-      properties[`--an-${seedName}_neutral-${shadeNum}`] = format(
-        seeded.neutral[shadeKey],
-        'hex',
-      );
-    }
+  for (const shadeKey of SHADE_KEYS) {
+    const shadeNum = shadeKey.slice(1);
+    properties[`--an-main-${shadeNum}`] = format(
+      palettes.main[shadeKey],
+      'hex',
+    );
+    properties[`--an-neutral-${shadeNum}`] = format(
+      palettes.neutral[shadeKey],
+      'hex',
+    );
   }
 
   for (const mode of MODES) {

@@ -1,5 +1,4 @@
 import {
-  isPaletteKey,
   isShadeKey,
   MODES,
   PaletteColorKey,
@@ -18,7 +17,7 @@ function getPenpotPaletteAlias(key: PaletteColorKey): string {
     return '{black}';
   }
   const [paletteKey, shadeKey] = key.split('.');
-  if (!isPaletteKey(paletteKey) || !isShadeKey(shadeKey)) {
+  if (!paletteKey || !isShadeKey(shadeKey)) {
     throw new Error(`Invalid palette color key: ${key}`);
   }
   const shadeNum = shadeKey.slice(1);

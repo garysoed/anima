@@ -1,10 +1,10 @@
 import {Signal, SignalWatcher} from '@lit-labs/signals';
-import {Color, hsl} from 'gs-tools/export/color';
+import {Color, hsl, rgb} from 'gs-tools/export/color';
 import {LitElement, PropertyValues, TemplateResult, html} from 'lit';
 import {customElement} from 'lit/decorators.js';
 
-import {createPaletteSet} from '../core/palette/create-palette-set';
-import {createSeededPaletteSet} from '../core/palette/create-seeded-palette-set';
+import {createNeutralPalette} from '../core/palette/create-neutral-palette';
+import {createPalette} from '../core/palette/create-palette';
 import {Palette} from '../core/palette/palette';
 import {PaletteSet} from '../core/palette/palette-set';
 import {mergePenpotTokenTrees} from '../core/penpot/merge-penpot-token-trees';
@@ -36,8 +36,8 @@ function getPreviewPalette(
   palettes: PaletteSet,
   key: PalettePreviewKey,
 ): Palette | undefined {
-  if (key === 'highlight' || key === 'neutral') {
-    return palettes.seededPaletteSets.get('main')?.[key];
+  if (key === 'highlight') {
+    return palettes.main;
   }
   return palettes[key];
 }
@@ -197,9 +197,18 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
   protected readonly labelSmallFont = new Signal.State('Atkinson Hyperlegible');
   protected readonly mode = new Signal.State<ThemeMode>('light');
   protected readonly seedColor = new Signal.State<Color>(DEFAULT_SEED_COLOR);
-  protected readonly paletteSet = new Signal.Computed(() => {
-    const seeded = createSeededPaletteSet(this.seedColor.get(), 'main');
-    return createPaletteSet(new Map([['main', seeded]]));
+  protected readonly paletteSet = new Signal.Computed<PaletteSet>(() => {
+    const seed = this.seedColor.get();
+    return {
+      black: rgb('#000000'),
+      error: createPalette(rgb('#dc2626')),
+      main: createPalette(seed),
+      neutral: createNeutralPalette(seed),
+      other: new Map(),
+      success: createPalette(rgb('#16a34a')),
+      warning: createPalette(rgb('#d97706')),
+      white: rgb('#ffffff'),
+    };
   });
   protected readonly titleLargeFont = new Signal.State('Atkinson Hyperlegible');
   protected readonly titleMediumFont = new Signal.State(
