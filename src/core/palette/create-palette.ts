@@ -126,6 +126,7 @@ export function createPalette(seed: Color): Palette {
   const targetSpace = seed.space;
 
   return {
+    c50: createShade(seedOklch, 0.98, targetSpace),
     c100: createShade(seedOklch, 0.96, targetSpace),
     c200: createShade(seedOklch, 0.865, targetSpace),
     c300: createShade(seedOklch, 0.77, targetSpace),
@@ -135,5 +136,6 @@ export function createPalette(seed: Color): Palette {
     c700: createShade(seedOklch, 0.39, targetSpace),
     c800: createShade(seedOklch, 0.295, targetSpace),
     c900: createShade(seedOklch, 0.2, targetSpace),
+    c950: createShade(seedOklch, 0.15, targetSpace),
   };
 }

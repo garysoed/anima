@@ -10,6 +10,7 @@ interface ShadeMeta {
 }
 
 const SHADES: readonly ShadeMeta[] = [
+  {expectedLightness: 0.98, key: 'c50'},
   {expectedLightness: 0.96, key: 'c100'},
   {expectedLightness: 0.865, key: 'c200'},
   {expectedLightness: 0.77, key: 'c300'},
@@ -19,6 +20,7 @@ const SHADES: readonly ShadeMeta[] = [
   {expectedLightness: 0.39, key: 'c700'},
   {expectedLightness: 0.295, key: 'c800'},
   {expectedLightness: 0.2, key: 'c900'},
+  {expectedLightness: 0.15, key: 'c950'},
 ];
 
 function toLinear(c: number): number {
@@ -39,7 +41,7 @@ function getRelativeLuminance(rgbColor: {
 }
 
 test.describe('createPalette', () => {
-  test('renders 9 boxes with colors and takes a screenshot', async ({page}) => {
+  test('renders 11 boxes with colors and takes a screenshot', async ({page}) => {
     // In sRGB space, hue ~211 (cyan/teal) has the narrowest peak chroma boundary (~0.1438)
     const seed: Color = oklch({c: 0.1438, h: 211, l: 0.81, space: 'oklch'});
     const palette = createPalette(seed);

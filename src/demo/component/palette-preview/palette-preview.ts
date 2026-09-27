@@ -7,7 +7,7 @@ import {Palette, SHADE_KEYS} from '../../../core/palette/palette';
 import styles from './palette-preview.scss';
 
 /**
- * Component rendering the 9-shade swatch preview.
+ * Component rendering the 11-shade swatch preview.
  * - Renders no DOM nodes when palette is null.
  * - Displays hex value below each swatch.
  * Custom Element Tag: <an-palette-preview>

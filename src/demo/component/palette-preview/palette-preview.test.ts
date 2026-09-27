@@ -29,7 +29,7 @@ test.describe('<an-palette-preview>', () => {
     await expect(swatches).toHaveCount(0);
   });
 
-  test('renders 9 swatches with hex labels when palette is provided', async ({
+  test('renders 11 swatches with hex labels when palette is provided', async ({
     page,
   }) => {
     await page.setContent(`
@@ -65,10 +65,10 @@ test.describe('<an-palette-preview>', () => {
     await expect(preview).toBeVisible();
 
     const swatches = preview.locator('.swatch');
-    await expect(swatches).toHaveCount(9);
+    await expect(swatches).toHaveCount(11);
 
     const hexLabels = preview.locator('.hex-label');
-    await expect(hexLabels).toHaveCount(9);
+    await expect(hexLabels).toHaveCount(11);
 
     await preview.screenshot({
       path: 'src/demo/component/palette-preview/goldens/palette-preview.png',
