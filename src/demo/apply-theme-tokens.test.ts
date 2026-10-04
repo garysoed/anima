@@ -20,7 +20,7 @@ test.describe('apply-theme-tokens', () => {
     neutral: createNeutralPalette(seed),
     other: new Map([['food', createPalette(rgb('#10b981'))]]),
     success: createPalette(rgb('#16a34a')),
-    warning: createPalette(rgb('#d97706')),
+    warning: createPalette(rgb('#ffbf00')),
     white: rgb('#ffffff'),
   };
   const themeSet: ThemeSet = {

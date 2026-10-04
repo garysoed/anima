@@ -74,7 +74,7 @@ const PALETTE_PREVIEWS: readonly PalettePreviewConfig[] = [
   },
   {
     description:
-      'Fixed semantic palette generated from standard amber seed (#d97706).',
+      'Fixed semantic palette generated from standard amber seed (#ffbf00).',
     key: 'warning',
     title: 'Warning palette',
   },
@@ -196,7 +196,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
       neutral: createNeutralPalette(seed),
       other: new Map(),
       success: createPalette(rgb('#16a34a')),
-      warning: createPalette(rgb('#d97706')),
+      warning: createPalette(rgb('#ffbf00')),
       white: rgb('#ffffff'),
     };
   });

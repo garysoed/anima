@@ -17,7 +17,7 @@ test.describe('paletteSetToPenpotTokenTree', () => {
     neutral: createNeutralPalette(seed),
     other: new Map([['accent', accentPalette]]),
     success: createPalette(rgb('#16a34a')),
-    warning: createPalette(rgb('#d97706')),
+    warning: createPalette(rgb('#ffbf00')),
     white: rgb('#ffffff'),
   };
   const tree = paletteSetToPenpotTokenTree(palettes);
