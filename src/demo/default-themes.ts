@@ -78,7 +78,7 @@ export const INITIAL_THEME_SET: ThemeSet = {
       warning: 'warning.c600',
     },
     2: {
-      background: 'main.c200',
+      background: 'main.c100',
       display: 'main.c600',
       error: 'error.c700',
       mode: 'light',
@@ -90,7 +90,7 @@ export const INITIAL_THEME_SET: ThemeSet = {
       warning: 'warning.c700',
     },
     3: {
-      background: 'main.c300',
+      background: 'main.c200',
       display: 'main.c600',
       error: 'error.c800',
       mode: 'light',
