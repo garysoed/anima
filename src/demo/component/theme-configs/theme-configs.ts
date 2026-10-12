@@ -1,6 +1,6 @@
 import {Signal, SignalWatcher} from '@lit-labs/signals';
 import {contrast} from 'gs-tools/export/color';
-import {html, LitElement, TemplateResult} from 'lit';
+import {html, LitElement, nothing, PropertyValues, TemplateResult} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 
 import {SHADE_KEYS} from '../../../core/palette/palette';
@@ -34,6 +34,45 @@ const SECTION_CONFIGS: ReadonlyArray<{
   {label: 'Warning', section: 'warning'},
   {label: 'Error', section: 'error'},
 ];
+
+type ForegroundThemeSection =
+  'display' | 'error' | 'primary' | 'secondary' | 'success' | 'warning';
+
+const MIN_CONTRAST_RATIOS: Readonly<Record<ForegroundThemeSection, number>> = {
+  display: 3.0,
+  error: 4.5,
+  primary: 4.5,
+  secondary: 4.5,
+  success: 4.5,
+  warning: 4.5,
+};
+
+function isForegroundThemeSection(
+  section: ThemeSection,
+): section is ForegroundThemeSection {
+  return (
+    section === 'display' ||
+    section === 'error' ||
+    section === 'primary' ||
+    section === 'secondary' ||
+    section === 'success' ||
+    section === 'warning'
+  );
+}
+
+function hasLowContrast(
+  section: ThemeSection,
+  theme: Theme,
+  palettes: PaletteSet | null,
+): boolean {
+  if (!palettes || !isForegroundThemeSection(section)) {
+    return false;
+  }
+  const minRatio = MIN_CONTRAST_RATIOS[section];
+  const bg = resolveThemeColor(palettes, theme.background);
+  const fg = resolveThemeColor(palettes, theme[section]);
+  return contrast(fg, bg) < minRatio;
+}
 
 function getShadeLabel(key: PaletteColorKey): string {
   const dotIndex = key.indexOf('.');
@@ -108,19 +147,33 @@ export class ThemeConfigs extends SignalWatcher(LitElement) {
 
   override render(): TemplateResult {
     const currentTheme = this.theme;
+    const palettes = this.palettes;
 
     return html`
       <div class="configs-container">
         ${SECTION_CONFIGS.map(
           (config) => html`
             <label class="config-row">
-              <span class="config-label">${config.label}</span>
+              <span class="config-label">
+                ${config.label}
+                ${
+                  hasLowContrast(config.section, currentTheme, palettes)
+                    ? html`<span class="contrast-icon">(!)</span>`
+                    : nothing
+                }
+              </span>
               ${this.renderColorSelect(config.section, currentTheme)}
             </label>
           `,
         )}
       </div>
     `;
+  }
+  override updated(changedProperties: PropertyValues<this>): void {
+    super.updated(changedProperties);
+    const theme = this.theme;
+    const themePrefix = `--an-main-${theme.mode}_${theme.type}`;
+    this.style.setProperty('--an-config-error', `var(${themePrefix}-error)`);
   }
 
   @property({type: String})
@@ -150,10 +203,7 @@ export class ThemeConfigs extends SignalWatcher(LitElement) {
     this.themeSignal.set(getDefaultTheme(this.mode, value));
   }
 
-  private getOptionLabel(
-    section: ThemeSection,
-    key: PaletteColorKey,
-  ): string {
+  private getOptionLabel(section: ThemeSection, key: PaletteColorKey): string {
     const shade = getShadeLabel(key);
     const palettes = this.palettes;
     if (section === 'background' || !palettes) {
