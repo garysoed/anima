@@ -1,4 +1,4 @@
-import type {DesignTokens} from 'style-dictionary/types';
+import type {DesignToken, DesignTokens} from 'style-dictionary/types';
 
 import {TypographySet, TypographyValue} from '../typography/types';
 
@@ -26,8 +26,8 @@ function parseTypographyKey(key: string): ParsedTypographyKey | null {
 
 function createTypographyToken(
   value: TypographyValue,
-  codeToken: Record<string, unknown> | null,
-): Record<string, unknown> {
+  codeToken: DesignToken | null,
+): DesignToken {
   return {
     $type: 'typography',
     $value: {
@@ -51,7 +51,7 @@ export function typographySetToTokenTree(
     Record<
       string,
       {
-        code: Record<string, unknown> | null;
+        code: DesignToken | null;
         standard: TypographyValue | null;
       }
     >
@@ -80,12 +80,9 @@ export function typographySetToTokenTree(
     const typeTokens: DesignTokens = {};
     for (const [size, {code, standard}] of Object.entries(sizes)) {
       if (standard !== null) {
-        typeTokens[size] = createTypographyToken(
-          standard,
-          code,
-        ) as DesignTokens;
+        typeTokens[size] = createTypographyToken(standard, code);
       } else if (code !== null) {
-        typeTokens[size] = {code} as DesignTokens;
+        typeTokens[size] = {code};
       }
     }
     result[type] = typeTokens;

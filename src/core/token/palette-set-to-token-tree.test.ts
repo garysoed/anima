@@ -8,7 +8,7 @@ import {PaletteSet} from '../palette/palette-set';
 import {paletteSetToTokenTree} from './palette-set-to-token-tree';
 
 test.describe('paletteSetToTokenTree', () => {
-  test('converts global palettes, main/neutral palettes, and other palettes to color tokens', () => {
+  test('converts global, main/neutral, and other palettes to color tokens', () => {
     const seed = rgb({b: 220, g: 38, r: 38});
     const accentPalette = createPalette(rgb('#3b82f6'));
     const palettes: PaletteSet = {

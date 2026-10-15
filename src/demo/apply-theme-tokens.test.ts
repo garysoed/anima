@@ -159,9 +159,7 @@ test.describe('apply-theme-tokens', () => {
       expect(properties['--an-main-dark_0-background']).toBe(
         'var(--an-neutral-800)',
       );
-      expect(properties['--an-main-dark_0-outline']).toBe(
-        'var(--an-main-200)',
-      );
+      expect(properties['--an-main-dark_0-outline']).toBe('var(--an-main-200)');
     });
   });
 

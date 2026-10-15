@@ -7,10 +7,10 @@ import {PaletteSet} from '../../../core/palette/palette-set';
 import {Theme} from '../../../core/theme/theme';
 
 test.describe('<an-theme-configs>', () => {
-  test(
-    'resolves default theme from mode and type, and dispatches theme-change on selection',
-    async ({page}) => {
-      await page.setContent(`
+  test('resolves theme from mode and type, and dispatches theme-change on selection', async ({
+    page,
+  }) => {
+    await page.setContent(`
         <!DOCTYPE html>
         <html>
           <head>
@@ -31,70 +31,69 @@ test.describe('<an-theme-configs>', () => {
         </html>
       `);
 
-      await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js'});
 
-      const configs = page.locator('an-theme-configs');
-      const seed = rgb({b: 220, g: 38, r: 38});
-      const palettes: PaletteSet = {
-        black: rgb('#000000'),
-        error: createPalette(rgb('#dc2626')),
-        main: createPalette(seed),
-        neutral: createNeutralPalette(seed),
-        other: new Map(),
-        success: createPalette(rgb('#16a34a')),
-        warning: createPalette(rgb('#ffbf00')),
-        white: rgb('#ffffff'),
-      };
+    const configs = page.locator('an-theme-configs');
+    const seed = rgb({b: 220, g: 38, r: 38});
+    const palettes: PaletteSet = {
+      black: rgb('#000000'),
+      error: createPalette(rgb('#dc2626')),
+      main: createPalette(seed),
+      neutral: createNeutralPalette(seed),
+      other: new Map(),
+      success: createPalette(rgb('#16a34a')),
+      warning: createPalette(rgb('#ffbf00')),
+      white: rgb('#ffffff'),
+    };
 
-      await configs.evaluate((el: HTMLElement, palettesParam: PaletteSet) => {
-        Reflect.set(el, 'mode', 'light');
-        Reflect.set(el, 'type', 0);
-        Reflect.set(el, 'palettes', palettesParam);
-        Reflect.set(window, '__themeChangeFired', false);
-        Reflect.set(window, '__updatedTheme', null);
-        el.addEventListener('theme-change', (event: Event) => {
-          const customEvent = Object(event);
-          const detail: {readonly theme: Theme} = Object(customEvent.detail);
-          Reflect.set(window, '__themeChangeFired', true);
-          Reflect.set(window, '__updatedTheme', detail.theme);
-        });
-      }, palettes);
-
-      const initialTheme: Theme = await configs.evaluate((el: HTMLElement) =>
-        Object(Reflect.get(el, 'theme')),
-      );
-      expect(initialTheme.background).toBe('neutral.c100');
-      expect(initialTheme.mode).toBe('light');
-      expect(initialTheme.type).toBe(0);
-
-      await configs.screenshot({
-        path: 'src/demo/component/theme-configs/goldens/theme-configs.png',
+    await configs.evaluate((el: HTMLElement, palettesParam: PaletteSet) => {
+      Reflect.set(el, 'mode', 'light');
+      Reflect.set(el, 'type', 0);
+      Reflect.set(el, 'palettes', palettesParam);
+      Reflect.set(window, '__themeChangeFired', false);
+      Reflect.set(window, '__updatedTheme', null);
+      el.addEventListener('theme-change', (event: Event) => {
+        const customEvent = Object(event);
+        const detail: {readonly theme: Theme} = Object(customEvent.detail);
+        Reflect.set(window, '__themeChangeFired', true);
+        Reflect.set(window, '__updatedTheme', detail.theme);
       });
+    }, palettes);
 
-      const select = configs.locator('select[data-section="primary"]');
-      await select.selectOption('white');
+    const initialTheme: Theme = await configs.evaluate((el: HTMLElement) =>
+      Object(Reflect.get(el, 'theme')),
+    );
+    expect(initialTheme.background).toBe('neutral.c100');
+    expect(initialTheme.mode).toBe('light');
+    expect(initialTheme.type).toBe(0);
 
-      await expect
-        .poll(async () => {
-          return configs.evaluate(() =>
-            Reflect.get(window, '__themeChangeFired'),
-          );
-        })
-        .toBe(true);
+    await configs.screenshot({
+      path: 'src/demo/component/theme-configs/goldens/theme-configs.png',
+    });
 
-      const updatedTheme: Theme = await configs.evaluate(() =>
-        Object(Reflect.get(window, '__updatedTheme')),
-      );
-      expect(updatedTheme.primary).toBe('white');
-      expect(updatedTheme.background).toBe('neutral.c100');
-      expect(updatedTheme.outline).toBe('main.c800');
-    },
-  );
+    const select = configs.locator('select[data-section="primary"]');
+    await select.selectOption('white');
 
-  test(
-    'renders warning icon when foreground colour contrast ratio is too low',
-    async ({page}) => {
-      await page.setContent(`
+    await expect
+      .poll(async () => {
+        return configs.evaluate(() =>
+          Reflect.get(window, '__themeChangeFired'),
+        );
+      })
+      .toBe(true);
+
+    const updatedTheme: Theme = await configs.evaluate(() =>
+      Object(Reflect.get(window, '__updatedTheme')),
+    );
+    expect(updatedTheme.primary).toBe('white');
+    expect(updatedTheme.background).toBe('neutral.c100');
+    expect(updatedTheme.outline).toBe('main.c800');
+  });
+
+  test('renders warning icon when foreground colour contrast ratio is too low', async ({
+    page,
+  }) => {
+    await page.setContent(`
         <!DOCTYPE html>
         <html>
           <head>
@@ -116,38 +115,37 @@ test.describe('<an-theme-configs>', () => {
         </html>
       `);
 
-      await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js'});
 
-      const configs = page.locator('an-theme-configs');
-      const seed = rgb({b: 220, g: 38, r: 38});
-      const palettes: PaletteSet = {
-        black: rgb('#000000'),
-        error: createPalette(rgb('#dc2626')),
-        main: createPalette(seed),
-        neutral: createNeutralPalette(seed),
-        other: new Map(),
-        success: createPalette(rgb('#16a34a')),
-        warning: createPalette(rgb('#ffbf00')),
-        white: rgb('#ffffff'),
-      };
+    const configs = page.locator('an-theme-configs');
+    const seed = rgb({b: 220, g: 38, r: 38});
+    const palettes: PaletteSet = {
+      black: rgb('#000000'),
+      error: createPalette(rgb('#dc2626')),
+      main: createPalette(seed),
+      neutral: createNeutralPalette(seed),
+      other: new Map(),
+      success: createPalette(rgb('#16a34a')),
+      warning: createPalette(rgb('#ffbf00')),
+      white: rgb('#ffffff'),
+    };
 
-      await configs.evaluate((el: HTMLElement, palettesParam: PaletteSet) => {
-        Reflect.set(el, 'mode', 'light');
-        Reflect.set(el, 'type', 0);
-        Reflect.set(el, 'palettes', palettesParam);
-      }, palettes);
+    await configs.evaluate((el: HTMLElement, palettesParam: PaletteSet) => {
+      Reflect.set(el, 'mode', 'light');
+      Reflect.set(el, 'type', 0);
+      Reflect.set(el, 'palettes', palettesParam);
+    }, palettes);
 
-      const select = configs.locator('select[data-section="primary"]');
-      await select.selectOption('white');
+    const select = configs.locator('select[data-section="primary"]');
+    await select.selectOption('white');
 
-      await configs.evaluate(
-        (el: HTMLElement & {updateComplete: Promise<boolean>}) =>
-          el.updateComplete,
-      );
+    await configs.evaluate(
+      (el: HTMLElement & {updateComplete: Promise<boolean>}) =>
+        el.updateComplete,
+    );
 
-      await configs.screenshot({
-        path: 'src/demo/component/theme-configs/goldens/theme-configs-low-contrast.png',
-      });
-    },
-  );
+    await configs.screenshot({
+      path: 'src/demo/component/theme-configs/goldens/theme-configs-low-contrast.png',
+    });
+  });
 });

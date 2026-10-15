@@ -402,9 +402,9 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                 decreasing its saturation to 0.05 in HSL colour space.
               </li>
               <li>
-                Status palettes: Fixed semantic palettes generated from
-                standard seed colours (error from red, warning from amber,
-                success from green).
+                Status palettes: Fixed semantic palettes generated from standard
+                seed colours (error from red, warning from amber, success from
+                green).
               </li>
               <li>
                 Other palettes: Domain-specific palettes generated from
@@ -536,8 +536,8 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
             <ul>
               <li>
                 Theme 0: Subtle shift / inset theme. Uses a neutral shade for
-                background (darker than Theme 1 in light mode, lighter than Theme
-                1 in dark mode).
+                background (darker than Theme 1 in light mode, lighter than
+                Theme 1 in dark mode).
               </li>
               <li>
                 Theme 1: Base canvas theme. Uses a neutral shade for background
@@ -545,19 +545,19 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
               </li>
               <li>
                 Theme 2: Highlight theme. Uses a main palette shade for
-                background (darker than Theme 1 in light mode, lighter than Theme
-                1 in dark mode).
+                background (darker than Theme 1 in light mode, lighter than
+                Theme 1 in dark mode).
               </li>
               <li>
                 Theme 3: Super highlight theme. Uses a main palette shade for
-                background (darker than Theme 2 in light mode, lighter than Theme
-                2 in dark mode) to command user attention.
+                background (darker than Theme 2 in light mode, lighter than
+                Theme 2 in dark mode) to command user attention.
               </li>
             </ul>
 
             <p>
-              Each of the above themes has light and dark versions. This can
-              be used for light / dark mode of the app, though apps can mix and
+              Each of the above themes has light and dark versions. This can be
+              used for light / dark mode of the app, though apps can mix and
               match this. For example, a light mode app can have a dark mode
               button.
             </p>

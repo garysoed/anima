@@ -41,7 +41,9 @@ function getRelativeLuminance(rgbColor: {
 }
 
 test.describe('createPalette', () => {
-  test('renders 11 boxes with colors and takes a screenshot', async ({page}) => {
+  test('renders 11 boxes with colors and takes a screenshot', async ({
+    page,
+  }) => {
     // In sRGB space, hue ~211 (cyan/teal) has the narrowest peak chroma boundary (~0.1438)
     const seed: Color = oklch({c: 0.1438, h: 211, l: 0.81, space: 'oklch'});
     const palette = createPalette(seed);
