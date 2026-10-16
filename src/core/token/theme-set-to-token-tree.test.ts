@@ -5,7 +5,7 @@ import {ThemeSet} from '../theme/theme-set';
 import {themeSetToTokenTree} from './theme-set-to-token-tree';
 
 test.describe('themeSetToTokenTree', () => {
-  test('formats theme group keys as mode_type and references palette aliases', () => {
+  test('formats theme group keys hierarchically under name, mode, and type', () => {
     const themeSet: ThemeSet = {
       dark: {
         0: {
@@ -107,36 +107,36 @@ test.describe('themeSetToTokenTree', () => {
           warning: 'warning.c800',
         },
       },
+      name: 'theme',
     };
     const tree = themeSetToTokenTree(themeSet);
 
-    expect(tree['dark_0']).toEqual({
-      background: {$type: 'color', $value: '{neutral.800}'},
-      display: {$type: 'color', $value: '{main.500}'},
-      error: {$type: 'color', $value: '{error.300}'},
-      outline: {$type: 'color', $value: '{main.50}'},
-      primary: {$type: 'color', $value: '{neutral.100}'},
-      secondary: {$type: 'color', $value: '{neutral.950}'},
-      success: {$type: 'color', $value: '{success.300}'},
-      warning: {$type: 'color', $value: '{warning.300}'},
-    });
-
-    expect(tree['dark_1']).toEqual(
+    expect(tree['theme']).toEqual(
       expect.objectContaining({
-        background: {$type: 'color', $value: '{black}'},
-      }),
-    );
-
-    expect(tree['dark_3']).toEqual(
-      expect.objectContaining({
-        primary: {$type: 'color', $value: '{white}'},
-      }),
-    );
-
-    expect(tree['light_0']).toEqual(
-      expect.objectContaining({
-        background: {$type: 'color', $value: '{neutral.100}'},
-        primary: {$type: 'color', $value: '{neutral.900}'},
+        dark: expect.objectContaining({
+          0: {
+            background: {$type: 'color', $value: '{neutral.800}'},
+            display: {$type: 'color', $value: '{main.500}'},
+            error: {$type: 'color', $value: '{error.300}'},
+            outline: {$type: 'color', $value: '{main.50}'},
+            primary: {$type: 'color', $value: '{neutral.100}'},
+            secondary: {$type: 'color', $value: '{neutral.950}'},
+            success: {$type: 'color', $value: '{success.300}'},
+            warning: {$type: 'color', $value: '{warning.300}'},
+          },
+          1: expect.objectContaining({
+            background: {$type: 'color', $value: '{black}'},
+          }),
+          3: expect.objectContaining({
+            primary: {$type: 'color', $value: '{white}'},
+          }),
+        }),
+        light: expect.objectContaining({
+          0: expect.objectContaining({
+            background: {$type: 'color', $value: '{neutral.100}'},
+            primary: {$type: 'color', $value: '{neutral.900}'},
+          }),
+        }),
       }),
     );
   });

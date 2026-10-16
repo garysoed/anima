@@ -147,7 +147,7 @@ test.describe('<an-demo>', () => {
       'Montserrat',
     );
     expect(json['black']['$value']).toBe('#000000');
-    expect(json['dark_0']['background']['$value']).toBe('{neutral.800}');
+    expect(json['theme']['dark'][0]['background']['$value']).toBe('{neutral.800}');
   });
 
   test('updates typography tokens when font selector changes', async ({

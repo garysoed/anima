@@ -102,6 +102,7 @@ export const INITIAL_THEME_SET: ThemeSet = {
       warning: 'warning.c800',
     },
   },
+  name: 'theme',
 };
 
 export function getDefaultTheme(mode: ThemeMode, type: ThemeType): Theme {

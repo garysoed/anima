@@ -124,6 +124,7 @@ test.describe('apply-theme-tokens', () => {
         warning: 'warning.c800',
       },
     },
+    name: 'theme',
   };
 
   test.describe('getThemeTokensCssProperties', () => {

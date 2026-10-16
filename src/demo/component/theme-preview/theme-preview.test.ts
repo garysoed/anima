@@ -170,6 +170,7 @@ test.describe('<an-theme-preview>', () => {
           warning: 'warning.c800',
         },
       },
+      name: 'theme',
     };
     const lightTheme0: Theme = themeSet.light[0];
     const cssVars = getThemeTokensCssProperties(themeSet, palettes, 'main');

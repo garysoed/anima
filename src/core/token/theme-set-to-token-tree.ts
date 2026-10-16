@@ -25,9 +25,10 @@ function getPaletteAlias(key: PaletteColorKey): string {
 }
 
 export function themeSetToTokenTree(themeSet: ThemeSet): DesignTokens {
-  const tree: DesignTokens = {};
+  const modeTokens: DesignTokens = {};
 
   for (const mode of MODES) {
+    const typeTokens: DesignTokens = {};
     const modeThemes = themeSet[mode];
     for (const type of TYPES) {
       const theme = modeThemes[type];
@@ -38,9 +39,12 @@ export function themeSetToTokenTree(themeSet: ThemeSet): DesignTokens {
           $value: getPaletteAlias(theme[section]),
         };
       }
-      tree[`${mode}_${type}`] = roleTokens;
+      typeTokens[type] = roleTokens;
     }
+    modeTokens[mode] = typeTokens;
   }
 
-  return tree;
+  return {
+    [themeSet.name]: modeTokens,
+  };
 }
