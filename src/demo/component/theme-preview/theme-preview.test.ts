@@ -19,7 +19,8 @@ test.describe('<an-theme-preview>', () => {
       </html>
     `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-theme-preview'));
 
     const preview = page.locator('an-theme-preview');
     await expect(preview).toBeAttached();
@@ -51,7 +52,8 @@ test.describe('<an-theme-preview>', () => {
       </html>
     `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-theme-preview'));
 
     const preview = page.locator('an-theme-preview');
     await expect(preview).toBeAttached();

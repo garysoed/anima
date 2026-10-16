@@ -23,7 +23,8 @@ test.describe('<an-demo>', () => {
       </html>
     `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-demo'));
 
     const demo = page.locator('an-demo');
     await demo.screenshot({
@@ -52,7 +53,8 @@ test.describe('<an-demo>', () => {
       </html>
     `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-demo'));
 
     const demo = page.locator('an-demo');
     const picker = demo.locator('an-color-picker');
@@ -87,7 +89,8 @@ test.describe('<an-demo>', () => {
       </html>
     `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-demo'));
 
     const demo = page.locator('an-demo');
     const darkButton = demo.locator('.mode-button').filter({hasText: 'Dark'});
@@ -119,7 +122,8 @@ test.describe('<an-demo>', () => {
       </html>
     `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-demo'));
 
     const demo = page.locator('an-demo');
     const exportButton = demo.locator('.export-button');
@@ -167,7 +171,8 @@ test.describe('<an-demo>', () => {
       </html>
     `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-demo'));
 
     const demo = page.locator('an-demo');
     const select = demo.locator('#headline-large-font-select');

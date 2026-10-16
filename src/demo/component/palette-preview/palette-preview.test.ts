@@ -15,7 +15,8 @@ test.describe('<an-palette-preview>', () => {
       </html>
     `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-palette-preview'));
 
     const preview = page.locator('an-palette-preview');
     await expect(preview).toBeAttached();
@@ -50,7 +51,8 @@ test.describe('<an-palette-preview>', () => {
       </html>
     `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-palette-preview'));
 
     const preview = page.locator('an-palette-preview');
     await expect(preview).toBeAttached();

@@ -1,10 +1,12 @@
-import {PenpotTokenTree} from '../core/penpot/penpot';
+import type {DesignTokens} from 'style-dictionary/types';
 
-export function downloadPenpotTokens(
-  tokenTree: PenpotTokenTree,
+import {serializeTokens} from '../core/token/serialize-tokens';
+
+export async function downloadTokens(
+  tokens: DesignTokens,
   filename: string,
-): void {
-  const json = JSON.stringify(tokenTree, null, 2);
+): Promise<void> {
+  const json = await serializeTokens(tokens);
   const blob = new Blob([json], {type: 'application/json'});
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');

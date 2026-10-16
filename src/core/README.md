@@ -5,6 +5,6 @@ Reusable core color palette and theme generation modules for Anima.
 ## Subdirectories
 
 - [palette/](palette/)
-- [penpot/](penpot/)
 - [theme/](theme/)
+- [token/](token/)
 - [typography/](typography/)

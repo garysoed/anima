@@ -28,7 +28,8 @@ test.describe('<an-color-picker>', () => {
       </html>
     `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-color-picker'));
 
     const picker = page.locator('an-color-picker');
     await expect(picker).toBeVisible();
@@ -55,7 +56,8 @@ test.describe('<an-color-picker>', () => {
       </html>
     `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-color-picker'));
 
     const picker = page.locator('an-color-picker');
 
@@ -97,7 +99,8 @@ test.describe('<an-color-picker>', () => {
       </html>
     `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-color-picker'));
 
     const picker = page.locator('an-color-picker');
     const hexInput = picker.locator('.hex-input');

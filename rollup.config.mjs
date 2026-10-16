@@ -175,6 +175,7 @@ export default [
       {
         file: 'dist/demo/bundle.js',
         format: 'es',
+        inlineDynamicImports: true,
         sourcemap: true,
       },
     ],

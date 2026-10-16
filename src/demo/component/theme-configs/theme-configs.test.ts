@@ -31,7 +31,8 @@ test.describe('<an-theme-configs>', () => {
         </html>
       `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-theme-configs'));
 
     const configs = page.locator('an-theme-configs');
     const seed = rgb({b: 220, g: 38, r: 38});
@@ -115,7 +116,8 @@ test.describe('<an-theme-configs>', () => {
         </html>
       `);
 
-    await page.addScriptTag({path: 'dist/demo/bundle.js'});
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-theme-configs'));
 
     const configs = page.locator('an-theme-configs');
     const seed = rgb({b: 220, g: 38, r: 38});

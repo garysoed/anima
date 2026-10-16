@@ -6,12 +6,12 @@ import {customElement} from 'lit/decorators.js';
 import {createNeutralPalette} from '../core/palette/create-neutral-palette';
 import {createPalette} from '../core/palette/create-palette';
 import {PaletteSet} from '../core/palette/palette-set';
-import {mergePenpotTokenTrees} from '../core/penpot/merge-penpot-token-trees';
-import {paletteSetToPenpotTokenTree} from '../core/penpot/palette-set-to-penpot-token-tree';
-import {themeSetToPenpotTokenTree} from '../core/penpot/theme-set-to-penpot-token-tree';
-import {typographySetToPenpotTokenTree} from '../core/penpot/typography-set-to-penpot-token-tree';
 import {Theme, ThemeMode, ThemeType, TYPES} from '../core/theme/theme';
 import {ThemeSet} from '../core/theme/theme-set';
+import {mergeTokenTrees} from '../core/token/merge-token-trees';
+import {paletteSetToTokenTree} from '../core/token/palette-set-to-token-tree';
+import {themeSetToTokenTree} from '../core/token/theme-set-to-token-tree';
+import {typographySetToTokenTree} from '../core/token/typography-set-to-token-tree';
 
 import {applyThemeTokens} from './apply-theme-tokens';
 import {applyTypographyTokens} from './apply-typography-tokens';
@@ -21,7 +21,7 @@ import './component/theme-configs/theme-configs';
 import './component/theme-preview/theme-preview';
 import {INITIAL_THEME_SET} from './default-themes';
 import styles from './demo.scss';
-import {downloadPenpotTokens} from './download-penpot-tokens';
+import {downloadTokens} from './download-tokens';
 import {ALL_FONTS} from './google-fonts';
 
 type PalettePreviewKey = 'error' | 'main' | 'neutral' | 'success' | 'warning';
@@ -845,16 +845,16 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
       this.seedColor.set(target.value);
     }
   }
-  protected handleExportPenpotTokens(): void {
+  protected async handleExportPenpotTokens(): Promise<void> {
     const palettes = this.paletteSet.get();
     const themeSet = this.themeSet.get();
     const typographySet = this.typographySet.get();
-    const mergedTree = mergePenpotTokenTrees(
-      paletteSetToPenpotTokenTree(palettes),
-      themeSetToPenpotTokenTree(themeSet),
-      typographySetToPenpotTokenTree(typographySet),
+    const mergedTree = mergeTokenTrees(
+      paletteSetToTokenTree(palettes),
+      themeSetToTokenTree(themeSet),
+      typographySetToTokenTree(typographySet),
     );
-    downloadPenpotTokens(mergedTree, 'base.json');
+    await downloadTokens(mergedTree, 'base.json');
   }
   protected handleFontSelect(
     event: Event,
