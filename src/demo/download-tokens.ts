@@ -3,7 +3,7 @@ import type {DeepKeyTokenMap} from '@tokens-studio/types';
 import {serializeTokens} from '../core/token/serialize-tokens';
 
 export async function downloadTokens(
-  tokens: DeepKeyTokenMap<false>,
+  tokens: DeepKeyTokenMap,
   filename: string,
 ): Promise<void> {
   const setName = filename.replace(/\.json$/, '');

@@ -148,8 +148,13 @@ test.describe('<an-demo>', () => {
       'Montserrat',
     );
     expect(json['base']['black']['$value']).toBe('#000000');
+    expect(json['base']['black']['name']).toBe('black');
+    expect(json['base']['body']['medium']['name']).toBe('body.medium');
     expect(json['base']['theme']['dark'][0]['background']['$value']).toBe(
       '{neutral.800}',
+    );
+    expect(json['base']['theme']['dark'][0]['background']['name']).toBe(
+      'theme.dark.0.background',
     );
   });
 

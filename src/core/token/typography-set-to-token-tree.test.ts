@@ -55,7 +55,9 @@ test.describe('typographySetToTokenTree', () => {
               textDecoration: undefined,
             },
             code: undefined,
+            name: 'display.large.code',
           },
+          name: 'display.large',
         },
       }),
     );
@@ -75,6 +77,7 @@ test.describe('typographySetToTokenTree', () => {
               textDecoration: undefined,
             },
             code: undefined,
+            name: 'body.medium.code',
           },
         },
       }),

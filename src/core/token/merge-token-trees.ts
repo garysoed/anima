@@ -12,14 +12,14 @@ function isLeafToken(value: Record<string, unknown>): boolean {
   );
 }
 
-function isTokenTree(value: unknown): value is DeepKeyTokenMap<false> {
+function isTokenTree(value: unknown): value is DeepKeyTokenMap {
   return isPlainObject(value) && !isLeafToken(value);
 }
 
 export function mergeTokenTrees(
-  ...trees: ReadonlyArray<DeepKeyTokenMap<false>>
-): DeepKeyTokenMap<false> {
-  const result: DeepKeyTokenMap<false> = {};
+  ...trees: readonly DeepKeyTokenMap[]
+): DeepKeyTokenMap {
+  const result: DeepKeyTokenMap = {};
 
   for (const tree of trees) {
     for (const [key, value] of Object.entries(tree)) {

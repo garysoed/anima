@@ -6,30 +6,46 @@ import {mergeTokenTrees} from './merge-token-trees';
 
 test.describe('mergeTokenTrees', () => {
   test('merges disjoint token trees', () => {
-    const treeA: DeepKeyTokenMap<false> = {
+    const treeA: DeepKeyTokenMap = {
       palette: {
-        black: {$type: TokenTypes.COLOR, $value: '#000000'},
+        black: {
+          $type: TokenTypes.COLOR,
+          $value: '#000000',
+          name: 'palette.black',
+        },
       },
     };
-    const treeB: DeepKeyTokenMap<false> = {
+    const treeB: DeepKeyTokenMap = {
       theme: {
-        background: {$type: TokenTypes.COLOR, $value: '{white}'},
+        background: {
+          $type: TokenTypes.COLOR,
+          $value: '{white}',
+          name: 'theme.background',
+        },
       },
     };
     const merged = mergeTokenTrees(treeA, treeB);
 
     expect(merged).toEqual({
       palette: {
-        black: {$type: TokenTypes.COLOR, $value: '#000000'},
+        black: {
+          $type: TokenTypes.COLOR,
+          $value: '#000000',
+          name: 'palette.black',
+        },
       },
       theme: {
-        background: {$type: TokenTypes.COLOR, $value: '{white}'},
+        background: {
+          $type: TokenTypes.COLOR,
+          $value: '{white}',
+          name: 'theme.background',
+        },
       },
     });
   });
 
   test('recursively merges nested subtrees and overrides overlapping leaves', () => {
-    const treeA: DeepKeyTokenMap<false> = {
+    const treeA: DeepKeyTokenMap = {
       display: {
         large: {
           $type: TokenTypes.TYPOGRAPHY,
@@ -39,6 +55,7 @@ test.describe('mergeTokenTrees', () => {
             fontWeight: '400',
             lineHeight: '64px',
           },
+          name: 'display.large',
         },
         medium: {
           $type: TokenTypes.TYPOGRAPHY,
@@ -48,10 +65,11 @@ test.describe('mergeTokenTrees', () => {
             fontWeight: '400',
             lineHeight: '52px',
           },
+          name: 'display.medium',
         },
       },
     };
-    const treeB: DeepKeyTokenMap<false> = {
+    const treeB: DeepKeyTokenMap = {
       display: {
         large: {
           $type: TokenTypes.TYPOGRAPHY,
@@ -61,6 +79,7 @@ test.describe('mergeTokenTrees', () => {
             fontWeight: '700',
             lineHeight: '64px',
           },
+          name: 'display.large',
         },
         small: {
           $type: TokenTypes.TYPOGRAPHY,
@@ -70,6 +89,7 @@ test.describe('mergeTokenTrees', () => {
             fontWeight: '400',
             lineHeight: '44px',
           },
+          name: 'display.small',
         },
       },
     };
@@ -85,6 +105,7 @@ test.describe('mergeTokenTrees', () => {
             fontWeight: '700',
             lineHeight: '64px',
           },
+          name: 'display.large',
         },
         medium: {
           $type: TokenTypes.TYPOGRAPHY,
@@ -94,6 +115,7 @@ test.describe('mergeTokenTrees', () => {
             fontWeight: '400',
             lineHeight: '52px',
           },
+          name: 'display.medium',
         },
         small: {
           $type: TokenTypes.TYPOGRAPHY,
@@ -103,6 +125,7 @@ test.describe('mergeTokenTrees', () => {
             fontWeight: '400',
             lineHeight: '44px',
           },
+          name: 'display.small',
         },
       },
     });

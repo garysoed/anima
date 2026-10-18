@@ -28,14 +28,20 @@ function parseTypographyKey(key: string): ParsedTypographyKey | null {
   };
 }
 
-interface TypographyTokenPayload {
-  readonly code?: SingleTypographyToken<false>;
+export interface TypographyTokenPayload {
+  readonly code?: TypographyToken;
 }
+
+export type TypographyToken = SingleTypographyToken<
+  true,
+  TypographyTokenPayload
+>;
 
 function createTypographyToken(
   value: TypographyValue,
-  codeToken: SingleTypographyToken<false> | null,
-): SingleTypographyToken<false, TypographyTokenPayload> {
+  name: string,
+  codeToken: TypographyToken | null,
+): TypographyToken {
   return {
     $type: TokenTypes.TYPOGRAPHY,
     $value: {
@@ -51,18 +57,19 @@ function createTypographyToken(
       textDecoration: value.textDecoration,
     },
     code: codeToken ?? undefined,
+    name,
   };
 }
 
 export function typographySetToTokenTree(
   typographySet: TypographySet,
-): DeepKeyTokenMap<false> {
+): DeepKeyTokenMap {
   const typographyTokens: Record<
     string,
     Record<
       string,
       {
-        code: SingleTypographyToken<false> | null;
+        code: TypographyToken | null;
         standard: TypographyValue | null;
       }
     >
@@ -80,18 +87,18 @@ export function typographySetToTokenTree(
     const typeGroup = (typographyTokens[type] ??= {});
     const sizeGroup = (typeGroup[size] ??= {code: null, standard: null});
     if (isCode) {
-      sizeGroup.code = createTypographyToken(value, null);
+      sizeGroup.code = createTypographyToken(value, `${type}.${size}.code`, null);
     } else {
       sizeGroup.standard = value;
     }
   }
 
-  const result: DeepKeyTokenMap<false> = {};
+  const result: DeepKeyTokenMap = {};
   for (const [type, sizes] of Object.entries(typographyTokens)) {
-    const typeTokens: DeepKeyTokenMap<false> = {};
+    const typeTokens: DeepKeyTokenMap = {};
     for (const [size, {code, standard}] of Object.entries(sizes)) {
       if (standard !== null) {
-        typeTokens[size] = createTypographyToken(standard, code);
+        typeTokens[size] = createTypographyToken(standard, `${type}.${size}`, code);
       } else if (code !== null) {
         typeTokens[size] = {code};
       }

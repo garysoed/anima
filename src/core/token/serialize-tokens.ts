@@ -1,7 +1,7 @@
 import type {DeepKeyTokenMap} from '@tokens-studio/types';
 
 export function serializeTokens(
-  tokenSets: Record<string, DeepKeyTokenMap<false>>,
+  tokenSets: Record<string, DeepKeyTokenMap>,
   tokenSetOrder: readonly string[],
 ): string {
   const store = {

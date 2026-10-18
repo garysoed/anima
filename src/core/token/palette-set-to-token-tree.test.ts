@@ -23,14 +23,23 @@ test.describe('paletteSetToTokenTree', () => {
     };
     const tree = paletteSetToTokenTree(palettes);
 
-    expect(tree['black']).toEqual({$type: 'color', $value: '#000000'});
-    expect(tree['white']).toEqual({$type: 'color', $value: '#ffffff'});
+    expect(tree['black']).toEqual({
+      $type: 'color',
+      $value: '#000000',
+      name: 'black',
+    });
+    expect(tree['white']).toEqual({
+      $type: 'color',
+      $value: '#ffffff',
+      name: 'white',
+    });
 
     expect(tree['error']).toEqual(
       expect.objectContaining({
         '500': {
           $type: 'color',
           $value: '#e63330',
+          name: 'error.500',
         },
       }),
     );
@@ -40,14 +49,17 @@ test.describe('paletteSetToTokenTree', () => {
         '50': {
           $type: 'color',
           $value: '#f6f8ff',
+          name: 'main.50',
         },
         '500': {
           $type: 'color',
           $value: '#4c6cff',
+          name: 'main.500',
         },
         '950': {
           $type: 'color',
           $value: '#03003b',
+          name: 'main.950',
         },
       }),
     );
@@ -57,14 +69,17 @@ test.describe('paletteSetToTokenTree', () => {
         '50': {
           $type: 'color',
           $value: '#f8f8ff',
+          name: 'neutral.50',
         },
         '100': {
           $type: 'color',
           $value: '#f0f1ff',
+          name: 'neutral.100',
         },
         '950': {
           $type: 'color',
           $value: '#0b0a13',
+          name: 'neutral.950',
         },
       }),
     );
@@ -74,14 +89,17 @@ test.describe('paletteSetToTokenTree', () => {
         '50': {
           $type: 'color',
           $value: '#f5f9ff',
+          name: 'accent.50',
         },
         '500': {
           $type: 'color',
           $value: '#2f76e9',
+          name: 'accent.500',
         },
         '950': {
           $type: 'color',
           $value: '#000925',
+          name: 'accent.950',
         },
       }),
     );

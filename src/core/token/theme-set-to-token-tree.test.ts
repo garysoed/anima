@@ -115,26 +115,74 @@ test.describe('themeSetToTokenTree', () => {
       expect.objectContaining({
         dark: expect.objectContaining({
           0: {
-            background: {$type: 'color', $value: '{neutral.800}'},
-            display: {$type: 'color', $value: '{main.500}'},
-            error: {$type: 'color', $value: '{error.300}'},
-            outline: {$type: 'color', $value: '{main.50}'},
-            primary: {$type: 'color', $value: '{neutral.100}'},
-            secondary: {$type: 'color', $value: '{neutral.950}'},
-            success: {$type: 'color', $value: '{success.300}'},
-            warning: {$type: 'color', $value: '{warning.300}'},
+            background: {
+              $type: 'color',
+              $value: '{neutral.800}',
+              name: 'theme.dark.0.background',
+            },
+            display: {
+              $type: 'color',
+              $value: '{main.500}',
+              name: 'theme.dark.0.display',
+            },
+            error: {
+              $type: 'color',
+              $value: '{error.300}',
+              name: 'theme.dark.0.error',
+            },
+            outline: {
+              $type: 'color',
+              $value: '{main.50}',
+              name: 'theme.dark.0.outline',
+            },
+            primary: {
+              $type: 'color',
+              $value: '{neutral.100}',
+              name: 'theme.dark.0.primary',
+            },
+            secondary: {
+              $type: 'color',
+              $value: '{neutral.950}',
+              name: 'theme.dark.0.secondary',
+            },
+            success: {
+              $type: 'color',
+              $value: '{success.300}',
+              name: 'theme.dark.0.success',
+            },
+            warning: {
+              $type: 'color',
+              $value: '{warning.300}',
+              name: 'theme.dark.0.warning',
+            },
           },
           1: expect.objectContaining({
-            background: {$type: 'color', $value: '{black}'},
+            background: {
+              $type: 'color',
+              $value: '{black}',
+              name: 'theme.dark.1.background',
+            },
           }),
           3: expect.objectContaining({
-            primary: {$type: 'color', $value: '{white}'},
+            primary: {
+              $type: 'color',
+              $value: '{white}',
+              name: 'theme.dark.3.primary',
+            },
           }),
         }),
         light: expect.objectContaining({
           0: expect.objectContaining({
-            background: {$type: 'color', $value: '{neutral.100}'},
-            primary: {$type: 'color', $value: '{neutral.900}'},
+            background: {
+              $type: 'color',
+              $value: '{neutral.100}',
+              name: 'theme.light.0.background',
+            },
+            primary: {
+              $type: 'color',
+              $value: '{neutral.900}',
+              name: 'theme.light.0.primary',
+            },
           }),
         }),
       }),

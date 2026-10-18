@@ -6,19 +6,21 @@ import {serializeTokens} from './serialize-tokens';
 
 test.describe('serializeTokens', () => {
   test('serializes multi-set tokens into formatted JSON with $metadata.tokenSetOrder', () => {
-    const baseSet: DeepKeyTokenMap<false> = {
+    const baseSet: DeepKeyTokenMap = {
       color: {
         primary: {
           $type: TokenTypes.COLOR,
           $value: '#ff0000',
+          name: 'color.primary',
         },
       },
     };
-    const themesSet: DeepKeyTokenMap<false> = {
+    const themesSet: DeepKeyTokenMap = {
       theme: {
         background: {
           $type: TokenTypes.COLOR,
           $value: '{color.primary}',
+          name: 'theme.background',
         },
       },
     };
@@ -40,11 +42,19 @@ test.describe('serializeTokens', () => {
   });
 
   test('preserves custom tokenSetOrder when provided', () => {
-    const setA: DeepKeyTokenMap<false> = {
-      black: {$type: TokenTypes.COLOR, $value: '#000000'},
+    const setA: DeepKeyTokenMap = {
+      black: {
+        $type: TokenTypes.COLOR,
+        $value: '#000000',
+        name: 'black',
+      },
     };
-    const setB: DeepKeyTokenMap<false> = {
-      white: {$type: TokenTypes.COLOR, $value: '#ffffff'},
+    const setB: DeepKeyTokenMap = {
+      white: {
+        $type: TokenTypes.COLOR,
+        $value: '#ffffff',
+        name: 'white',
+      },
     };
 
     const result = serializeTokens({a: setA, b: setB}, ['b', 'a']);

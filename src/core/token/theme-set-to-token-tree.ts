@@ -25,21 +25,20 @@ function getPaletteAlias(key: PaletteColorKey): string {
   return `{${paletteKey}.${shadeNum}}`;
 }
 
-export function themeSetToTokenTree(
-  themeSet: ThemeSet,
-): DeepKeyTokenMap<false> {
-  const modeTokens: DeepKeyTokenMap<false> = {};
+export function themeSetToTokenTree(themeSet: ThemeSet): DeepKeyTokenMap {
+  const modeTokens: DeepKeyTokenMap = {};
 
   for (const mode of MODES) {
-    const typeTokens: DeepKeyTokenMap<false> = {};
+    const typeTokens: DeepKeyTokenMap = {};
     const modeThemes = themeSet[mode];
     for (const type of TYPES) {
       const theme = modeThemes[type];
-      const roleTokens: DeepKeyTokenMap<false> = {};
+      const roleTokens: DeepKeyTokenMap = {};
       for (const section of SECTIONS) {
         roleTokens[section] = {
           $type: TokenTypes.COLOR,
           $value: getPaletteAlias(theme[section]),
+          name: `${themeSet.name}.${mode}.${type}.${section}`,
         };
       }
       typeTokens[type] = roleTokens;
