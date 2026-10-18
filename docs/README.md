@@ -14,4 +14,6 @@ Persisted architectural design specifications and phased implementation roadmaps
 - [0.4.md](0.4.md): Architectural design document for Anima 0.4 Theme Set Redesign, 11-Shade Gamut Palettes, and Contrast-Driven Theming.
 - [0.5.impl.md](0.5.impl.md): Phased implementation roadmap and task specifications for Anima 0.5.
 - [0.5.md](0.5.md): Architectural design document for Anima 0.5 Style Dictionary token implementation and serialization.
+- [0.6.impl.md](0.6.impl.md): Phased implementation roadmap and task specifications for Anima 0.6.
+- [0.6.md](0.6.md): Architectural design document for Anima 0.6 Penpot Multi-Set Token Export & Theme Factory.
 - [README.md](README.md): Documentation directory overview and index.
