@@ -140,14 +140,17 @@ test.describe('<an-demo>', () => {
     }
     const content = Buffer.concat(chunks).toString('utf-8');
     const json = JSON.parse(content);
-    expect(json['body']['medium']['$value']['fontFamily']).toBe(
+    expect(json['$metadata']['tokenSetOrder']).toEqual(['base']);
+    expect(json['base']['body']['medium']['$value']['fontFamily']).toBe(
       'Atkinson Hyperlegible',
     );
-    expect(json['headline']['large']['$value']['fontFamily']).toBe(
+    expect(json['base']['headline']['large']['$value']['fontFamily']).toBe(
       'Montserrat',
     );
-    expect(json['black']['$value']).toBe('#000000');
-    expect(json['theme']['dark'][0]['background']['$value']).toBe('{neutral.800}');
+    expect(json['base']['black']['$value']).toBe('#000000');
+    expect(json['base']['theme']['dark'][0]['background']['$value']).toBe(
+      '{neutral.800}',
+    );
   });
 
   test('updates typography tokens when font selector changes', async ({

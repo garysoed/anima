@@ -1,4 +1,5 @@
-import type {DesignTokens} from 'style-dictionary/types';
+import type {DeepKeyTokenMap} from '@tokens-studio/types';
+import {TokenTypes} from '@tokens-studio/types';
 
 import {
   isShadeKey,
@@ -24,18 +25,20 @@ function getPaletteAlias(key: PaletteColorKey): string {
   return `{${paletteKey}.${shadeNum}}`;
 }
 
-export function themeSetToTokenTree(themeSet: ThemeSet): DesignTokens {
-  const modeTokens: DesignTokens = {};
+export function themeSetToTokenTree(
+  themeSet: ThemeSet,
+): DeepKeyTokenMap<false> {
+  const modeTokens: DeepKeyTokenMap<false> = {};
 
   for (const mode of MODES) {
-    const typeTokens: DesignTokens = {};
+    const typeTokens: DeepKeyTokenMap<false> = {};
     const modeThemes = themeSet[mode];
     for (const type of TYPES) {
       const theme = modeThemes[type];
-      const roleTokens: DesignTokens = {};
+      const roleTokens: DeepKeyTokenMap<false> = {};
       for (const section of SECTIONS) {
         roleTokens[section] = {
-          $type: 'color',
+          $type: TokenTypes.COLOR,
           $value: getPaletteAlias(theme[section]),
         };
       }

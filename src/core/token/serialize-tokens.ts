@@ -1,8 +1,14 @@
-import StyleDictionary from 'style-dictionary';
-import type {DesignTokens} from 'style-dictionary/types';
+import type {DeepKeyTokenMap} from '@tokens-studio/types';
 
-export async function serializeTokens(tokens: DesignTokens): Promise<string> {
-  const sd = new StyleDictionary({tokens}, {init: false});
-  await sd.init();
-  return JSON.stringify(sd.tokens, null, 2);
+export function serializeTokens(
+  tokenSets: Record<string, DeepKeyTokenMap<false>>,
+  tokenSetOrder: readonly string[],
+): string {
+  const store = {
+    ...tokenSets,
+    $metadata: {
+      tokenSetOrder,
+    },
+  };
+  return JSON.stringify(store, null, 2);
 }

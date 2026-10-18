@@ -1,4 +1,8 @@
-import type {DesignToken, DesignTokens} from 'style-dictionary/types';
+import type {
+  DeepKeyTokenMap,
+  SingleTypographyToken,
+} from '@tokens-studio/types';
+import {TokenTypes} from '@tokens-studio/types';
 
 import {TypographySet, TypographyValue} from '../typography/types';
 
@@ -24,17 +28,24 @@ function parseTypographyKey(key: string): ParsedTypographyKey | null {
   };
 }
 
+interface TypographyTokenPayload {
+  readonly code?: SingleTypographyToken<false>;
+}
+
 function createTypographyToken(
   value: TypographyValue,
-  codeToken: DesignToken | null,
-): DesignToken {
+  codeToken: SingleTypographyToken<false> | null,
+): SingleTypographyToken<false, TypographyTokenPayload> {
   return {
-    $type: 'typography',
+    $type: TokenTypes.TYPOGRAPHY,
     $value: {
       fontFamily: value.fontFamily,
       fontSize: value.fontSize,
-      fontWeight: value.fontWeight,
-      letterSpacing: value.letterSpacing,
+      fontWeight: `${value.fontWeight}`,
+      letterSpacing:
+        value.letterSpacing !== undefined
+          ? `${value.letterSpacing}`
+          : undefined,
       lineHeight: `${value.lineHeight}`,
       textCase: value.textCase,
       textDecoration: value.textDecoration,
@@ -45,13 +56,13 @@ function createTypographyToken(
 
 export function typographySetToTokenTree(
   typographySet: TypographySet,
-): DesignTokens {
+): DeepKeyTokenMap<false> {
   const typographyTokens: Record<
     string,
     Record<
       string,
       {
-        code: DesignToken | null;
+        code: SingleTypographyToken<false> | null;
         standard: TypographyValue | null;
       }
     >
@@ -75,9 +86,9 @@ export function typographySetToTokenTree(
     }
   }
 
-  const result: DesignTokens = {};
+  const result: DeepKeyTokenMap<false> = {};
   for (const [type, sizes] of Object.entries(typographyTokens)) {
-    const typeTokens: DesignTokens = {};
+    const typeTokens: DeepKeyTokenMap<false> = {};
     for (const [size, {code, standard}] of Object.entries(sizes)) {
       if (standard !== null) {
         typeTokens[size] = createTypographyToken(standard, code);

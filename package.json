@@ -27,9 +27,9 @@
   "homepage": "https://github.com/garysoed/anima#readme",
   "dependencies": {
     "@lit-labs/signals": "^0.3.0",
+    "@tokens-studio/types": "^0.5.2",
     "gs-tools": "*",
-    "lit": "^3.3.3",
-    "style-dictionary": "^5.6.1"
+    "lit": "^3.3.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

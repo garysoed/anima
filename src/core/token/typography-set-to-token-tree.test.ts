@@ -37,8 +37,8 @@ test.describe('typographySetToTokenTree', () => {
           $value: {
             fontFamily: 'Roboto',
             fontSize: '57px',
-            fontWeight: 400,
-            letterSpacing: -0.25,
+            fontWeight: '400',
+            letterSpacing: '-0.25',
             lineHeight: '64px',
             textCase: undefined,
             textDecoration: undefined,
@@ -48,8 +48,8 @@ test.describe('typographySetToTokenTree', () => {
             $value: {
               fontFamily: 'Fira Code',
               fontSize: '57px',
-              fontWeight: 400,
-              letterSpacing: -0.25,
+              fontWeight: '400',
+              letterSpacing: '-0.25',
               lineHeight: '64px',
               textCase: undefined,
               textDecoration: undefined,
@@ -68,7 +68,7 @@ test.describe('typographySetToTokenTree', () => {
             $value: {
               fontFamily: 'Fira Code',
               fontSize: '14px',
-              fontWeight: 400,
+              fontWeight: '400',
               letterSpacing: undefined,
               lineHeight: '20px',
               textCase: undefined,

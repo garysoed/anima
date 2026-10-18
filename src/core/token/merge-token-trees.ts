@@ -1,4 +1,4 @@
-import type {DesignTokens} from 'style-dictionary/types';
+import type {DeepKeyTokenMap} from '@tokens-studio/types';
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -12,14 +12,14 @@ function isLeafToken(value: Record<string, unknown>): boolean {
   );
 }
 
-function isTokenTree(value: unknown): value is DesignTokens {
+function isTokenTree(value: unknown): value is DeepKeyTokenMap<false> {
   return isPlainObject(value) && !isLeafToken(value);
 }
 
 export function mergeTokenTrees(
-  ...trees: readonly DesignTokens[]
-): DesignTokens {
-  const result: DesignTokens = {};
+  ...trees: ReadonlyArray<DeepKeyTokenMap<false>>
+): DeepKeyTokenMap<false> {
+  const result: DeepKeyTokenMap<false> = {};
 
   for (const tree of trees) {
     for (const [key, value] of Object.entries(tree)) {

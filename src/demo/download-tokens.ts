@@ -1,12 +1,13 @@
-import type {DesignTokens} from 'style-dictionary/types';
+import type {DeepKeyTokenMap} from '@tokens-studio/types';
 
 import {serializeTokens} from '../core/token/serialize-tokens';
 
 export async function downloadTokens(
-  tokens: DesignTokens,
+  tokens: DeepKeyTokenMap<false>,
   filename: string,
 ): Promise<void> {
-  const json = await serializeTokens(tokens);
+  const setName = filename.replace(/\.json$/, '');
+  const json = serializeTokens({[setName]: tokens}, [setName]);
   const blob = new Blob([json], {type: 'application/json'});
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');

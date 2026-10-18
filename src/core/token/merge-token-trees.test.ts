@@ -1,72 +1,73 @@
 import {expect, test} from '@playwright/test';
-import type {DesignTokens} from 'style-dictionary/types';
+import type {DeepKeyTokenMap} from '@tokens-studio/types';
+import {TokenTypes} from '@tokens-studio/types';
 
 import {mergeTokenTrees} from './merge-token-trees';
 
 test.describe('mergeTokenTrees', () => {
   test('merges disjoint token trees', () => {
-    const treeA: DesignTokens = {
+    const treeA: DeepKeyTokenMap<false> = {
       palette: {
-        black: {$type: 'color', $value: '#000000'},
+        black: {$type: TokenTypes.COLOR, $value: '#000000'},
       },
     };
-    const treeB: DesignTokens = {
+    const treeB: DeepKeyTokenMap<false> = {
       theme: {
-        background: {$type: 'color', $value: '{white}'},
+        background: {$type: TokenTypes.COLOR, $value: '{white}'},
       },
     };
     const merged = mergeTokenTrees(treeA, treeB);
 
     expect(merged).toEqual({
       palette: {
-        black: {$type: 'color', $value: '#000000'},
+        black: {$type: TokenTypes.COLOR, $value: '#000000'},
       },
       theme: {
-        background: {$type: 'color', $value: '{white}'},
+        background: {$type: TokenTypes.COLOR, $value: '{white}'},
       },
     });
   });
 
   test('recursively merges nested subtrees and overrides overlapping leaves', () => {
-    const treeA: DesignTokens = {
+    const treeA: DeepKeyTokenMap<false> = {
       display: {
         large: {
-          $type: 'typography',
+          $type: TokenTypes.TYPOGRAPHY,
           $value: {
             fontFamily: 'Roboto',
             fontSize: '57px',
-            fontWeight: 400,
+            fontWeight: '400',
             lineHeight: '64px',
           },
         },
         medium: {
-          $type: 'typography',
+          $type: TokenTypes.TYPOGRAPHY,
           $value: {
             fontFamily: 'Roboto',
             fontSize: '45px',
-            fontWeight: 400,
+            fontWeight: '400',
             lineHeight: '52px',
           },
         },
       },
     };
-    const treeB: DesignTokens = {
+    const treeB: DeepKeyTokenMap<false> = {
       display: {
         large: {
-          $type: 'typography',
+          $type: TokenTypes.TYPOGRAPHY,
           $value: {
             fontFamily: 'Open Sans',
             fontSize: '57px',
-            fontWeight: 700,
+            fontWeight: '700',
             lineHeight: '64px',
           },
         },
         small: {
-          $type: 'typography',
+          $type: TokenTypes.TYPOGRAPHY,
           $value: {
             fontFamily: 'Roboto',
             fontSize: '36px',
-            fontWeight: 400,
+            fontWeight: '400',
             lineHeight: '44px',
           },
         },
@@ -77,29 +78,29 @@ test.describe('mergeTokenTrees', () => {
     expect(merged).toEqual({
       display: {
         large: {
-          $type: 'typography',
+          $type: TokenTypes.TYPOGRAPHY,
           $value: {
             fontFamily: 'Open Sans',
             fontSize: '57px',
-            fontWeight: 700,
+            fontWeight: '700',
             lineHeight: '64px',
           },
         },
         medium: {
-          $type: 'typography',
+          $type: TokenTypes.TYPOGRAPHY,
           $value: {
             fontFamily: 'Roboto',
             fontSize: '45px',
-            fontWeight: 400,
+            fontWeight: '400',
             lineHeight: '52px',
           },
         },
         small: {
-          $type: 'typography',
+          $type: TokenTypes.TYPOGRAPHY,
           $value: {
             fontFamily: 'Roboto',
             fontSize: '36px',
-            fontWeight: 400,
+            fontWeight: '400',
             lineHeight: '44px',
           },
         },
