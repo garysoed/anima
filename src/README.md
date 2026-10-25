@@ -11,3 +11,4 @@ Source code root for the Anima project.
 
 - [core/](core/)
 - [demo/](demo/)
+- [util/](util/)

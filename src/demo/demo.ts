@@ -8,16 +8,21 @@ import {createPalette} from '../core/palette/create-palette';
 import {PaletteSet} from '../core/palette/palette-set';
 import {Theme, ThemeMode, ThemeType, TYPES} from '../core/theme/theme';
 import {ThemeSet} from '../core/theme/theme-set';
+import {deserializeTokens} from '../core/token/deserialize-tokens';
+import {getSeedColour} from '../core/token/get-seed-colour';
 import {mergeTokenTrees} from '../core/token/merge-token-trees';
 import {paletteSetToTokenTree} from '../core/token/palette-set-to-token-tree';
 import {themeSetToTokenTree} from '../core/token/theme-set-to-token-tree';
+import {tokenTreeToThemeSet} from '../core/token/token-tree-to-theme-set';
+import {tokenTreeToTypographySet} from '../core/token/token-tree-to-typography-set';
 import {typographySetToTokenTree} from '../core/token/typography-set-to-token-tree';
+import {isRecord} from '../util/is-record';
 
 import {applyThemeTokens} from './apply-theme-tokens';
 import {applyTypographyTokens} from './apply-typography-tokens';
 import {ColorPicker} from './component/color-picker/color-picker';
 import './component/palette-preview/palette-preview';
-import './component/theme-configs/theme-configs';
+import {ThemeConfigs} from './component/theme-configs/theme-configs';
 import './component/theme-preview/theme-preview';
 import {INITIAL_THEME_SET} from './default-themes';
 import styles from './demo.scss';
@@ -272,6 +277,62 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
   override disconnectedCallback(): void {
     super.disconnectedCallback();
     this.cleanupWatcher();
+  }
+  importTokens(data: Record<string, unknown>): void {
+    const tokenSets = deserializeTokens(data);
+    const combinedTree = mergeTokenTrees(...Object.values(tokenSets));
+
+    const seedColor = getSeedColour(combinedTree);
+    if (seedColor) {
+      this.seedColor.set(seedColor);
+    }
+
+    const baseTree = tokenSets['base'] ?? combinedTree;
+    const typographySet = tokenTreeToTypographySet(baseTree);
+    if (typographySet.bodyMedium) {
+      this.bodyMediumFont.set(typographySet.bodyMedium.fontFamily);
+    }
+    if (typographySet.bodyMediumCode) {
+      this.bodyMediumCodeFont.set(typographySet.bodyMediumCode.fontFamily);
+    }
+    if (typographySet.headlineLarge) {
+      this.headlineLargeFont.set(typographySet.headlineLarge.fontFamily);
+    }
+    if (typographySet.headlineMedium) {
+      this.headlineMediumFont.set(typographySet.headlineMedium.fontFamily);
+    }
+    if (typographySet.headlineSmall) {
+      this.headlineSmallFont.set(typographySet.headlineSmall.fontFamily);
+    }
+    if (typographySet.labelMedium) {
+      this.labelMediumFont.set(typographySet.labelMedium.fontFamily);
+    }
+    if (typographySet.labelSmall) {
+      this.labelSmallFont.set(typographySet.labelSmall.fontFamily);
+    }
+    if (typographySet.titleLarge) {
+      this.titleLargeFont.set(typographySet.titleLarge.fontFamily);
+    }
+    if (typographySet.titleMedium) {
+      this.titleMediumFont.set(typographySet.titleMedium.fontFamily);
+    }
+
+    const themesTree =
+      tokenSets['themes'] ?? tokenSets['theme'] ?? combinedTree;
+    const updatedThemeSet = tokenTreeToThemeSet(themesTree, 'theme');
+    this.themeSet.set(updatedThemeSet);
+
+    const configs = this.shadowRoot?.querySelectorAll('an-theme-configs');
+    if (configs) {
+      for (const config of Array.from(configs)) {
+        if (config instanceof ThemeConfigs) {
+          config.setTheme(
+            updatedThemeSet[config.mode][config.type],
+            updatedThemeSet,
+          );
+        }
+      }
+    }
   }
   override render(): TemplateResult {
     return html`
@@ -572,6 +633,20 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
 
             <div class="generator-layout" id="generator">
               <h4>Colour generator</h4>
+              <button
+                class="import-button"
+                type="button"
+                @click="${this.handleImportTokensClick}"
+              >
+                Import tokens
+              </button>
+              <input
+                class="tokens-file-input"
+                id="tokens-file-input"
+                type="file"
+                accept=".json,application/json"
+                @change="${this.handleTokensFileChange}"
+              />
               <an-color-picker
                 .value="${this.seedColor.get()}"
                 @input="${this.handleColorPickerEvent}"
@@ -875,6 +950,11 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
       fontSignal.set(target.value);
     }
   }
+  protected handleImportTokensClick(): void {
+    const input =
+      this.shadowRoot?.querySelector<HTMLInputElement>('#tokens-file-input');
+    input?.click();
+  }
   protected handleModeSelect(selectedMode: ThemeMode): void {
     this.mode.set(selectedMode);
   }
@@ -907,6 +987,30 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
         [type]: updatedTheme,
       },
     });
+  }
+  protected async handleTokensFileChange(event: Event): Promise<void> {
+    const target = event.target;
+    if (
+      !(target instanceof HTMLInputElement) ||
+      !target.files ||
+      target.files.length === 0
+    ) {
+      return;
+    }
+    const file = target.files[0];
+    if (!file) {
+      return;
+    }
+    const text = await file.text();
+    try {
+      const data = JSON.parse(text);
+      if (isRecord(data)) {
+        this.importTokens(data);
+      }
+    } catch {
+      // Ignore parse error
+    }
+    target.value = '';
   }
   protected initWatcher(): void {
     this.cleanupWatcher();

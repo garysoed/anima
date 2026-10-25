@@ -291,4 +291,79 @@ test.describe('<an-demo>', () => {
       await expect(dark0Display).toHaveValue('main.c400');
     },
   );
+
+  test('restores seed colour, typography, and theme settings on tokens file import', async ({
+    page,
+  }) => {
+    await page.setContent(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>
+              body {
+                margin: 0;
+                padding: 0;
+                background-color: #ffffff;
+              }
+            </style>
+          </head>
+          <body>
+            <an-demo id="demo"></an-demo>
+          </body>
+        </html>
+      `);
+
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-demo'));
+
+    const demo = page.locator('an-demo');
+    const tokensPayload = {
+      base: {
+        headline: {
+          large: {
+            $type: 'typography',
+            $value: {
+              fontFamily: 'Playfair Display',
+              fontSize: '36px',
+              fontWeight: '400',
+              lineHeight: '1.2',
+            },
+          },
+        },
+        main: {
+          '500': {
+            $type: 'color',
+            $value: '#2563eb',
+          },
+        },
+      },
+      themes: {
+        theme: {
+          light: {
+            '0': {
+              background: {
+                $type: 'color',
+                $value: '{neutral.200}',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    const fileInput = demo.locator('#tokens-file-input');
+    await fileInput.setInputFiles({
+      buffer: Buffer.from(JSON.stringify(tokensPayload)),
+      mimeType: 'application/json',
+      name: 'tokens.json',
+    });
+
+    const light0Background = demo
+      .locator('#configs-light-0')
+      .locator('select[data-section="background"]');
+    await expect(light0Background).toHaveValue('neutral.c200');
+
+    const headlineLargeFontSelect = demo.locator('#headline-large-font-select');
+    await expect(headlineLargeFontSelect).toHaveValue('Playfair Display');
+  });
 });
