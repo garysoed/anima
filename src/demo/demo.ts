@@ -556,6 +556,13 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
             </ul>
 
             <p>
+              Adjacent theme background colours within each mode (Theme 0 vs
+              Theme 1, Theme 1 vs Theme 2, and Theme 2 vs Theme 3) must maintain
+              a minimum contrast ratio of at least 1.1:1 to guarantee clear
+              surface distinction.
+            </p>
+
+            <p>
               Each of the above themes has light and dark versions. This can be
               used for light / dark mode of the app, though apps can mix and
               match this. For example, a light mode app can have a dark mode
@@ -592,9 +599,10 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                             .theme="${this.themeSet.get().light[type]}"
                           ></an-theme-preview>
                           <an-theme-configs
-                            .mode="${'light'}"
-                            .type="${type}"
+                            id="configs-light-${type}"
                             .palettes="${this.paletteSet.get()}"
+                            .theme="${this.themeSet.get().light[type]}"
+                            .themeSet="${this.themeSet.get()}"
                             @theme-change="${this.handleThemeChange}"
                           ></an-theme-configs>
                         </div>
@@ -610,9 +618,10 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                             .theme="${this.themeSet.get().dark[type]}"
                           ></an-theme-preview>
                           <an-theme-configs
-                            .mode="${'dark'}"
-                            .type="${type}"
+                            id="configs-dark-${type}"
                             .palettes="${this.paletteSet.get()}"
+                            .theme="${this.themeSet.get().dark[type]}"
+                            .themeSet="${this.themeSet.get()}"
                             @theme-change="${this.handleThemeChange}"
                           ></an-theme-configs>
                         </div>

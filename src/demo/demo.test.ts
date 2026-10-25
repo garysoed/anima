@@ -191,4 +191,53 @@ test.describe('<an-demo>', () => {
     });
     expect(headlineLargeFont).toContain('Raleway');
   });
+
+  test(
+    'surfaces background contrast warning icon on adjacent themes when ' +
+      'contrast drops below 1.1',
+    async ({page}) => {
+      await page.setContent(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>
+              body {
+                margin: 0;
+                padding: 0;
+                background-color: #ffffff;
+              }
+            </style>
+          </head>
+          <body>
+            <an-demo id="demo"></an-demo>
+          </body>
+        </html>
+      `);
+
+      await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+      await page.evaluate(() => customElements.whenDefined('an-demo'));
+
+      const demo = page.locator('an-demo');
+      const configsLight2 = demo.locator('#configs-light-2');
+      const configsLight3 = demo.locator('#configs-light-3');
+
+      const bgWarning2 = configsLight2.locator(
+        'label.config-row:has(select[data-section="background"]) .contrast-icon',
+      );
+      const bgWarning3 = configsLight3.locator(
+        'label.config-row:has(select[data-section="background"]) .contrast-icon',
+      );
+
+      await expect(bgWarning2).not.toBeAttached();
+      await expect(bgWarning3).not.toBeAttached();
+
+      const selectBg3 = configsLight3.locator(
+        'select[data-section="background"]',
+      );
+      await selectBg3.selectOption('main.c100');
+
+      await expect(bgWarning2).toBeVisible();
+      await expect(bgWarning3).toBeVisible();
+    },
+  );
 });

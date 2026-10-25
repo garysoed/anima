@@ -5,6 +5,7 @@ import {customElement, property} from 'lit/decorators.js';
 
 import {SHADE_KEYS} from '../../../core/palette/palette';
 import {PaletteSet} from '../../../core/palette/palette-set';
+import {hasAdjacentBackgroundContrastViolation} from '../../../core/theme/has-adjacent-background-contrast-violation';
 import {
   isShadeKey,
   PaletteColorKey,
@@ -14,12 +15,12 @@ import {
   ThemeSection,
   ThemeType,
 } from '../../../core/theme/theme';
+import {ThemeSet} from '../../../core/theme/theme-set';
 import {getDefaultTheme} from '../../default-themes';
 
 import styles from './theme-configs.scss';
 
-const DEFAULT_MODE: ThemeMode = 'light';
-const DEFAULT_TYPE: ThemeType = 0;
+const DEFAULT_THEME = getDefaultTheme('light', 0);
 
 const SECTION_CONFIGS: ReadonlyArray<{
   readonly label: string;
@@ -138,36 +139,49 @@ function getSectionOptions(
 export class ThemeConfigs extends SignalWatcher(LitElement) {
   static override styles = styles;
 
-  private readonly modeSignal = new Signal.State<ThemeMode>(DEFAULT_MODE);
   private readonly palettesSignal = new Signal.State<PaletteSet | null>(null);
-  private readonly themeSignal = new Signal.State<Theme>(
-    getDefaultTheme(DEFAULT_MODE, DEFAULT_TYPE),
-  );
-  private readonly typeSignal = new Signal.State<ThemeType>(DEFAULT_TYPE);
+  private readonly themeSetSignal = new Signal.State<ThemeSet | null>(null);
+  private readonly themeSignal = new Signal.State<Theme>(DEFAULT_THEME);
 
   override render(): TemplateResult {
     const currentTheme = this.theme;
     const palettes = this.palettes;
+    const themeSet = this.themeSet;
 
     return html`
       <div class="configs-container">
-        ${SECTION_CONFIGS.map(
-          (config) => html`
+        ${SECTION_CONFIGS.map((config) => {
+          const hasWarning =
+            config.section === 'background'
+              ? !!themeSet &&
+                !!palettes &&
+                hasAdjacentBackgroundContrastViolation(
+                  currentTheme,
+                  themeSet,
+                  palettes,
+                )
+              : hasLowContrast(config.section, currentTheme, palettes);
+
+          return html`
             <label class="config-row">
               <span class="config-label">
                 ${config.label}
                 ${
-                  hasLowContrast(config.section, currentTheme, palettes)
+                  hasWarning
                     ? html`<span class="contrast-icon">(!)</span>`
                     : nothing
                 }
               </span>
               ${this.renderColorSelect(config.section, currentTheme)}
             </label>
-          `,
-        )}
+          `;
+        })}
       </div>
     `;
+  }
+  setTheme(theme: Theme, themeSet: ThemeSet): void {
+    this.themeSignal.set(theme);
+    this.themeSetSignal.set(themeSet);
   }
   override updated(changedProperties: PropertyValues<this>): void {
     super.updated(changedProperties);
@@ -176,13 +190,8 @@ export class ThemeConfigs extends SignalWatcher(LitElement) {
     this.style.setProperty('--an-config-error', `var(${themePrefix}-error)`);
   }
 
-  @property({type: String})
   get mode(): ThemeMode {
-    return this.modeSignal.get();
-  }
-  set mode(value: ThemeMode) {
-    this.modeSignal.set(value);
-    this.themeSignal.set(getDefaultTheme(value, this.type));
+    return this.theme.mode;
   }
   @property({attribute: false})
   get palettes(): PaletteSet | null {
@@ -191,16 +200,22 @@ export class ThemeConfigs extends SignalWatcher(LitElement) {
   set palettes(value: PaletteSet | null) {
     this.palettesSignal.set(value);
   }
+  @property({attribute: false})
   get theme(): Theme {
     return this.themeSignal.get();
   }
-  @property({type: Number})
-  get type(): ThemeType {
-    return this.typeSignal.get();
+  set theme(value: Theme) {
+    this.themeSignal.set(value);
   }
-  set type(value: ThemeType) {
-    this.typeSignal.set(value);
-    this.themeSignal.set(getDefaultTheme(this.mode, value));
+  @property({attribute: false})
+  get themeSet(): ThemeSet | null {
+    return this.themeSetSignal.get();
+  }
+  set themeSet(value: ThemeSet | null) {
+    this.themeSetSignal.set(value);
+  }
+  get type(): ThemeType {
+    return this.theme.type;
   }
 
   private getOptionLabel(section: ThemeSection, key: PaletteColorKey): string {
@@ -229,6 +244,15 @@ export class ThemeConfigs extends SignalWatcher(LitElement) {
       [section]: newColorKey,
     };
     this.themeSignal.set(updatedTheme);
+    if (this.themeSet) {
+      this.themeSetSignal.set({
+        ...this.themeSet,
+        [updatedTheme.mode]: {
+          ...this.themeSet[updatedTheme.mode],
+          [updatedTheme.type]: updatedTheme,
+        },
+      });
+    }
     this.dispatchEvent(
       new CustomEvent('theme-change', {
         bubbles: true,

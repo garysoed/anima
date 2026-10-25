@@ -4,7 +4,17 @@ import {rgb} from 'gs-tools/export/color';
 import {createNeutralPalette} from '../../../core/palette/create-neutral-palette';
 import {createPalette} from '../../../core/palette/create-palette';
 import {PaletteSet} from '../../../core/palette/palette-set';
+import {createThemeSet} from '../../../core/theme/create-theme-set';
 import {Theme} from '../../../core/theme/theme';
+import {ThemeSet} from '../../../core/theme/theme-set';
+import {getDefaultTheme} from '../../default-themes';
+
+interface ThemeConfigsElement extends HTMLElement {
+  palettes: PaletteSet | null;
+  setTheme(theme: Theme, themeSet: ThemeSet): void;
+  theme: Theme;
+  themeSet: ThemeSet | null;
+}
 
 test.describe('<an-theme-configs>', () => {
   test('resolves theme from mode and type, and dispatches theme-change on selection', async ({
@@ -47,19 +57,24 @@ test.describe('<an-theme-configs>', () => {
       white: rgb('#ffffff'),
     };
 
-    await configs.evaluate((el: HTMLElement, palettesParam: PaletteSet) => {
-      Reflect.set(el, 'mode', 'light');
-      Reflect.set(el, 'type', 0);
-      Reflect.set(el, 'palettes', palettesParam);
-      Reflect.set(window, '__themeChangeFired', false);
-      Reflect.set(window, '__updatedTheme', null);
-      el.addEventListener('theme-change', (event: Event) => {
-        const customEvent = Object(event);
-        const detail: {readonly theme: Theme} = Object(customEvent.detail);
-        Reflect.set(window, '__themeChangeFired', true);
-        Reflect.set(window, '__updatedTheme', detail.theme);
-      });
-    }, palettes);
+    await configs.evaluate(
+      (
+        el: ThemeConfigsElement,
+        params: {palettes: PaletteSet; theme: Theme},
+      ) => {
+        el.theme = params.theme;
+        el.palettes = params.palettes;
+        Reflect.set(window, '__themeChangeFired', false);
+        Reflect.set(window, '__updatedTheme', null);
+        el.addEventListener('theme-change', (event: Event) => {
+          const customEvent = Object(event);
+          const detail: {readonly theme: Theme} = Object(customEvent.detail);
+          Reflect.set(window, '__themeChangeFired', true);
+          Reflect.set(window, '__updatedTheme', detail.theme);
+        });
+      },
+      {palettes, theme: getDefaultTheme('light', 0)},
+    );
 
     const initialTheme: Theme = await configs.evaluate((el: HTMLElement) =>
       Object(Reflect.get(el, 'theme')),
@@ -132,11 +147,16 @@ test.describe('<an-theme-configs>', () => {
       white: rgb('#ffffff'),
     };
 
-    await configs.evaluate((el: HTMLElement, palettesParam: PaletteSet) => {
-      Reflect.set(el, 'mode', 'light');
-      Reflect.set(el, 'type', 0);
-      Reflect.set(el, 'palettes', palettesParam);
-    }, palettes);
+    await configs.evaluate(
+      (
+        el: ThemeConfigsElement,
+        params: {palettes: PaletteSet; theme: Theme},
+      ) => {
+        el.theme = params.theme;
+        el.palettes = params.palettes;
+      },
+      {palettes, theme: getDefaultTheme('light', 0)},
+    );
 
     const select = configs.locator('select[data-section="primary"]');
     await select.selectOption('white');
@@ -150,4 +170,84 @@ test.describe('<an-theme-configs>', () => {
       path: 'src/demo/component/theme-configs/goldens/theme-configs-low-contrast.png',
     });
   });
+
+  test(
+    'renders warning icon on Background row when adjacent background ' +
+      'contrast falls below 1.1',
+    async ({page}) => {
+      await page.setContent(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>
+              body {
+                margin: 0;
+                padding: 20px;
+                background-color: #ffffff;
+                --an-main-light_0-error: #dc2626;
+              }
+              an-theme-configs {
+                width: 170px;
+              }
+            </style>
+          </head>
+          <body>
+            <an-theme-configs id="configs"></an-theme-configs>
+          </body>
+        </html>
+      `);
+
+      await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+      await page.evaluate(() => customElements.whenDefined('an-theme-configs'));
+
+      const configs = page.locator('an-theme-configs');
+      const seed = rgb({b: 220, g: 38, r: 38});
+      const palettes: PaletteSet = {
+        black: rgb('#000000'),
+        error: createPalette(rgb('#dc2626')),
+        main: createPalette(seed),
+        neutral: createNeutralPalette(seed),
+        other: new Map(),
+        success: createPalette(rgb('#16a34a')),
+        warning: createPalette(rgb('#ffbf00')),
+        white: rgb('#ffffff'),
+      };
+      const defaultThemeSet = createThemeSet('theme', 'main', 'neutral');
+      const violatingThemeSet: ThemeSet = {
+        ...defaultThemeSet,
+        light: {
+          ...defaultThemeSet.light,
+          3: {
+            ...defaultThemeSet.light[3],
+            background: 'main.c100',
+          },
+        },
+      };
+
+      await configs.evaluate(
+        (
+          el: ThemeConfigsElement,
+          params: {palettes: PaletteSet; themeSet: ThemeSet},
+        ) => {
+          el.palettes = params.palettes;
+          el.setTheme(params.themeSet.light[3], params.themeSet);
+        },
+        {palettes, themeSet: violatingThemeSet},
+      );
+
+      const bgWarningIcon = configs.locator(
+        'label.config-row:has(select[data-section="background"]) .contrast-icon',
+      );
+      await expect(bgWarningIcon).toBeVisible();
+
+      await configs.evaluate(
+        (el: ThemeConfigsElement, params: {themeSet: ThemeSet}) => {
+          el.setTheme(params.themeSet.light[3], params.themeSet);
+        },
+        {themeSet: defaultThemeSet},
+      );
+
+      await expect(bgWarningIcon).not.toBeAttached();
+    },
+  );
 });
