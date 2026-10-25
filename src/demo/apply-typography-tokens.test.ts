@@ -120,7 +120,9 @@ test.describe('apply-typography-tokens', () => {
       `);
 
       await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
-      await page.waitForFunction(() => window.applyTypographyTokens !== undefined);
+      await page.waitForFunction(
+        () => window.applyTypographyTokens !== undefined,
+      );
 
       const preview = page.locator('#preview');
       await preview.evaluate((el: HTMLElement, set: TypographySet) => {

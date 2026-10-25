@@ -9,7 +9,7 @@ export function createThemeSet(
     dark: {
       0: {
         background: `${neutralPaletteName}.c800`,
-        display: `${mainPaletteName}.c500`,
+        display: `${mainPaletteName}.c400`,
         error: 'error.c300',
         mode: 'dark',
         outline: `${mainPaletteName}.c200`,
@@ -21,7 +21,7 @@ export function createThemeSet(
       },
       1: {
         background: 'black',
-        display: `${mainPaletteName}.c500`,
+        display: `${mainPaletteName}.c400`,
         error: 'error.c400',
         mode: 'dark',
         outline: `${mainPaletteName}.c200`,
@@ -33,7 +33,7 @@ export function createThemeSet(
       },
       2: {
         background: `${mainPaletteName}.c900`,
-        display: `${mainPaletteName}.c500`,
+        display: `${mainPaletteName}.c400`,
         error: 'error.c400',
         mode: 'dark',
         outline: `${mainPaletteName}.c200`,
@@ -59,7 +59,7 @@ export function createThemeSet(
     light: {
       0: {
         background: `${neutralPaletteName}.c100`,
-        display: `${mainPaletteName}.c500`,
+        display: `${mainPaletteName}.c600`,
         error: 'error.c600',
         mode: 'light',
         outline: `${mainPaletteName}.c800`,
@@ -71,7 +71,7 @@ export function createThemeSet(
       },
       1: {
         background: 'white',
-        display: `${mainPaletteName}.c500`,
+        display: `${mainPaletteName}.c600`,
         error: 'error.c600',
         mode: 'light',
         outline: `${mainPaletteName}.c800`,

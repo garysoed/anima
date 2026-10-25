@@ -515,7 +515,8 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
               <li>
                 Display: Foreground colour for brand icons, large headlines, and
                 non-textual symbols. The contrast ratio against background
-                should be at least 3.0:1.
+                should be at least 3.0:1. All themes in the same mode share the
+                same display shade.
               </li>
               <li>
                 Outline: Structural dividers, borders, focus rings, and
@@ -882,6 +883,23 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
     const currentThemeSet = this.themeSet.get();
     const mode = updatedTheme.mode;
     const type = updatedTheme.type;
+
+    if (updatedTheme.display !== currentThemeSet[mode][type].display) {
+      const modeThemes = {...currentThemeSet[mode]};
+      for (const themeType of TYPES) {
+        modeThemes[themeType] = {
+          ...modeThemes[themeType],
+          display: updatedTheme.display,
+        };
+      }
+      modeThemes[type] = updatedTheme;
+      this.themeSet.set({
+        ...currentThemeSet,
+        [mode]: modeThemes,
+      });
+      return;
+    }
+
     this.themeSet.set({
       ...currentThemeSet,
       [mode]: {

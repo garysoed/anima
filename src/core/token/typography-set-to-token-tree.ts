@@ -87,7 +87,11 @@ export function typographySetToTokenTree(
     const typeGroup = (typographyTokens[type] ??= {});
     const sizeGroup = (typeGroup[size] ??= {code: null, standard: null});
     if (isCode) {
-      sizeGroup.code = createTypographyToken(value, `${type}.${size}.code`, null);
+      sizeGroup.code = createTypographyToken(
+        value,
+        `${type}.${size}.code`,
+        null,
+      );
     } else {
       sizeGroup.standard = value;
     }
@@ -98,7 +102,11 @@ export function typographySetToTokenTree(
     const typeTokens: DeepKeyTokenMap = {};
     for (const [size, {code, standard}] of Object.entries(sizes)) {
       if (standard !== null) {
-        typeTokens[size] = createTypographyToken(standard, `${type}.${size}`, code);
+        typeTokens[size] = createTypographyToken(
+          standard,
+          `${type}.${size}`,
+          code,
+        );
       } else if (code !== null) {
         typeTokens[size] = {code};
       }
