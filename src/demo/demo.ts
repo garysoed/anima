@@ -28,6 +28,7 @@ import {INITIAL_THEME_SET} from './default-themes';
 import styles from './demo.scss';
 import {downloadTokens} from './download-tokens';
 import {ALL_FONTS} from './google-fonts';
+import {suggestForegroundColours} from './suggest-foreground-colours';
 
 type PalettePreviewKey = 'error' | 'main' | 'neutral' | 'success' | 'warning';
 
@@ -321,18 +322,7 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
       tokenSets['themes'] ?? tokenSets['theme'] ?? combinedTree;
     const updatedThemeSet = tokenTreeToThemeSet(themesTree, 'theme');
     this.themeSet.set(updatedThemeSet);
-
-    const configs = this.shadowRoot?.querySelectorAll('an-theme-configs');
-    if (configs) {
-      for (const config of Array.from(configs)) {
-        if (config instanceof ThemeConfigs) {
-          config.setTheme(
-            updatedThemeSet[config.mode][config.type],
-            updatedThemeSet,
-          );
-        }
-      }
-    }
+    this.updateThemeConfigs(updatedThemeSet);
   }
   override render(): TemplateResult {
     return html`
@@ -559,25 +549,30 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
               <li>Background: The surface background colour.</li>
               <li>
                 Primary: The primary foreground colour. This is usually used for
-                body texts and headings. The contrast ratio against background
-                should be at least 4.5:1.
+                body texts and headings. It is set to black on light backgrounds
+                and white on dark backgrounds to ensure contrast ratio against
+                background is at least 4.5:1.
               </li>
               <li>
                 Secondary: The secondary foreground colour. This is usually used
                 for secondary texts and is dimmer (i.e. lower contrast) than
-                primary. The contrast ratio against background should be at
-                least 4.5:1.
+                primary. It selects the neutral shade closest to 500 meeting a
+                contrast ratio against background of at least 4.5:1 and remains
+                distinct from primary.
               </li>
               <li>
                 Status (Error, Warning, Success): Contextual state and feedback
-                colours. The contrast ratio against background should be at
-                least 4.5:1.
+                colours. Each selects the shade from its respective semantic
+                palette closest to 500 meeting a contrast ratio against
+                background of at least 4.5:1.
               </li>
               <li>
                 Display: Foreground colour for brand icons, large headlines, and
                 non-textual symbols. The contrast ratio against background
                 should be at least 3.0:1. All themes in the same mode share the
-                same display shade.
+                same display shade, chosen as the main palette shade closest to
+                500 that meets the 3.0:1 contrast ratio across all four
+                backgrounds in that mode.
               </li>
               <li>
                 Outline: Structural dividers, borders, focus rings, and
@@ -585,6 +580,13 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
                 least 1.5:1.
               </li>
             </ul>
+
+            <p>
+              Click "Automate foreground" to automatically calculate and apply
+              optimal primary, secondary, display, and status shades closest to
+              500 that meet all contrast rules across all themes while
+              preserving existing outlines.
+            </p>
           </div>
 
           <h3>Theme set</h3>
@@ -665,6 +667,13 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
               )}
               <div class="themes-showcase">
                 <h4>Themes</h4>
+                <button
+                  class="automate-button"
+                  type="button"
+                  @click="${this.handleAutomateForeground}"
+                >
+                  Automate foreground
+                </button>
                 <div class="themes-columns">
                   <div class="themes-column">
                     ${TYPES.map(
@@ -924,6 +933,16 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
       this.watcher = null;
     }
   }
+  protected handleAutomateForeground(): void {
+    const palettes = this.paletteSet.get();
+    const currentThemeSet = this.themeSet.get();
+    const suggestedThemeSet = suggestForegroundColours(
+      currentThemeSet,
+      palettes,
+    );
+    this.themeSet.set(suggestedThemeSet);
+    this.updateThemeConfigs(suggestedThemeSet);
+  }
   protected handleColorPickerEvent(event: Event): void {
     const target = event.target;
     if (target instanceof ColorPicker) {
@@ -1037,5 +1056,15 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
     this.watcher.watch(this.typographySet);
     this.applyThemeTokens();
     this.applyTypographyTokens();
+  }
+  protected updateThemeConfigs(themeSet: ThemeSet): void {
+    const configs = this.shadowRoot?.querySelectorAll('an-theme-configs');
+    if (configs) {
+      for (const config of Array.from(configs)) {
+        if (config instanceof ThemeConfigs) {
+          config.setTheme(themeSet[config.mode][config.type], themeSet);
+        }
+      }
+    }
   }
 }

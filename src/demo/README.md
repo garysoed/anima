@@ -15,6 +15,7 @@ Interactive demo application and visualizer for Anima.
 - [index.html](index.html): HTML shell hosting the bundled demo application with preloaded Google Fonts stylesheet links.
 - [main.ts](main.ts): Demo application entry point script.
 - [README.md](README.md): Demo directory documentation.
+- [suggest-foreground-colours.ts](suggest-foreground-colours.ts): Utility function suggesting foreground colours (primary, secondary, display, and semantic status colours) adhering to contrast requirements and mode-wide display synchronization.
 
 ## Subdirectories
 

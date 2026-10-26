@@ -366,4 +366,45 @@ test.describe('<an-demo>', () => {
     const headlineLargeFontSelect = demo.locator('#headline-large-font-select');
     await expect(headlineLargeFontSelect).toHaveValue('Playfair Display');
   });
+
+  test('suggests and updates foreground colours on automate foreground click', async ({
+    page,
+  }) => {
+    await page.setContent(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>
+              body {
+                margin: 0;
+                padding: 0;
+                background-color: #ffffff;
+              }
+            </style>
+          </head>
+          <body>
+            <an-demo id="demo"></an-demo>
+          </body>
+        </html>
+      `);
+
+    await page.addScriptTag({path: 'dist/demo/bundle.js', type: 'module'});
+    await page.evaluate(() => customElements.whenDefined('an-demo'));
+
+    const demo = page.locator('an-demo');
+    const light0Primary = demo
+      .locator('#configs-light-0')
+      .locator('select[data-section="primary"]');
+    await light0Primary.selectOption('white');
+
+    const automateButton = demo.locator('.automate-button');
+    await automateButton.click();
+
+    await expect(light0Primary).toHaveValue('black');
+
+    const dark0Primary = demo
+      .locator('#configs-dark-0')
+      .locator('select[data-section="primary"]');
+    await expect(dark0Primary).toHaveValue('white');
+  });
 });
