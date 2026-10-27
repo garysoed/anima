@@ -129,8 +129,10 @@ test.describe('apply-typography-tokens', () => {
         window.applyTypographyTokens!(el, set);
       }, testTypographySet);
 
-      await preview.screenshot({
-        path: 'src/demo/goldens/typography-preview.png',
+      await page.evaluate(() => document.fonts.ready);
+
+      await expect(preview).toHaveScreenshot('typography-preview.png', {
+        maxDiffPixels: 10,
       });
     });
   });

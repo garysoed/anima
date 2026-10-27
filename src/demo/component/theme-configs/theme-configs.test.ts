@@ -83,9 +83,7 @@ test.describe('<an-theme-configs>', () => {
     expect(initialTheme.mode).toBe('light');
     expect(initialTheme.type).toBe(0);
 
-    await configs.screenshot({
-      path: 'src/demo/component/theme-configs/goldens/theme-configs.png',
-    });
+    await expect(configs).toHaveScreenshot('theme-configs.png');
 
     const select = configs.locator('select[data-section="primary"]');
     await select.selectOption('white');
@@ -166,9 +164,7 @@ test.describe('<an-theme-configs>', () => {
         el.updateComplete,
     );
 
-    await configs.screenshot({
-      path: 'src/demo/component/theme-configs/goldens/theme-configs-low-contrast.png',
-    });
+    await expect(configs).toHaveScreenshot('theme-configs-low-contrast.png');
   });
 
   test(

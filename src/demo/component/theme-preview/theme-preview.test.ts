@@ -196,8 +196,6 @@ test.describe('<an-theme-preview>', () => {
       },
     );
 
-    await preview.screenshot({
-      path: 'src/demo/component/theme-preview/goldens/theme-preview.png',
-    });
+    await expect(preview).toHaveScreenshot('theme-preview.png');
   });
 });

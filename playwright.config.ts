@@ -1,6 +1,7 @@
 import {defineConfig} from '@playwright/test';
 
 export default defineConfig({
+  snapshotPathTemplate: '{testDir}/{testFileDir}/goldens/{arg}{ext}',
   testDir: './src',
   testMatch: /.*\.test\.ts/,
   timeout: 30000,

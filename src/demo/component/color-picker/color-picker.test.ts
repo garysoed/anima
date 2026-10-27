@@ -39,9 +39,7 @@ test.describe('<an-color-picker>', () => {
       Reflect.set(el, 'value', color);
     }, testRgb);
 
-    await picker.screenshot({
-      path: 'src/demo/component/color-picker/goldens/color-picker.png',
-    });
+    await expect(picker).toHaveScreenshot('color-picker.png');
   });
 
   test('dispatches input and change events when user interacts with sliders', async ({

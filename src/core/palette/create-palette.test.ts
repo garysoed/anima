@@ -93,9 +93,7 @@ test.describe('createPalette', () => {
       </html>
     `);
 
-    await page.screenshot({
-      path: 'src/core/palette/goldens/palette-narrowest-chroma.png',
-    });
+    await expect(page).toHaveScreenshot('palette-narrowest-chroma.png');
   });
 
   test('produces matching contrast against background across different hues', () => {

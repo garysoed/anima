@@ -72,8 +72,6 @@ test.describe('<an-palette-preview>', () => {
     const hexLabels = preview.locator('.hex-label');
     await expect(hexLabels).toHaveCount(11);
 
-    await preview.screenshot({
-      path: 'src/demo/component/palette-preview/goldens/palette-preview.png',
-    });
+    await expect(preview).toHaveScreenshot('palette-preview.png');
   });
 });

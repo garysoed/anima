@@ -27,9 +27,7 @@ test.describe('<an-demo>', () => {
     await page.evaluate(() => customElements.whenDefined('an-demo'));
 
     const demo = page.locator('an-demo');
-    await demo.screenshot({
-      path: 'src/demo/goldens/demo.png',
-    });
+    await expect(demo).toHaveScreenshot('demo.png');
   });
 
   test('updates palette preview when color picker value changes', async ({
@@ -65,9 +63,7 @@ test.describe('<an-demo>', () => {
       el.dispatchEvent(new Event('input', {bubbles: true, composed: true}));
     }, seed);
 
-    await demo.screenshot({
-      path: 'src/demo/goldens/demo-updated.png',
-    });
+    await expect(demo).toHaveScreenshot('demo-updated.png');
   });
 
   test('renders dark mode when toggled', async ({page}) => {
@@ -96,9 +92,7 @@ test.describe('<an-demo>', () => {
     const darkButton = demo.locator('.mode-button').filter({hasText: 'Dark'});
     await darkButton.click();
 
-    await demo.screenshot({
-      path: 'src/demo/goldens/demo-dark.png',
-    });
+    await expect(demo).toHaveScreenshot('demo-dark.png');
   });
 
   test('renders export penpot tokens button and triggers download', async ({
