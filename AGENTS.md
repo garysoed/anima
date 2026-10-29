@@ -13,7 +13,7 @@
 - **Core Module (`src/core/`)**: Must remain a pure library containing color calculations, palette generation, and data models. It must have zero DOM dependencies and must never import from `src/demo/`.
 - **Demo Module (`src/demo/`)**: Houses the showcase application, Web Components, and DOM token application logic (such as `apply-theme-tokens.ts`).
 
-## 3. Theme Models & Constants
+## 3. Scope of AGENTS.md
 
-- **PaletteColorKey**: Role colors are defined by `PaletteColorKey` (`'black' | 'white' | `${string}.${ShadeKey}``).
-- **Manual Theme Selection**: Themes do not have predefined or fixed shades; there is no global `THEME_SET`. Consumers manually configure shades for each theme based on background and contrast requirements.
+- **Coding & Architecture Guidelines Only**: `AGENTS.md` is strictly reserved for agent coding standards, tooling workflows, and architectural boundaries. Never add product features, UI component specifications, design system guidelines, or application copy to this file; those belong in application source code, demo pages (e.g. `src/demo/demo.ts`), or `docs/`.
+- **No Unsolicited Rule Additions**: Do not proactively modify `AGENTS.md` during task commits or routine workflow execution unless explicitly directed by the user.

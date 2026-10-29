@@ -901,6 +901,67 @@ export class AnimaDemo extends SignalWatcher(LitElement) {
               </li>
             </ul>
           </div>
+
+          <h2>Components</h2>
+
+          <h3>Interactables</h3>
+
+          <div class="card">
+            <p>All interactable components must:</p>
+
+            <ul>
+              <li>
+                Support the following states:
+                <ul>
+                  <li>Normal</li>
+                  <li>
+                    Disabled: Disabled components do not need to meet the
+                    contrast ratio requirements.
+                  </li>
+                  <li>
+                    Focus: Focus should be an outline around the component. This
+                    ensures that it doesn’t overlap hover state. This should
+                    only be shown when keyboard navigation is used.
+                  </li>
+                  <li>
+                    Hover: Only for mouse based apps. This should be an overlay
+                    on top of the component
+                  </li>
+                  <li>
+                    Action: This is when the user is interacting on the
+                    component. This is more important for interactables that do
+                    not have multiple stable states, such as buttons. Toggle
+                    buttons and checkboxes do not need this. Text input needs
+                    this.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                The size of the interaction target is at least 24px by 24px.
+                This follows the accessibility guideline.
+              </li>
+            </ul>
+          </div>
+
+          <h3>Button</h3>
+
+          <div class="card">
+            <p>
+              Buttons must only be used to trigger an action. It cannot handle
+              active / inactive states. Those are reserved for other
+              interactables, like navigation items, toggles, checkmarks, and
+              radio buttons.
+            </p>
+          </div>
+
+          <h3>Card</h3>
+
+          <div class="card">
+            <p>
+              Cards are used to group contents together. They may contain other
+              components, even other cards.
+            </p>
+          </div>
         </section>
       </div>
     `;
